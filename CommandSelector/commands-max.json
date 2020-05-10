@@ -1,0 +1,44 @@
+{
+  "Commands": [    
+    {
+      "category": "generate",
+      "name": "new Guid",
+      "command": "generateGuidInClipboard"
+    },   
+    {
+      "category": "convertCase",
+      "name": "to lower",
+      "command": "toLower"
+    },
+    {
+      "category": "convertCase",
+      "name": "to upper",
+      "command": "toUpper"
+    },
+    {
+      "category": "copy",
+      "name": "file from full path",
+      "command": "copyFileFromFullPath"
+    },
+    {
+      "category": "convertData",
+      "name": "get 'where in ()' from list",
+      "command": "listToWhereIn"
+    },
+    {
+      "category": "open application",
+      "name": "chrome",
+      "command": "*RunAs \"C:\\ProgramData\\Microsoft\\Windows\\Start Menu\\Programs\\Google Chrome.lnk\""
+    },
+    {
+      "category": "open application",
+      "name": "vs 2019",
+      "command": "*RunAs \"C:/ProgramData/Microsoft/Windows/Start Menu/Programs/Visual Studio 2019.lnk\""
+    },
+    {
+      "category": "tool",
+      "name": "format command path",
+      "command": "formatCommand"
+    }
+  ]
+}
