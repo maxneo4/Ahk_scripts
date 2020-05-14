@@ -26,12 +26,12 @@
 ##LNzLEpGeC3fMu77Ro2k3hQ==
 ##L97HB5mLAnfMu77Ro2k3hQ==
 ##P8HPCZWEGmaZ7/K1
-##L8/UAdDXTlaDjofG5iZk2UbvWlQEYMC/q7+xwb2Y+vzptyrJRJ8aXWhWvgLAN0qrXNsfVPIQksMeWD4mJuIJ7bPCH6msXadq
+##L8/UAdDXTlaDjrXc9whW7UDRUWs5Z9WPqoqExZGo6vjpkijYTp8HfUFjmTv1BUeQWPkXR8kmtccUfBArKPct8L3dOOugVaAFk/F7JeCWo9I=
 ##Kc/BRM3KXhU=
 ##
 ##
 ##fd6a9f26a06ea3bc99616d4851b372ba
-param( $secondsToWait=3, $folderTarget='C:', $editConfig='false', $runHtmlPage='false' )
+param( $secondsToWait=5, $folderTarget='C:', $editConfig='false', $runHtmlPage='false', $openImagesFolder='false' )
 
 function run-html($folderTarget)
 {
@@ -107,6 +107,10 @@ if($editConfig -eq 'true')
     open-config $folderTarget $files
 }elseif($runHtmlPage -eq 'true') {   
     run-html $folderTarget
+}elseif($openImagesFolder -eq 'true'){
+    invoke-item $folderImages
 }else{
     save-image $secondsToWait $folderImages $files 
 }
+
+write-host "$(get-location)"
