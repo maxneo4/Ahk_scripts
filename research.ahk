@@ -1,3 +1,42 @@
+#SingleInstance Force 
+
+SetWorkingDir %A_ScriptDir% 
+FormatTime, DateString,, ddMMMyyyy
+
+^!Space::
+
+FormatTime, TimeString,, HH:mm:ss
+
+gosub sendCopy
+
+FileAppend, >>[%TimeString%] `r`n%Clipboard%`r`n`r`n, %DateString%.txt 
+
+Clipboard = ;
+
+Progress, B1 W200 H28 ZH0 FS11 WS900 Y400 CT0000FF, Text added to log
+SetTimer, OSD_OFF, -1000
+
+return
+
+OSD_OFF:
+Progress, off
+return
+
+^!o::
+
+Run, %DateString%.txt
+
+return 
+
+sendCopy:
+   Sleep, 100
+   Send ^c
+   ClipWait 1
+   if ErrorLevel  ; ClipWait timed out.
+    return
+   Sleep, 100
+return
+
 ^w::
 Pics := []
 ; Find some pictures to display.
@@ -29,8 +68,8 @@ Loop
 	
 }
 return
+
 GuiClose:
 GuiEscape:
 ExitApp
-
 return
