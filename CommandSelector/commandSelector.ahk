@@ -57,6 +57,8 @@ invokeCommand:
     Gui, mw:Hide   
     if InStr(selectedCommand, ".lnk")
         ActivateOpenShortCut(selectedCommand, selectedRunAs)
+    else if InStr(selectedCommand, ".exe")        
+            ActivateOpenExe(selectedCommand, selectedRunAs)        
     else if InStr(selectedCommand, ".")
         Run, %selectedCommand%
     else if InStr(selectedCommand, "`/")

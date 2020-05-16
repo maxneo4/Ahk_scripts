@@ -37,15 +37,15 @@
       "command": "C:/ProgramData/Microsoft/Windows/Start Menu/Programs/Visual Studio 2019.lnk"
     },
     {
-      "category": "tool",
-      "name": "format command path",
-      "command": "formatCommand"
+      "category": "application",
+      "name": "biztools",
+      "command": "C:/Users/max/Documents/ReleaseTool/BizagiDevelopmentToolFX.exe"
     },
     {
-      "category": "tool",
-      "name": "get target from shortcut",
-      "command": "getfilefromshortcut"
-    },
+      "category": "replace",
+      "name": "change \\ by /",
+      "command": "replaceFileSeparator"
+    },    
     {
       "category": "web",
       "name": "drive cuentas casa",

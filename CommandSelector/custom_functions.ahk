@@ -25,10 +25,9 @@ public static void main(String[] args){
 :?*:obj`t::object
 :*O:th`t::Thank you
 
-formatCommand:
+replaceFileSeparator:
    path :=  clipboard
-   StringReplace, path, path, `\, /, 1
-   path := "\""" path "\"""   
+   StringReplace, path, path, `\, /, 1   
    Clipboard :=  path
    Sleep, 100
    Send ^v
@@ -68,12 +67,6 @@ generateGuidInClipboard:
    Send ^v
 return
 
-getfilefromshortcut:
-fullpath := Clipboard
-FileGetShortcut, %fullpath%, exePath
-Clipboard := exePath
-return
-
 toLower:
  gosub sendCopy
  StringLower, Clipboard, Clipboard
@@ -85,18 +78,18 @@ toUpper:
 return
 
 ActivateOpenShortCut(shortCut, runAs)
-{    
+{       
     FileGetShortcut, %shortCut%, exePath
     ActivateOpenExe(exePath, runAs)
 }
 
 ActivateOpenExe(exePath, runAs)
-{
+{   
     SplitPath, exePath, exeName
     IfWinExist ahk_exe %exeName%
        WinActivate ahk_exe %exeName%        
     else        
-    {
+    {      
       if runAs
         Run *RunAs "%exePath%"
       else
