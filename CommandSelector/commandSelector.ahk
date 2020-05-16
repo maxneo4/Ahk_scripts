@@ -20,7 +20,7 @@ Gui +LastFound
 WinSet, TransColor, EEAA99
 
 ; Create the ListView with two columns, Name and Size:
-Gui, mw:Add, ListView, w600 h400 -Multi gMyListView AltSubmit -Hdr vLV1 HwndLVID, Category|Name|Command|Order|RunAs
+Gui, mw:Add, ListView, w600 h400 -Multi gMyListView AltSubmit -Hdr vLV1 HwndLVID, Category|Name|Command|Order|RunAs|Title
 LV_SetImageList( DllCall( "ImageList_Create", Int,2, Int, 30, Int,0x18, Int,1, Int,1 ), 1 ) ;set row height to 30
     
 ; load json config
@@ -38,6 +38,7 @@ LV_ModifyCol(2, 385)
 LV_ModifyCol(3, 0)
 LV_ModifyCol(4, 0)
 LV_ModifyCol(5, 0)
+LV_ModifyCol(6, 0)
 
 #Include custom_functions.ahk
 
@@ -45,7 +46,7 @@ return
 
 Add_item(item)
 {
-    LV_Add("", item.category, item.name, item.command, item.category item.name, item.runAs)
+    LV_Add("", item.category, item.name, item.command, item.category item.name, item.runAs, item.title)
 }
 
 selectFirstRow:
@@ -56,9 +57,9 @@ return
 invokeCommand:
     Gui, mw:Hide   
     if InStr(selectedCommand, ".lnk")
-        ActivateOpenShortCut(selectedCommand, selectedRunAs)
+        ActivateOpenShortCut(selectedCommand, selectedRunAs, selectedTitle)
     else if InStr(selectedCommand, ".exe")        
-            ActivateOpenExe(selectedCommand, selectedRunAs)        
+        ActivateOpenExeByTitle(selectedCommand, selectedRunAs, selectedTitle)        
     else if InStr(selectedCommand, ".")
         Run, %selectedCommand%
     else if InStr(selectedCommand, "`/")
@@ -70,6 +71,7 @@ return
 Get_selected_command_vars:
     LV_GetText(selectedCommand, A_EventInfo, 3) ; Get the text from the row's third field.  
     LV_GetText(selectedRunAs, A_EventInfo, 5)
+    LV_GetText(selectedTitle, A_EventInfo, 6)
 return
 
 MyListView:

@@ -38,6 +38,7 @@
     },
     {
       "category": "application",
+      "title": "Bizagi tools",
       "name": "biztools",
       "command": "C:/Users/max/Documents/ReleaseTool/BizagiDevelopmentToolFX.exe"
     },

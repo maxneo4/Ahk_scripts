@@ -77,14 +77,19 @@ toUpper:
  StringUpper, Clipboard, Clipboard
 return
 
-ActivateOpenShortCut(shortCut, runAs)
+ActivateOpenShortCut(shortCut, runAs, selectedTitle)
 {       
     FileGetShortcut, %shortCut%, exePath
-    ActivateOpenExe(exePath, runAs)
+    ActivateOpenExe(exePath, runAs, selectedTitle)
 }
 
-ActivateOpenExe(exePath, runAs)
+ActivateOpenExe(exePath, runAs, selectedTitle)
 {   
+   if selectedTitle
+   {
+      ActivateOpenExeByTitle(exePath, runAs, selectedTitle)
+      return
+   }
     SplitPath, exePath, exeName
     IfWinExist ahk_exe %exeName%
        WinActivate ahk_exe %exeName%        
@@ -97,6 +102,23 @@ ActivateOpenExe(exePath, runAs)
      WinWait ahk_exe %exeName%
      WinActivate ahk_exe %exeName%
     }
+   return
+}
+
+ActivateOpenExeByTitle(exePath, runAs, title)
+{       
+    IfWinExist %title%
+       WinActivate     
+    else        
+    {      
+      if runAs
+        Run *RunAs "%exePath%"
+      else
+        run, %exePath%
+     WinWait %title%
+     WinActivate
+    }
+   return
 }
 
 InvokeVerb(path, menu, validate=True) {
