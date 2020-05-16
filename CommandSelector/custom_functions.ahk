@@ -68,6 +68,12 @@ generateGuidInClipboard:
    Send ^v
 return
 
+getfilefromshortcut:
+fullpath := Clipboard
+FileGetShortcut, %fullpath%, exePath
+Clipboard := exePath
+return
+
 toLower:
  gosub sendCopy
  StringLower, Clipboard, Clipboard
@@ -77,6 +83,28 @@ toUpper:
  gosub sendCopy
  StringUpper, Clipboard, Clipboard
 return
+
+ActivateOpenShortCut(shortCut, runAs)
+{    
+    FileGetShortcut, %shortCut%, exePath
+    ActivateOpenExe(exePath, runAs)
+}
+
+ActivateOpenExe(exePath, runAs)
+{
+    SplitPath, exePath, exeName
+    IfWinExist ahk_exe %exeName%
+       WinActivate ahk_exe %exeName%        
+    else        
+    {
+      if runAs
+        Run *RunAs "%exePath%"
+      else
+        run, %exePath%
+     WinWait ahk_exe %exeName%
+     WinActivate ahk_exe %exeName%
+    }
+}
 
 InvokeVerb(path, menu, validate=True) {
 	;by A_Samurai
