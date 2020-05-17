@@ -60,10 +60,8 @@ invokeCommand:
         ActivateOpenShortCut(selectedCommand, selectedRunAs, selectedTitle)
     else if InStr(selectedCommand, ".exe")        
         ActivateOpenExeByTitle(selectedCommand, selectedRunAs, selectedTitle)        
-    else if InStr(selectedCommand, ".")
-        Run, %selectedCommand%
-    else if InStr(selectedCommand, "`/")
-        Run, %selectedCommand%
+    else if InStr(selectedCommand, ".") or InStr(selectedCommand, "`/")
+        Run, %selectedCommand%    
     else if selectedCommand
         gosub %selectedCommand%  
 return
@@ -88,33 +86,34 @@ else if(A_GuiEvent = "I") ; AltSubmit is necesary option
     }
 return
 
+FocusText:
+    IfWinActive, CommandS
+    {
+        ControlGetFocus, OutVar, CommandS    
+        if OutVar not contains edit ;retrive edit or similar
+            GuiControl, Focus, %editId%
+    }    
+return
+
 ~Enter::
 IfWinActive, CommandS    
     gosub invokeCommand
 return
 
-~Del & BackSpace::
-~+Del::
-^Del::
-+BackSpace::
-^D::
-    ControlGetFocus, OutVar, CommandS    
-    if OutVar contains edit ;retrive edit or similar        
+~Del::
+    IfWinActive, CommandS
         GuiControl, ,%EditId% ;clear text box
+    gosub FocusText
 return
 
-~Del::
-    ControlGetFocus, OutVar, CommandS    
-    if OutVar contains edit ;retrive edit or similar        
-        GuiControl, ,%EditId% ;clear text box
+~BackSpace::
+    gosub FocusText
 return
 
 ~Down::    
     ControlGetFocus, OutVar, CommandS    
     if OutVar contains edit ;retrive edit or similar        
-            GuiControl, Focus, %LVID%        
-    ;else ;necesary to avoid jump one row more
-     ;   SendInput {Down} 
+            GuiControl, Focus, %LVID% 
 return
     
 ~Up::       
@@ -131,11 +130,7 @@ Update:
         item := value.Commands[A_Index]
         name := item.name       
         category := item.category
-        if name contains %Search% 
-            Add_item(item)
-        else if category contains %Search% 
-            Add_item(item)
-        else if Search = 
+        if  InStr(name, Search) or InStr(category, Search) or (Search = )
             Add_item(item)
     }    
     gosub selectFirstRow
