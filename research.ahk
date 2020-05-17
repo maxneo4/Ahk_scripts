@@ -1,5 +1,14 @@
 #SingleInstance Force 
 
+^w::
+CoordMode, Caret, Screen 
+Gui, New, AlwaysOnTop ToolWindow -DPIScale -Caption
+Gui, Add, ListBox, r5 vColorChoice, Red|Green|Blue|Black|White
+posY := 20 + A_CaretY
+posX := 20
+Gui, show, x%posX% y%posY%
+return
+
 SetWorkingDir %A_ScriptDir% 
 FormatTime, DateString,, ddMMMyyyy
 
@@ -37,7 +46,7 @@ sendCopy:
    Sleep, 100
 return
 
-^w::
+^i::
 Pics := []
 ; Find some pictures to display.
 Loop, Files, %Folder%\web\images\*.png, R

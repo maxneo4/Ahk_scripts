@@ -25,6 +25,16 @@ public static void main(String[] args){
 :?*:obj`t::object
 :*O:th`t::Thank you
 
+^Del::
+SendInput ^a
+SendInput {Delete}
+return
+
++Del::
+SendInput +{Home}
+SendInput {Delete}
+return
+
 replaceFileSeparator:
    path :=  clipboard
    StringReplace, path, path, `\, /, 1   
