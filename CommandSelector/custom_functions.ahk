@@ -2,12 +2,8 @@
 
 :*b0:<em>::</em>{left 5}
 :X:_mb::MsgBox
-:*:psvm::
-(
-public static void main(String[] args){
-   System.println("Hello world!");
-}
-)
+
+
 
 :*O:reb`t::\\dev-edwinbtmp\
 :*O:rorcl`t::\\dev-oracle122\
@@ -30,7 +26,7 @@ SendInput ^a
 SendInput {Delete}
 return
 
-+Del::
+!Del::
 SendInput +{Home}
 SendInput {Delete}
 return

@@ -1,50 +1,135 @@
 #SingleInstance Force 
 
-^w::
-CoordMode, Caret, Screen 
-Gui, New, AlwaysOnTop ToolWindow -DPIScale -Caption
-Gui, Add, ListBox, r5 vColorChoice, Red|Green|Blue|Black|White
-posY := 20 + A_CaretY
-posX := 20
-Gui, show, x%posX% y%posY%
-return
-
 SetWorkingDir %A_ScriptDir% 
 FormatTime, DateString,, ddMMMyyyy
 
+Gui, rl:New, AlwaysOnTop ToolWindow -DPIScale -Caption
+Gui, Font, s10 Arial cA9A9A7
+Gui, rl:Color, EEAA99, 282923
+Gui +LastFound 
+WinSet, TransColor, EEAA99
+
+; Create the ListView with two columns, Name and Size:
+Gui, rl:Add, ListView, w800 h400 -Multi gMyListView AltSubmit -Hdr vLV2 HwndLVRLID, item ;important diff v and Hwn
+LV_SetImageList( DllCall( "ImageList_Create", Int,2, Int, 20, Int,0x18, Int,1, Int,1 ), 1 ) ;set row height to 25
+
+;~ FileRead, listContent, rememberList.txt
+;~ Loop, Parse, listContent, `n
+		;~ {
+			;~ if  InStr(A_LoopField, filter) or (filter = )
+				;~ LV_Add("", A_LoopField)
+		;~ }
+
+MyListView:
+if(A_GuiEvent = "I") ; AltSubmit is necesary option
+    {        
+        selectedIndex:= LV_GetNext() ; new focused row  
+        LV_GetText(selectedText, A_EventInfo, 1)
+    }
+return
+
+selectFirstRow:
+    LV_ModifyCol(1, "Sort")
+    LV_Modify(1, "+Select +Focus")
+return
+
+~Escape::
+	Gui, rl:Hide
+return
+
 ^!Space::
+	gosub sendCopy
+	gosub addToLog	
+	Clipboard = ;
+	Progress, B1 W200 H28 ZH0 FS11 WS900 Y400 CT0000FF, Text added to log
+	SetTimer, OSD_OFF, -1000
+return
 
-FormatTime, TimeString,, HH:mm:ss
+^!r:: ; remember
+	gosub sendCopy
+	gosub addToLog
+	FileAppend, %Clipboard%`r`n, rememberList.txt 
+	Clipboard = ;
+	Progress, B1 W200 H28 ZH0 FS11 WS900 Y400 CT0000FF, Text added to remember
+	SetTimer, OSD_OFF, -1000
+return
 
-gosub sendCopy
+#f::
+	Clipboard := 
+	gosub sendCopy
+	filter := Clipboard
+	; IF FILTER EMPTY SHOW MODAL TO WRITE FILTER
+	Gui, rl: Default ; important!
+	
+	GuiControl, -redraw, LV2
+	GuiControl, -AltSubmit, LV2
+	
+	LV_Delete()		
+	Loop, Read, rememberList.txt
+	{
+		if  InStr(A_LoopReadLine, filter) or (filter = )
+			LV_Add("", A_LoopReadLine)
+	}
+	GuiControl, +redraw, LV2	
+	GuiControl, +AltSubmit, LV2
+	
+	LV_ModifyCol()	
+	gosub selectFirstRow	
+	Gui, rl:show, AutoSize ,rememberlist	
+return
 
-FileAppend, >>[%TimeString%] `r`n%Clipboard%`r`n`r`n, %DateString%.txt 
+~Enter::
+IfWinActive, rememberlist    
+    gosub invokeText
+return
 
-Clipboard = ;
+invokeText:
+    Gui, rl:Hide
+	Clipboard := SelectedText	
+	SendInput ^v
+return
 
-Progress, B1 W200 H28 ZH0 FS11 WS900 Y400 CT0000FF, Text added to log
-SetTimer, OSD_OFF, -1000
-
+^!t:: ; tasks
 return
 
 OSD_OFF:
 Progress, off
 return
 
-^!o::
+addToLog:	
+	FormatTime, TimeString,, HH:mm:ss
+	FileAppend, >>[%TimeString%] `r`n%Clipboard%`r`n`r`n, %DateString%.txt 
+return
 
-Run, %DateString%.txt
-
+^+r::
+Run, rememberList.txt
 return 
 
-sendCopy:
-   Sleep, 100
+^!o::
+Run, %DateString%.txt
+return 
+
+sendCopy:   
    Send ^c
    ClipWait 1
    if ErrorLevel  ; ClipWait timed out.
     return
-   Sleep, 100
 return
+
+
+^w::
+CoordMode, Caret, Screen 
+Gui, New, AlwaysOnTop ToolWindow -DPIScale -Caption
+Gui, Add, ListBox, r5 vColorChoice, Red|Green|Blue|Black|White
+posY := 20 
+posX := 0
+if A_CaretX
+	posX += A_CaretX
+if A_CaretY
+	posY += A_CaretY
+Gui, show, x%posX% y%posY%
+return
+
 
 ^i::
 Pics := []
