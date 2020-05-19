@@ -11,6 +11,7 @@
 :*O:rbs`t::\\biz-studio\
 :*O:baorcl`t::User Id=BizagiAdmon;Password=bizagi;Data Source=dev-oracle122:1521/orcl
 :*O:baorcll`t::User Id=BizagiAdmon;Password=bizagi;Data Source=orcl-12-2-w1252:1521/orcl
+:*O:btrace`t::E:\Bizagi\Trace
 
 :*:vcat::VWBA_CATALOG_BABIZAGICATALOG
 :*:vcaa::VWBA_CATALOG_BABIZAGICAT_ALL
@@ -83,47 +84,39 @@ toUpper:
  StringUpper, Clipboard, Clipboard
 return
 
-ActivateOpenShortCut(shortCut, runAs, selectedTitle)
-{       
-    FileGetShortcut, %shortCut%, exePath
-    ActivateOpenExe(exePath, runAs, selectedTitle)
-}
+getFileInfo:
+f := FileGetVersionInfo_AW(Clipboard, "ProductVersion", "FileVersion")
+pv := f.productVersion 
+fv := f.fileVersion
+Clipboard = %pv% %fv%
+MsgBox,,, % Clipboard
+return
 
-ActivateOpenExe(exePath, runAs, selectedTitle)
+RunPathSwitch(path, runAs, title)
 {   
-   if selectedTitle
-   {
-      ActivateOpenExeByTitle(exePath, runAs, selectedTitle)
-      return
-   }
-    SplitPath, exePath, exeName
-    IfWinExist ahk_exe %exeName%
-       WinActivate ahk_exe %exeName%        
-    else        
-    {      
-      if runAs
-        Run *RunAs "%exePath%"
-      else
-        run, %exePath%
-     WinWait ahk_exe %exeName%
-     WinActivate ahk_exe %exeName%
-    }
+   if title   
+      RunByTitle(path, runAs, title)
+   else
+      RunPath(path, runAs)   
    return
 }
 
-ActivateOpenExeByTitle(exePath, runAs, title)
+RunPath(path, RunAs)
+{
+   if runAs
+     Run *RunAs "%path%"
+   else
+     run, %path%    
+   return
+}
+
+RunByTitle(path, runAs, title)
 {       
+   SetTitleMatchMode, 2 ;to search window title by contains, not by prefix only
     IfWinExist %title%
-       WinActivate     
-    else        
-    {      
-      if runAs
-        Run *RunAs "%exePath%"
-      else
-        run, %exePath%
-     WinWait %title%
-     WinActivate
-    }
+       WinActivate %title%     
+    else  
+      RunPath(path, runAs)    
    return
 }
 
@@ -156,6 +149,35 @@ InvokeVerb(path, menu, validate=True) {
    return
 }
 
+FileGetVersionInfo_AW( peFile="", params*) {	; Written by SKAN
+	; www.autohotkey.com/forum/viewtopic.php?p=233188#233188  CD:24-Nov-2008 / LM:27-Oct-2010
+	Static	CS, HexVal, Sps="                        ", DLL="Version\", StrGet="StrGet"
+	If	!CS
+		CS :=	A_IsUnicode ? "W" : "A", HexVal :=	"msvcrt\s" (A_IsUnicode ? "w": "" ) "printf"
+
+	If	!FSz :=	DllCall( DLL "GetFileVersionInfoSize" CS , Str,peFile, UInt,0 )
+		Return	"", DllCall( "SetLastError", UInt,1 )
+
+	VarSetCapacity( FVI, FSz, 0 ), VarSetCapacity( Trans,8 * ( A_IsUnicode ? 2 : 1 ) )
+	DllCall( DLL "GetFileVersionInfo" CS, Str,peFile, Int,0, UInt,FSz, UInt,&FVI )
+	If	!DllCall( DLL "VerQueryValue" CS, UInt,&FVI, Str,"\VarFileInfo\Translation", UIntP,Translation, UInt,0 )
+		Return	"", DllCall( "SetLastError", UInt,2 )
+
+	If	!DllCall( HexVal, Str,Trans, Str,"%08X", UInt,NumGet(Translation+0) )
+		Return	"", DllCall( "SetLastError", UInt,3 )
+	res :=	{}
+	For each, attr in params
+	{
+		subBlock :=	"\StringFileInfo\" SubStr(Trans,-3) SubStr(Trans,1,4) "\" attr
+		If	!DllCall( DLL "VerQueryValue" CS, UInt,&FVI, Str,SubBlock, UIntP,InfoPtr, UInt,0 )
+			Continue
+
+		if	Value :=	( A_IsUnicode ? %StrGet%( InfoPtr, DllCall( "lstrlen" CS, UInt,InfoPtr ) )
+		 :  DllCall( "MulDiv", UInt,InfoPtr, Int,1, Int,1, "Str"  ) )
+			res.Insert(attr,Value)
+	}
+	Return	res
+}
 
  FileToClipboard(PathToCopy,Method="copy")
    {

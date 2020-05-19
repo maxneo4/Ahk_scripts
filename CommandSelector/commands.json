@@ -1,5 +1,10 @@
 {
-  "Commands": [    
+  "Commands": [  
+    {
+      "category": "get info",
+      "name": "Get dll/file info",
+      "command": "getFileInfo"
+    },
     {
       "category": "generate",
       "name": "new Guid",
@@ -28,71 +33,97 @@
     {
       "category": "open file",
       "name": "config bizagi studio",
-      "command": "\"C:/ProgramData/Bizagi/Enterprise/BizAgiStudio/appsettings.xml\""
+      "command": "C:/ProgramData/Bizagi/Enterprise/BizAgiStudio/appsettings.xml"
+    },
+    {
+      "category": "open file",
+      "name": "tags repository definition",
+      "command": "C:/git/Bizagi.Core/Source/BizagiCatalog/Bizagi.Catalog/Resources/RepositoryDefinition.json"
+    },
+    {
+      "category": "open file",
+      "name": "bizagi projects xml",
+      "command": "C:/ProgramData/Bizagi/BizAgiProjects.xml"
     },
     {
       "category": "open folder",
       "name": "programData folder bizagi studio",
-      "command": "\"C:/ProgramData/Bizagi/Enterprise/BizAgiStudio\""
+      "command": "C:/ProgramData/Bizagi/Enterprise/BizAgiStudio"
     },
     {
       "category": "open application",
       "name": "installed bizagi studio",
-      "command": "\"C:/ProgramData/Microsoft/Windows/Start Menu/Programs/Bizagi/Bizagi Studio/Bizagi Studio.lnk\""
+      "command": "C:/ProgramData/Microsoft/Windows/Start Menu/Programs/Bizagi/Bizagi Studio/Bizagi Studio.lnk"
     },
     {
       "category": "open application",
       "name": "sqldeveloper",
-      "command": "\"C:/ProgramData/Microsoft/Windows/Start Menu/Programs/Oracle - OraClient12Home3/Application Development/SQL Developer.lnk\""
+      "command": "C:/ProgramData/Microsoft/Windows/Start Menu/Programs/Oracle - OraClient12Home3/Application Development/SQL Developer.lnk"
     },
     {
       "category": "open application",
       "name": "sqldeveloper portable",
-      "command": "\"C:/Users/TEMP/Desktop/sqldeveloper.exe - Shortcut.lnk\""
+      "command": "C:/Users/TEMP/Desktop/sqldeveloper.exe - Shortcut.lnk"
     },
     {
       "category": "open application",
       "name": "visual studio 2019",
-      "command": "*RunAs \"C:/ProgramData/Microsoft/Windows/Start Menu/Programs/Visual Studio 2019.lnk\""
+      "command": "*RunAs C:/ProgramData/Microsoft/Windows/Start Menu/Programs/Visual Studio 2019.lnk"
     },
     {
       "category": "open application",
       "name": "DevGui compile",
-      "command": "*RunAs \"C:/git/Bizagi.Core/Source/DevUtilsGUI.bat\""
+      "title": "Build Solution",
+      "command": "*RunAs C:/git/Bizagi.Core/Source/DevUtilsGUI.bat"
     },
     {
       "category": "open application",
       "name": "SqlServer 17",
-      "command": "\"C:/ProgramData/Microsoft/Windows/Start Menu/Programs/Microsoft SQL Server Tools 17/Microsoft SQL Server Management Studio 17.lnk\""
+      "title":"Microsoft SQL Server Management Studio",
+      "command": "C:/ProgramData/Microsoft/Windows/Start Menu/Programs/Microsoft SQL Server Tools 17/Microsoft SQL Server Management Studio 17.lnk"
     },
      {
       "category": "open application",
       "name": "Hyper-V manager",
-      "command": "\"C:/ProgramData/Microsoft/Windows/Start Menu/Programs/Administrative Tools/Hyper-V Manager.lnk\""
+      "title": "Hyper-V Manager",
+      "command": "C:/ProgramData/Microsoft/Windows/Start Menu/Programs/Administrative Tools/Hyper-V Manager.lnk"
     },
     {
       "category": "open application",
       "name": "biztools",
-      "command": "\"E:/Mega/Portables/BizTools/BizTools1.0.3.3.exe\""
+      "command": "E:/Mega/Portables/BizTools/BizTools1.0.3.3.exe"
     },
     {
       "category": "open application",
       "name": "excel",
-      "command": "\"C:/ProgramData/Microsoft/Windows/Start Menu/Programs/Excel.lnk\""
+      "command": "C:/ProgramData/Microsoft/Windows/Start Menu/Programs/Excel.lnk"
     },
     {
       "category": "open application",
       "name": "oracle client",
-      "command": "\"C:/Windows/system32/WindowsPowerShell/v1.0/powershell.exe\" -NoExit -command \"cd 'E:/app/client/EdwinB/product/12.2.0/client_2/bin'\""
+      "command": "C:/Windows/system32/WindowsPowerShell/v1.0/powershell.exe -NoExit -command cd 'E:/app/client/EdwinB/product/12.2.0/client_2/bin'"
     },
      {
       "category": "open application",
       "name": "bizagi development tools",
-      "command": "\"E:/Mega/Portables/BizTools/BizagiDevelopmentToolFX_(T.51).exe\""
+      "title": "Bizagi tools",
+      "command": "E:/Mega/Portables/BizTools/BizagiDevelopmentToolFX_(T.51).exe"
+    },
+     {
+      "category": "open application",
+      "name": "azure storage explorer",
+      "title": "Storage Explorer",
+      "command": "C:/ProgramData/Microsoft/Windows/Start Menu/Programs/Microsoft Azure Storage Explorer/Microsoft Azure Storage Explorer.lnk"
+    },
+    {
+      "category": "open application",
+      "name": "powershellise",
+      "command": "C:/Users/EdwinB/AppData/Roaming/Microsoft/Windows/Start Menu/Programs/Windows PowerShell/Windows PowerShell ISE.lnk"
     },
      {
       "category": "open webpage",
       "name": "nuclino",
+      "title": "Nuclino",
       "command": "https://app.nuclino.com/DeploymentBizagi/Bizagi"
     },
     {
@@ -105,10 +136,35 @@
       "name": "Support new platform cases",
       "command": "https://cs-bizagi.bizagi.com/cs/index.html"
     },
+     {
+      "category": "open webpage",
+      "name": "regex expression online",
+      "command": "https://regexr.com/"
+    },
+    {
+      "category": "open webpage",
+      "name": "jsoneditor online",
+      "command": "https://jsoneditoronline.org/"
+    },
+    {
+      "category": "open webpage",
+      "name": "regex tester online guid",
+      "command": "https://www.regextester.com/94410"
+    },
+    {
+      "category": "open webpage",
+      "name": "xml viewer online",      
+      "command": "https://codebeautify.org/xmlviewer"
+    },
+    {
+      "category": "open webpage",
+      "name": "liquidtemplate online",
+      "command": "https://liquidtemplateonline.web.app/"
+    },
     {
       "category": "tool",
-      "name": "format command path",
-      "command": "formatCommand"
+      "name": "replace \\ by /",
+      "command": "replaceFileSeparator"
     }
   ]
 }

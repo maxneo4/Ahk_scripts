@@ -55,13 +55,9 @@ selectFirstRow:
 return
 
 invokeCommand:
-    Gui, mw:Hide   
-    if InStr(selectedCommand, ".lnk")
-        ActivateOpenShortCut(selectedCommand, selectedRunAs, selectedTitle)
-    else if InStr(selectedCommand, ".exe")        
-        ActivateOpenExeByTitle(selectedCommand, selectedRunAs, selectedTitle)        
-    else if InStr(selectedCommand, ".") or InStr(selectedCommand, "`/")
-        Run, %selectedCommand%    
+    Gui, mw:Hide          
+    if InStr(selectedCommand, ".") or InStr(selectedCommand, "`/")
+        RunPathSwitch(selectedCommand, selectedRunAs, selectedTitle)  
     else if selectedCommand
         gosub %selectedCommand%  
 return
