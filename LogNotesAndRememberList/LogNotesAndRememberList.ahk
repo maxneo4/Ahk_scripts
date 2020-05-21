@@ -9,7 +9,7 @@ Gui, rl:Add, Edit, w400 x0 y0 vFilter gUpdate HwndEditId ;h35
 Gui, Font, s10 Arial cA9A9A7
 Gui, rl:Color, EEAA99, F3282923
 Gui +LastFound 
-WinSet, TransColor, EEAA99 200
+WinSet, TransColor, EEAA99 220
 Gui, rl:Add, ListView, w400 h300 x0 y25 -Multi gMyListView AltSubmit -Hdr vLV2 HwndLVRLID, item ;important diff v and Hwn
 LV_SetImageList( DllCall( "ImageList_Create", Int,2, Int, 20, Int,0x18, Int,1, Int,1 ), 1 ) ;set row height to 25
 
@@ -25,17 +25,29 @@ gosub SelectFirstRow
 		
 ;COMMON
 
+showMessage(message, time)
+{
+	Progress, B1 W200 H28 ZH0 FS11 WS900 Y400 CT0000FF, %message%
+	SetTimer, OSD_OFF, -%time%
+}
+
+showFailMessage(message, time)
+{
+	Progress, B1 W300 H28 ZH0 FS11 WS900 Y400 CTFF0000, %message%
+	SetTimer, OSD_OFF, -%time%
+}
+
+OSD_OFF:
+Progress, off
+return
+
 sendCopy:   
    Send ^c
    ClipWait 1
    if ErrorLevel  ; ClipWait timed out.
     return
 return
-		
-OSD_OFF:
-Progress, off
-return
-		
+
 ;LOG NOTES
 
 addToLog:	
@@ -48,13 +60,33 @@ return
 	gosub sendCopy
 	gosub addToLog	
 	Clipboard = ;
-	Progress, B1 W200 H28 ZH0 FS11 WS900 Y400 CT0000FF, Text added to log
-	SetTimer, OSD_OFF, -1000
+	showMessage("Text added to log", 1000)	
 return
 
 ^!o::
-Run, %DateString%.txt
+FormatTime, DateString,, ddMMMyyyy
+IfExist, %DateString%.txt
+	Run, %DateString%.txt
+else
+	showFailMessage(DateString ".txt is not created!", 1500)
 return 
+
+^!d:: ;open by selected date
+Gui, dt:New, AlwaysOnTop ToolWindow -DPIScale -Caption
+Gui, dt:Add, MonthCal, vMyCalendar
+Gui, dt:Add, Button, gSelectedDate x100, Ok
+Gui, Show
+return 
+
+selectedDate:
+Gui, Submit ; important when selected date is today
+FormatTime, DateString, %MyCalendar%000000 , ddMMMyyyy
+Gui, dt:Hide
+IfExist, %DateString%.txt
+	Run, %DateString%.txt
+else
+	showFailMessage(DateString ".txt is not created!", 2000)
+return
 
 ;REMEMBER LIST
 
@@ -95,8 +127,7 @@ return
 		gosub addToLog
 		Clipboard :=  StrReplace(Clipboard, "`r`n")
 		FileAppend, %Clipboard%`r`n, rememberList.txt 
-		Progress, B1 W200 H28 ZH0 FS11 WS900 Y400 CT0000FF, Text added to remember
-		SetTimer, OSD_OFF, -1000
+		showMessage("Text added to remember", 1000)
 	}		
 return
 
@@ -114,6 +145,8 @@ return
 !#r:: ; open remember list file
 IfExist, rememberList.txt
 	Run, rememberList.txt
+else
+	showFailMessage("rememberList.txt is not created!", 1500)
 return 
 
 ~Enter::
