@@ -3,22 +3,25 @@
 
 SetWorkingDir %A_ScriptDir% 
 
-
 Gui, rl:New, AlwaysOnTop ToolWindow -DPIScale -Caption
 Gui, Font, s10 Arial cA9A9A7
-Gui, rl:Color, EEAA99, 282923
+Gui, rl:Add, Edit, w400 x0 y0 vFilter gUpdate HwndEditId ;h35
+Gui, Font, s10 Arial cA9A9A7
+Gui, rl:Color, EEAA99, F3282923
 Gui +LastFound 
-WinSet, TransColor, EEAA99
-
-Gui, rl:Add, ListView, w800 h400 -Multi gMyListView AltSubmit -Hdr vLV2 HwndLVRLID, item ;important diff v and Hwn
+WinSet, TransColor, EEAA99 200
+Gui, rl:Add, ListView, w400 h300 x0 y25 -Multi gMyListView AltSubmit -Hdr vLV2 HwndLVRLID, item ;important diff v and Hwn
 LV_SetImageList( DllCall( "ImageList_Create", Int,2, Int, 20, Int,0x18, Int,1, Int,1 ), 1 ) ;set row height to 25
 
-;~ FileRead, listContent, rememberList.txt
-;~ Loop, Parse, listContent, `n
-		;~ {
-			;~ if  InStr(A_LoopField, filter) or (filter = )
-				;~ LV_Add("", A_LoopField)
-		;~ }
+ FileRead, listContent, rememberList.txt
+ Loop, Parse, listContent, `n
+		{
+			if  A_LoopField
+				LV_Add("", A_LoopField)
+		}
+LV_ModifyCol()	
+		
+gosub SelectFirstRow
 		
 ;COMMON
 
@@ -63,6 +66,18 @@ if(A_GuiEvent = "I") ; AltSubmit is necesary option
     }
 return
 
+Update:
+    GuiControlGet Filter ;get content of control of associate var
+    LV_Delete()
+    Loop, Read, rememberList.txt
+	{
+		if  InStr(A_LoopReadLine, Filter) or (Filter = )
+			LV_Add("", A_LoopReadLine)
+	}
+    gosub selectFirstRow
+	LV_ModifyCol()
+    return
+
 selectFirstRow:
     LV_ModifyCol(1, "Sort")
     LV_Modify(1, "+Select +Focus")
@@ -85,28 +100,15 @@ return
 	}		
 return
 
-:*:irm:: ; invoke remember list
-	Clipboard := 
-	gosub sendCopy
-	filter := Clipboard
-	; IF FILTER EMPTY SHOW MODAL TO WRITE FILTER
-	Gui, rl: Default ; important!
-	
-	GuiControl, -redraw, LV2
-	GuiControl, -AltSubmit, LV2
-	
-	LV_Delete()		
-	Loop, Read, rememberList.txt
-	{
-		if  InStr(A_LoopReadLine, filter) or (filter = )
-			LV_Add("", A_LoopReadLine)
-	}
-	GuiControl, +redraw, LV2	
-	GuiControl, +AltSubmit, LV2
-	
-	LV_ModifyCol()	
-	gosub selectFirstRow	
-	Gui, rl:show, AutoSize ,rememberlist	
+:*:irm:: 
+	CoordMode, Caret, Screen 
+	GuiControl, ,%EditId% 	
+	Sleep, 100
+	if A_CaretX	
+		Gui, rl:show, AutoSize x%A_CaretX% y%A_CaretY% ,rememberlist	
+	else
+		Gui, rl:show, AutoSize Center , rememberlist
+	GuiControl, Focus, %EditId%
 return
 
 !#r:: ; open remember list file
@@ -124,6 +126,18 @@ invokeText:
 	Clipboard := SelectedText	
 	SendInput ^v
 return
+
+~Down::    
+    ControlGetFocus, OutVar, rememberlist    
+    if OutVar contains edit ;retrive edit or similar        
+            GuiControl, Focus, %LVRLID% 
+return
+    
+~Up::       
+    ControlGetFocus, OutVar, rememberlist
+    if (OutVar contains listView) and (selectedIndex < 2)
+        GuiControl, Focus, %EditId%
+	return
 
 ^!t:: ; tasks
 return
