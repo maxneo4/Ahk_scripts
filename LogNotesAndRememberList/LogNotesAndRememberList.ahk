@@ -13,17 +13,49 @@ WinSet, TransColor, EEAA99 220
 Gui, rl:Add, ListView, w400 h300 x0 y25 -Multi gMyListView AltSubmit -Hdr vLV2 HwndLVRLID, item ;important diff v and Hwn
 LV_SetImageList( DllCall( "ImageList_Create", Int,2, Int, 20, Int,0x18, Int,1, Int,1 ), 1 ) ;set row height to 25
 
- FileRead, listContent, rememberList.txt
- Loop, Parse, listContent, `n
-		{
-			if  A_LoopField
-				LV_Add("", A_LoopField)
-		}
+FileRead, listContent, rememberList.txt
+Loop, Parse, listContent, `n
+	{
+		if  A_LoopField
+			LV_Add("", A_LoopField)
+	}
 LV_ModifyCol()	
 		
 gosub SelectFirstRow
+
+FileDelete, ShortKeys.txt
+FileAppend, 
+(
+SHIFT+F1 : abre esta archivo para recordar los comandos
+
+LOG DE NOTAS
+
+CTRL+ALT+SPACE : agregar texto seleccionado al log
+
+WIN+ALT+SPACE : abre caja de texto para escribir directamente al log
+
+CTRL+ALT+O : abrir log del dia actual
+
+CTRL+ALT+D : abrir log por fecha del calendario
+
+----------------------------------------------------------------
+
+REMEBER LIST
+
+ESCAPE : oculta la lista
+
+CTRL+WIN+R : agrega texto seleccionado a la lista
+
+ALT+WIN+R : abre listRemember.txt
+
+irm : muestra la lista para escoger el item a usar
+), ShortKeys.txt
 		
 ;COMMON
+
++F1::
+Run, ShortKeys.txt
+return
 
 showMessage(message, time)
 {
@@ -63,6 +95,17 @@ return
 	showMessage("Text added to log", 1000)	
 return
 
+#!Space::
+InputBox, textToLog, , Text to log., , 500, 140
+if ErrorLevel 
+	ShowFailMessage("You cancel the dialog", 1000)
+else
+{
+	Clipboard := textToLog
+	gosub addToLog
+}
+return
+
 ^!o::
 FormatTime, DateString,, ddMMMyyyy
 IfExist, %DateString%.txt
@@ -74,6 +117,7 @@ return
 ^!d:: ;open by selected date
 Gui, dt:New, AlwaysOnTop ToolWindow -DPIScale -Caption
 Gui, dt:Add, MonthCal, vMyCalendar
+Gui, Font, s10
 Gui, dt:Add, Button, gSelectedDate x100, Ok
 Gui, Show
 return 
