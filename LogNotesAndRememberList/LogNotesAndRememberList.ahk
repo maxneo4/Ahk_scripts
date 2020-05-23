@@ -38,6 +38,12 @@ CTRL+ALT+O : abrir log del dia actual
 
 CTRL+ALT+D : abrir log por fecha del calendario
 
+CTRL+WIN+C : agregar captura de pantalla al log de imagenes
+
+CTRL+WIN+O : abrir log de imagenes del dia actual
+
+CTRL+WIN+D : abrir log de imagenes por fecha del calendario
+
 ----------------------------------------------------------------
 
 REMEBER LIST
@@ -91,7 +97,6 @@ return
 ^!Space::
 	gosub sendCopy
 	gosub addToLog	
-	Clipboard = ;
 	showMessage("Text added to log", 1000)	
 return
 
@@ -106,6 +111,23 @@ else
 }
 return
 
+^#c::
+FormatTime, DateString,, ddMMMyyyy
+FormatTime, TimeString,, HH-mm-ss
+IfNotExist, %DateString%
+   FileCreateDir, %DateString%
+SendInput, #+s
+Run, "%A_ScriptDir%\ClipboardImageToFile.exe" -secondsToWait 20 -imagePath "%DateString%/%TimeString%.png"
+return
+
+^#o::
+FormatTime, DateString,, ddMMMyyyy
+IfExist, %DateString%
+	Run, %DateString%
+else
+	showFailMessage("images log not created!", 2000)
+return
+
 ^!o::
 FormatTime, DateString,, ddMMMyyyy
 IfExist, %DateString%.txt
@@ -114,22 +136,42 @@ else
 	showFailMessage(DateString ".txt is not created!", 1500)
 return 
 
-^!d:: ;open by selected date
+openCalendar:
 Gui, dt:New, AlwaysOnTop ToolWindow -DPIScale -Caption
 Gui, dt:Add, MonthCal, vMyCalendar
 Gui, Font, s10
 Gui, dt:Add, Button, gSelectedDate x100, Ok
 Gui, Show
+return
+
+^!d:: ;open by selected date
+mode := "file"
+gosub openCalendar
 return 
+
+^#d::
+mode := "folder"
+gosub openCalendar
+return
 
 selectedDate:
 Gui, Submit ; important when selected date is today
 FormatTime, DateString, %MyCalendar%000000 , ddMMMyyyy
 Gui, dt:Hide
-IfExist, %DateString%.txt
-	Run, %DateString%.txt
-else
-	showFailMessage(DateString ".txt is not created!", 2000)
+if(mode = "file")
+{
+	IfExist, %DateString%.txt
+		Run, %DateString%.txt
+	else
+		showFailMessage(DateString ".txt is not created!", 2000)
+}
+if(mode = "folder")
+{
+	IfExist, %DateString%
+		Run, %DateString%
+	else
+		showFailMessage(DateString " images log not created!", 2000)
+}
 return
 
 ;REMEMBER LIST
