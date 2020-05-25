@@ -1,121 +1,114 @@
 #SingleInstance Force 
 
+#Include C:\git\Ahk_scripts\samples\sharats.me\time-osd.ahk
+TimeOSDInit()
+
 SetWorkingDir %A_ScriptDir% 
-FormatTime, DateString,, ddMMMyyyy
 
-Gui, rl:New, AlwaysOnTop ToolWindow -DPIScale -Caption
-Gui, Font, s10 Arial cA9A9A7
-Gui, rl:Color, EEAA99, 282923
-Gui +LastFound 
-WinSet, TransColor, EEAA99
 
-; Create the ListView with two columns, Name and Size:
-Gui, rl:Add, ListView, w800 h400 -Multi gMyListView AltSubmit -Hdr vLV2 HwndLVRLID, item ;important diff v and Hwn
-LV_SetImageList( DllCall( "ImageList_Create", Int,2, Int, 20, Int,0x18, Int,1, Int,1 ), 1 ) ;set row height to 25
 
-;~ FileRead, listContent, rememberList.txt
-;~ Loop, Parse, listContent, `n
-		;~ {
-			;~ if  InStr(A_LoopField, filter) or (filter = )
-				;~ LV_Add("", A_LoopField)
-		;~ }
-
-MyListView:
-if(A_GuiEvent = "I") ; AltSubmit is necesary option
-    {        
-        selectedIndex:= LV_GetNext() ; new focused row  
-        LV_GetText(selectedText, A_EventInfo, 1)
+!Space::
+    Input, text, L3 T3, , oi,ol,ob
+    Switch text
+    {
+        case "oi": MsgBox,,, Open I
+        case "ob": MsgBox,,, Open B
+        case "ol": MsgBox,,, Open L
     }
 return
 
-selectFirstRow:
-    LV_ModifyCol(1, "Sort")
-    LV_Modify(1, "+Select +Focus")
-return
 
-~Escape::
-	Gui, rl:Hide
-return
 
-^!Space::
-	gosub sendCopy
-	gosub addToLog	
-	Clipboard = ;
-	Progress, B1 W200 H28 ZH0 FS11 WS900 Y400 CT0000FF, Text added to log
-	SetTimer, OSD_OFF, -1000
-return
+GroupAdd, FileListers, ahk_class CabinetWClass
+GroupAdd, FileListers, ahk_class WorkerW
+GroupAdd, FileListers, ahk_class #32770, ShellView
 
-^!r:: ; remember
-	gosub sendCopy
-	gosub addToLog
-	FileAppend, %Clipboard%`r`n, rememberList.txt 
-	Clipboard = ;
-	Progress, B1 W200 H28 ZH0 FS11 WS900 Y400 CT0000FF, Text added to remember
-	SetTimer, OSD_OFF, -1000
-return
+;ALT+D is used from CTRL+D : go to address bar in windows explorer like navigators
+#IfWinActive ahk_group FileListers
+^l::SendInput !d
 
-#f::
-	Clipboard := 
-	gosub sendCopy
-	filter := Clipboard
-	; IF FILTER EMPTY SHOW MODAL TO WRITE FILTER
-	Gui, rl: Default ; important!
-	
-	GuiControl, -redraw, LV2
-	GuiControl, -AltSubmit, LV2
-	
-	LV_Delete()		
-	Loop, Read, rememberList.txt
-	{
-		if  InStr(A_LoopReadLine, filter) or (filter = )
-			LV_Add("", A_LoopReadLine)
-	}
-	GuiControl, +redraw, LV2	
-	GuiControl, +AltSubmit, LV2
-	
-	LV_ModifyCol()	
-	gosub selectFirstRow	
-	Gui, rl:show, AutoSize ,rememberlist	
-return
+;Open in cmd current windows explorer folder
+#IfWinActive ahk_group FileListers  
+^!t::SendInput !dcmd{Enter}
 
-~Enter::
-IfWinActive, rememberlist    
-    gosub invokeText
-return
+; Get selected files in explorer and more:
+; http://www.autohotkey.com/board/topic/60985-get-paths-of-selected-items-in-an-explorer-window/
+#IfWinActive ahk_group FileListers
+^s::
+SelectByRegEx() {
+    static selectionPattern := ""
+    WinGetPos, wx, wy
+    ControlGetPos, cx, cy, cw, , DirectUIHWND3
+    x := wx + cx + cw/2 - 200
+    y := wy + cy
+    InputBox, selectionPattern, Select by regex
+        , Enter regex pattern to select files that CONTAIN it (Empty to select all)
+        , , 400, 150, %x%, %y%, , , %selectionPattern%
+    if ErrorLevel
+        Return
+    for window in ComObjCreate("Shell.Application").Windows
+        if WinActive("ahk_id " . window.hwnd) {
+            pattern := "S)" . selectionPattern
+            items := window.document.Folder.Items
+            total := items.Count()
+            i := 0
+            showProgress := total > 160
+            if (showProgress)
+                Progress, b w200, , Matching...
+            for item in items {
+                match := RegExMatch(item.Name, pattern) ? 17 : 0
+                window.document.SelectItem(item, match)
+                if (showProgress) {
+                    i := i + 100
+                    Progress, % i / total
+                }
+            }
+            Break
+        }
+    Progress, Off
+}
 
-invokeText:
-    Gui, rl:Hide
-	Clipboard := SelectedText	
-	SendInput ^v
-return
+#include C:\git\Ahk_scripts\Ahk Resources\AhkLibs\SelectedPath.ahk
 
-^!t:: ; tasks
-return
 
-OSD_OFF:
-Progress, off
-return
-
-addToLog:	
-	FormatTime, TimeString,, HH:mm:ss
-	FileAppend, >>[%TimeString%] `r`n%Clipboard%`r`n`r`n, %DateString%.txt 
-return
-
-^+r::
-Run, rememberList.txt
-return 
-
-^!o::
-Run, %DateString%.txt
-return 
-
-sendCopy:   
-   Send ^c
-   ClipWait 1
-   if ErrorLevel  ; ClipWait timed out.
-    return
-return
-
+#IfWinActive ahk_group FileListers
+^#c::
+	SplashTextOn, before
+    SoundBeep
+    Clipboard := Explorer_GetSelected()
+	SplashTextOff
+    Return
+    
+#IfWinActive ahk_group FileListers
+^#n::
+CreateFolderHierarchy() {
+    loc := Explorer_GetPath()
+    WinGetPos, wx, wy
+    ControlGetPos, cx, cy, cw, , DirectUIHWND3
+    x := wx + cx + cw/2 - 200
+    y := wy + cy
+    InputBox, folder, Create Folder, Enter folder name/path create:, , 400, 120
+        , %x%, %y%
+    if ErrorLevel
+        Return
+    folder := StrReplace(folder, "/", "\")
+    pos := RegExMatch(folder, "O)\{([^\{]+)\}", match)
+    folders := []
+    if (pos > 0) {
+        parts := StrSplit(match.value(1), ",")
+        prefix := SubStr(folder, 1, match.Pos(0) - 1)
+        suffix := SubStr(folder, match.Pos(0) + match.Len(0))
+        for i, part in parts {
+            folders.Push(prefix . part . suffix)
+        }
+    } else {
+        folders.Push(folder)
+    }
+    for i, folder in folders {
+        FileCreateDir, %loc%\%folder%
+    }
+    Explorer_GetWindow().Navigate2(loc . "\" . folders[folders.Length()])
+}
 
 ^w::
 CoordMode, Caret, Screen 
@@ -161,9 +154,4 @@ Loop
 	GuiControl, , Pic, % "HBITMAP:*" Pics[Mod(A_Index, Pics.Length())+1]
 	
 }
-return
-
-GuiClose:
-GuiEscape:
-ExitApp
 return
