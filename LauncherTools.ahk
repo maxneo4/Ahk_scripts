@@ -5,14 +5,14 @@
 SendMode Input
 
 SetWorkingDir %A_ScriptDir%
+FileCreateShortcut, %A_ScriptFullPath%, %A_Startup%\LauncherToolsShortCut.lnk, %A_ScriptDir%
+
 
 #Include Ahk Resources\AhkLibs\json.ahk
 #include CommandSelector\CommandSelector.ahk
 
 
-SetWorkingDir %A_ScriptDir%
 
-FileCreateShortcut, %A_ScriptFullPath%, %A_Startup%\LauncherToolsShortCut.lnk, %A_ScriptDir%
 
 ;O ommit the end character
 ;* ommit to need end character	
@@ -38,9 +38,12 @@ FileCreateShortcut, %A_ScriptFullPath%, %A_Startup%\LauncherToolsShortCut.lnk, %
 +F1::
 helpText = 
 (
+CommandSelector
+ALT+SPACE : open command selector
+
 Custom Functions
 CTRL+DEL : Delete all in file
 ALT+DEL : Delete current line
 )
-MsgBox, ,, %helptext%, 
+MsgBox, ,Help, %helptext%, 
 Return

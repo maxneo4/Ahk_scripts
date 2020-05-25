@@ -13,18 +13,18 @@ InitCommandSelector() {
     Gui +LastFound 
     WinSet, TransColor, EEAA99
 
-    static LV1
+    static ListViewCommandSelector
 
     ; Create the ListView with two columns, Name and Size:
-    Gui, mw:Add, ListView, w600 h400 -Multi gMyListView AltSubmit -Hdr vLV1 HwndLVID, Category|Name|Command|Order|RunAs|Title
+    Gui, mw:Add, ListView, w600 h400 -Multi gMyListView AltSubmit -Hdr vListViewCommandSelector HwndLVID, Category|Name|Command|Order|RunAs|Title
     LV_SetImageList( DllCall( "ImageList_Create", Int,2, Int, 30, Int,0x18, Int,1, Int,1 ), 1 ) ;set row height to 30
         
     ; load json config
     FileRead, jsonContent, CommandSelector\commands-max.json
-    global value := JSON.Load( jsonContent )
+    global valueCSjson := JSON.Load( jsonContent )
 
-    Loop, % value.Commands.MaxIndex() {
-        item := value.Commands[A_Index]
+    Loop, % valueCSjson.Commands.MaxIndex() {
+        item := valueCSjson.Commands[A_Index]
         Add_item(item)
     }
     gosub selectFirstRow
@@ -38,7 +38,6 @@ InitCommandSelector() {
 }
 
 Add_item(item) {
-    Gui, mw:Default
     LV_Add("", item.category, item.name, item.command, item.category item.name, item.runAs, item.title)
 }
 
@@ -115,9 +114,9 @@ Update:
     Gui, mw:Default
     GuiControlGet Search ;get content of control of associate var
     LV_Delete()
-    Loop, % value.Commands.MaxIndex()  
+    Loop, % valueCSjson.Commands.MaxIndex()  
     {
-        item := value.Commands[A_Index]
+        item := valueCSjson.Commands[A_Index]
         name := item.name       
         category := item.category
         if  InStr(name, Search) or InStr(category, Search) or (Search = )
