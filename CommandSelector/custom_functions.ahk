@@ -1,27 +1,3 @@
-;https://www.autohotkey.com/docs/Hotstrings.htm#EndChars
-
-:*b0:<em>::</em>{left 5}
-:X:_mb::MsgBox
-
-
-
-:*O:reb`t::\\dev-edwinbtmp\
-:*O:rorcl`t::\\dev-oracle122\
-:*O:rorcll`t::\\orcl-12-2-w1252\
-:*O:rbs`t::\\biz-studio\
-:*O:baorcl`t::User Id=BizagiAdmon;Password=bizagi;Data Source=dev-oracle122:1521/orcl
-:*O:baorcll`t::User Id=BizagiAdmon;Password=bizagi;Data Source=orcl-12-2-w1252:1521/orcl
-:*O:btrace`t::E:\Bizagi\Trace
-
-:*:vcat::VWBA_CATALOG_BABIZAGICATALOG
-:*:vcaa::VWBA_CATALOG_BABIZAGICAT_ALL
-:*:tcat::BABIZAGICATALOG
-:*:wgi::where guidObject in(){left 1}
-::btc::fnBA_DB_ClobToBlob
-::ctb::fnBA_DB_BlobToClob
-:?*:obj`t::object
-:*O:th`t::Thank you
-
 ^Del::
 SendInput ^a
 SendInput {Delete}
@@ -85,15 +61,14 @@ toUpper:
 return
 
 getFileInfo:
-f := FileGetVersionInfo_AW(Clipboard, "ProductVersion", "FileVersion")
-pv := f.productVersion 
-fv := f.fileVersion
-Clipboard = %pv% %fv%
-MsgBox,,, % Clipboard
+  f := FileGetVersionInfo_AW(Clipboard, "ProductVersion", "FileVersion")
+  pv := f.productVersion 
+  fv := f.fileVersion
+  Clipboard = %pv% %fv%
+  MsgBox,,, % Clipboard
 return
 
-RunPathSwitch(path, runAs, title)
-{   
+RunPathSwitch(path, runAs, title) {   
    if title   
       RunByTitle(path, runAs, title)
    else
@@ -101,8 +76,7 @@ RunPathSwitch(path, runAs, title)
    return
 }
 
-RunPath(path, RunAs)
-{
+RunPath(path, RunAs) {
    if runAs
      Run *RunAs "%path%"
    else
@@ -110,8 +84,7 @@ RunPath(path, RunAs)
    return
 }
 
-RunByTitle(path, runAs, title)
-{       
+RunByTitle(path, runAs, title) {       
    SetTitleMatchMode, 2 ;to search window title by contains, not by prefix only
     IfWinExist %title%
        WinActivate %title%     
@@ -179,8 +152,7 @@ FileGetVersionInfo_AW( peFile="", params*) {	; Written by SKAN
 	Return	res
 }
 
- FileToClipboard(PathToCopy,Method="copy")
-   {
+ FileToClipboard(PathToCopy,Method="copy") {
    FileCount:=0
    PathLength:=0
 

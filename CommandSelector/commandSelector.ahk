@@ -1,51 +1,44 @@
-#NoEnv  ; Recommended for performance and compatibility with future AutoHotkey releases.
-; #Warn  ; Enable warnings to assist with detecting common errors.
-SendMode Input  ; Recommended for new scripts due to its superior speed and reliability.
-SetWorkingDir %A_ScriptDir%  ; Ensures a consistent starting directory.
-;MsgBox, %A_AhkVersion%
-; + shift, ^ ctrl, # windows, ! alt, ~ continua el evento [Alt+126]
 
-#SingleInstance,Force
-#Include json.ahk
+InitCommandSelector()
 
-FileCreateShortcut, %A_ScriptFullPath%, %A_Startup%\My AHK Script.lnk, %A_ScriptDir%
+#include CommandSelector\custom_functions.ahk
 
-Gui, mw:New, AlwaysOnTop ToolWindow -DPIScale -Caption
-Gui, Font, s18 Arial cA9A9A7
-Gui, mw:Add, Edit, w600 vSearch gUpdate HwndEditId ;h35
-Gui, Font, s12 Arial cA9A9A7
+InitCommandSelector() {   
+    Gui, mw:New, AlwaysOnTop ToolWindow -DPIScale -Caption
+    Gui, Font, s18 Arial cA9A9A7
+    Gui, mw:Add, Edit, w600 vSearch gUpdate HwndEditId ;h35
+    Gui, Font, s12 Arial cA9A9A7
 
-Gui, mw:Color, EEAA99, 282923
-Gui +LastFound 
-WinSet, TransColor, EEAA99
+    Gui, mw:Color, EEAA99, 282923
+    Gui +LastFound 
+    WinSet, TransColor, EEAA99
 
-; Create the ListView with two columns, Name and Size:
-Gui, mw:Add, ListView, w600 h400 -Multi gMyListView AltSubmit -Hdr vLV1 HwndLVID, Category|Name|Command|Order|RunAs|Title
-LV_SetImageList( DllCall( "ImageList_Create", Int,2, Int, 30, Int,0x18, Int,1, Int,1 ), 1 ) ;set row height to 30
-    
-; load json config
-FileRead, jsonContent, commands-max.json
-value := JSON.Load( jsonContent )
+    static LV1
 
-Loop, % value.Commands.MaxIndex() {
-    item := value.Commands[A_Index]
-    Add_item(item)
+    ; Create the ListView with two columns, Name and Size:
+    Gui, mw:Add, ListView, w600 h400 -Multi gMyListView AltSubmit -Hdr vLV1 HwndLVID, Category|Name|Command|Order|RunAs|Title
+    LV_SetImageList( DllCall( "ImageList_Create", Int,2, Int, 30, Int,0x18, Int,1, Int,1 ), 1 ) ;set row height to 30
+        
+    ; load json config
+    FileRead, jsonContent, CommandSelector\commands-max.json
+    global value := JSON.Load( jsonContent )
+
+    Loop, % value.Commands.MaxIndex() {
+        item := value.Commands[A_Index]
+        Add_item(item)
+    }
+    gosub selectFirstRow
+    ;LV_ModifyCol()  ; Auto-size each column to fit its contents.
+    LV_ModifyCol(1, 185)
+    LV_ModifyCol(2, 385)
+    LV_ModifyCol(3, 0)
+    LV_ModifyCol(4, 0)
+    LV_ModifyCol(5, 0)
+    LV_ModifyCol(6, 0)
 }
-gosub selectFirstRow
-;LV_ModifyCol()  ; Auto-size each column to fit its contents.
-LV_ModifyCol(1, 185)
-LV_ModifyCol(2, 385)
-LV_ModifyCol(3, 0)
-LV_ModifyCol(4, 0)
-LV_ModifyCol(5, 0)
-LV_ModifyCol(6, 0)
 
-#Include custom_functions.ahk
-
-return
-
-Add_item(item)
-{
+Add_item(item) {
+    Gui, mw:Default
     LV_Add("", item.category, item.name, item.command, item.category item.name, item.runAs, item.title)
 }
 
@@ -119,6 +112,7 @@ return
 	return
 
 Update:
+    Gui, mw:Default
     GuiControlGet Search ;get content of control of associate var
     LV_Delete()
     Loop, % value.Commands.MaxIndex()  
