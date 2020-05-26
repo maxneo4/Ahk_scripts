@@ -12,8 +12,6 @@ FileCreateShortcut, %A_ScriptFullPath%, %A_Startup%\LauncherToolsShortCut.lnk, %
 #include CommandSelector\CommandSelector.ahk
 
 
-
-
 ;O ommit the end character
 ;* ommit to need end character	
 ;Bizagi developer hotStrings
@@ -34,6 +32,16 @@ FileCreateShortcut, %A_ScriptFullPath%, %A_Startup%\LauncherToolsShortCut.lnk, %
 :O:btrace::E:\Bizagi\Trace
 :O:baorcl::User Id=BizagiAdmon;Password=bizagi;Data Source=dev-oracle122:1521/orcl
 :O:baorcll::User Id=BizagiAdmon;Password=bizagi;Data Source=orcl-12-2-w1252:1521/orcl
+
+^Del::
+SendInput ^a
+SendInput {Delete}
+return
+
+!Del::
+SendInput +{Home}
+SendInput {Delete}
+return
 
 +F1::
 helpText = 

@@ -1,11 +1,3 @@
-^Del::
-SendInput ^a
-SendInput {Delete}
-return
-
-!Del::
-SendInput +{Home}
-SendInput {Delete}
 return
 
 replaceFileSeparator:

@@ -3,6 +3,8 @@ InitCommandSelector()
 
 #include CommandSelector\custom_functions.ahk
 
+return
+
 InitCommandSelector() {   
     Gui, mw:New, AlwaysOnTop ToolWindow -DPIScale -Caption
     Gui, Font, s18 Arial cA9A9A7
