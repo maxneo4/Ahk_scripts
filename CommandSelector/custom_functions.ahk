@@ -1,37 +1,40 @@
-
-replaceFileSeparator:
+replaceFileSeparator() {
    path :=  clipboard
    StringReplace, path, path, `\, /, 1   
    Clipboard :=  path
    Sleep, 100
    Send ^v
-return
+   return
+}
 
-sendCopy:
+sendCopy(){
    Sleep, 100
    Send ^c
    ClipWait 1
    if ErrorLevel  ; ClipWait timed out.
     return
    Sleep, 100
-return
+   return
+}
 
-listToWhereIn: 
- gosub sendCopy
+listToWhereIn(){
+ sendCopy()
  joined := ""
  Loop, Parse, clipboard, `r`n
    if A_loopfield
       joined .= "'" A_loopfield "'," 
  Clipboard := joined
-return
+ return
+}
 
-copyFileFromFullPath:
-   gosub sendCopy
+copyFileFromFullPath(){
+   sendCopy()
    fullPath := Clipboard
    InvokeVerb(fullPath, "Copy")
-return
+   return
+}
 
-generateGuidInClipboard:
+generateGuidInClipboard(){
    TypeLib := ComObjCreate("Scriptlet.TypeLib")
    NewGUID := TypeLib.Guid
    NewGUID := RegExReplace(NewGUID, "[{}]")
@@ -39,25 +42,29 @@ generateGuidInClipboard:
    Clipboard := NewGuid
    Sleep, 100
    Send ^v
-return
+   return
+}
 
-toLower:
- gosub sendCopy
+toLower(){
+ sendCopy()
  StringLower, Clipboard, Clipboard
-return
+   return
+}
 
-toUpper:
- gosub sendCopy
+toUpper(){
+ sendCopy()
  StringUpper, Clipboard, Clipboard
-return
+ return
+}
 
-getFileInfo:
+getFileInfo(){
   f := FileGetVersionInfo_AW(Clipboard, "ProductVersion", "FileVersion")
   pv := f.productVersion 
   fv := f.fileVersion
   Clipboard = %pv% %fv%
   MsgBox,,, % Clipboard
-return
+  return
+}
 
 RunPathSwitch(path, runAs, title) {   
    if title   

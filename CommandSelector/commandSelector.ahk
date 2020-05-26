@@ -3,8 +3,6 @@ InitCommandSelector()
 
 #include CommandSelector\custom_functions.ahk
 
-return
-
 InitCommandSelector() {   
     Gui, mw:New, AlwaysOnTop ToolWindow -DPIScale -Caption
     Gui, Font, s18 Arial cA9A9A7
@@ -53,7 +51,7 @@ invokeCommand:
     if InStr(selectedCommand, ".") or InStr(selectedCommand, "`/")
         RunPathSwitch(selectedCommand, selectedRunAs, selectedTitle)  
     else if selectedCommand
-        gosub %selectedCommand%  
+        %selectedCommand%()
 return
 
 Get_selected_command_vars:
