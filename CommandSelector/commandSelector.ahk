@@ -4,6 +4,8 @@ InitCommandSelector()
 #include CommandSelector\custom_functions.ahk
 
 InitCommandSelector() {   
+    global Search
+
     Gui, mw:New, AlwaysOnTop ToolWindow -DPIScale -Caption
     Gui, Font, s18 Arial cA9A9A7
     Gui, mw:Add, Edit, w600 vSearch gUpdate HwndEditId ;h35
@@ -67,28 +69,50 @@ Get_selected_command_vars(){
     LV_GetText(selectedTitle, A_EventInfo, 6)
 }
 
-MyListView:
-if (A_GuiEvent = "DoubleClick")
-{    
-    Get_selected_command_vars()
-    invokeCommand()
-}
-else if(A_GuiEvent = "I") ; AltSubmit is necesary option
-    {
-        ;selectedIndex:= A_EventInfo ; last focused row
-        selectedIndex:= LV_GetNext() ; new focused row  
+MyListView() {
+    if (A_GuiEvent = "DoubleClick")
+    {    
         Get_selected_command_vars()
+        invokeCommand()
     }
-return
+    else if(A_GuiEvent = "I") ; AltSubmit is necesary option
+        {
+            ;selectedIndex:= A_EventInfo ; last focused row
+            selectedIndex:= LV_GetNext() ; new focused row  
+            Get_selected_command_vars()
+        }
+    return
+}
 
-FocusText:
+FocusText() {
     IfWinActive, CommandS
     {
         ControlGetFocus, OutVar, CommandS    
         if OutVar not contains edit ;retrive edit or similar
             GuiControl, Focus, %editId%
     }    
-return
+    return
+}
+
+Update() {   
+    global Search
+    global valueCSjson
+    Gui, mw:Default
+    Gui, Submit, NoHide
+    ;GuiControlGet Search ;get content of control of associate var
+    ;SplashTextOn,,, "S:'"%Search%"'"
+    LV_Delete()
+    Loop, % valueCSjson.Commands.MaxIndex()  
+    {
+        item := valueCSjson.Commands[A_Index]
+        name := item.name       
+        category := item.category
+        if  InStr(name, Search) or InStr(category, Search) or (Search = )
+            Add_item(item)
+    }    
+    selectFirstRow()    
+    return
+}
 
 
 #IfWinActive, CommandS
@@ -100,11 +124,11 @@ return
 ~Del::
     IfWinActive, CommandS
         GuiControl, ,%EditId% ;clear text box
-    gosub FocusText
+    FocusText()
 return
 
 ~BackSpace::
-    gosub FocusText
+    FocusText()
 return
 
 ~Down::    
@@ -118,21 +142,6 @@ return
     if (OutVar contains listView) and (selectedIndex < 2)
         GuiControl, Focus, %EditId%
 	return
-
-Update:
-    Gui, mw:Default
-    GuiControlGet Search ;get content of control of associate var
-    LV_Delete()
-    Loop, % valueCSjson.Commands.MaxIndex()  
-    {
-        item := valueCSjson.Commands[A_Index]
-        name := item.name       
-        category := item.category
-        if  InStr(name, Search) or InStr(category, Search) or (Search = )
-            Add_item(item)
-    }    
-    selectFirstRow()
-    return
 
 #if
 
