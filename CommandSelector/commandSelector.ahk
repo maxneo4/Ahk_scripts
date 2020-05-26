@@ -27,7 +27,7 @@ InitCommandSelector() {
         item := valueCSjson.Commands[A_Index]
         Add_item(item)
     }
-    gosub selectFirstRow
+    selectFirstRow()
     ;LV_ModifyCol()  ; Auto-size each column to fit its contents.
     LV_ModifyCol(1, 185)
     LV_ModifyCol(2, 385)
@@ -41,36 +41,43 @@ Add_item(item) {
     LV_Add("", item.category, item.name, item.command, item.category item.name, item.runAs, item.title)
 }
 
-selectFirstRow:
+selectFirstRow(){
     LV_ModifyCol(4, "Sort")
     LV_Modify(1, "+Select +Focus")
-return
+    return
+}
 
-invokeCommand:
-    Gui, mw:Hide          
+invokeCommand(){    
+    Gui, mw:Hide
+    global selectedCommand
     if InStr(selectedCommand, ".") or InStr(selectedCommand, "`/")
         RunPathSwitch(selectedCommand, selectedRunAs, selectedTitle)  
     else if selectedCommand
         %selectedCommand%()
-return
+    return
+}
 
-Get_selected_command_vars:
+Get_selected_command_vars(){
+    Gui, mw:Default
+    global selectedCommand
+    global selectedRunAs
+    global selectedTitle
     LV_GetText(selectedCommand, A_EventInfo, 3) ; Get the text from the row's third field.  
     LV_GetText(selectedRunAs, A_EventInfo, 5)
     LV_GetText(selectedTitle, A_EventInfo, 6)
-return
+}
 
 MyListView:
 if (A_GuiEvent = "DoubleClick")
 {    
-    gosub Get_selected_command_vars
-    gosub invokeCommand
+    Get_selected_command_vars()
+    invokeCommand()
 }
 else if(A_GuiEvent = "I") ; AltSubmit is necesary option
     {
         ;selectedIndex:= A_EventInfo ; last focused row
         selectedIndex:= LV_GetNext() ; new focused row  
-        gosub Get_selected_command_vars
+        Get_selected_command_vars()
     }
 return
 
@@ -87,7 +94,7 @@ return
 #IfWinActive, CommandS
 
 ~Enter::   
-    gosub invokeCommand
+    invokeCommand()
 return
 
 ~Del::
@@ -124,7 +131,7 @@ Update:
         if  InStr(name, Search) or InStr(category, Search) or (Search = )
             Add_item(item)
     }    
-    gosub selectFirstRow
+    selectFirstRow()
     return
 
 #if
