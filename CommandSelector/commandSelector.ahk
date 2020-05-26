@@ -85,8 +85,10 @@ FocusText:
     }    
 return
 
-~Enter::
-IfWinActive, CommandS    
+
+#IfWinActive, CommandS
+
+~Enter::   
     gosub invokeCommand
 return
 
@@ -127,12 +129,16 @@ Update:
     gosub selectFirstRow
     return
 
+#if
+
 ^?::
 !Space::
 Gui, mw:Show, autosize xCenter y34, CommandS
 GuiControl, Focus, %editId%
 return
 
-~Escape::
-Gui, mw:Hide
-return
+CommandSelectorHide()
+{    
+    Gui, mw:Hide
+    return
+}

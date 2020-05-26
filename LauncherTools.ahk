@@ -1,16 +1,13 @@
 ﻿#NoEnv 
 ;#Warn
 #SingleInstance Force
-
 SendMode Input
-
 SetWorkingDir %A_ScriptDir%
-FileCreateShortcut, %A_ScriptFullPath%, %A_Startup%\LauncherToolsShortCut.lnk, %A_ScriptDir%
-
-
+FileCreateShortcut, %A_ScriptFullPath%, %A_Startup%\LauncherToolsShortCut.lnk, %A_ScriptDir%replaceFileSeparator:
+   
 #Include Ahk Resources\AhkLibs\json.ahk
 #include CommandSelector\CommandSelector.ahk
-
+#include LogNotesAndRememberList\LogNotesAndRememberList.ahk
 
 ;O ommit the end character
 ;* ommit to need end character	
@@ -43,13 +40,55 @@ SendInput +{Home}
 SendInput {Delete}
 return
 
-+F1::
+~Escape::   
+    CommandSelectorHide()
+	RememberListHide()
+return 
+
+^F1::
 helpText = 
 (
-CommandSelector
+##CommandSelector
+
 ALT+SPACE : open command selector
 
-Custom Functions
+--------------------------------------------------------------
+
+## Log Notes
+
+SHIFT+F1 : abre esta archivo para recordar los comandos
+
+LOG DE NOTAS
+
+CTRL+ALT+SPACE : agregar texto seleccionado al log
+
+WIN+ALT+SPACE : abre caja de texto para escribir directamente al log
+
+CTRL+ALT+O : abrir log del dia actual
+
+CTRL+ALT+D : abrir log por fecha del calendario
+
+CTRL+WIN+C : agregar captura de pantalla al log de imagenes
+
+CTRL+WIN+O : abrir log de imagenes del dia actual
+
+CTRL+WIN+D : abrir log de imagenes por fecha del calendario
+
+----------------------------------------------------------------
+
+## REMEBER LIST
+
+ESCAPE : oculta la lista
+
+CTRL+WIN+R : agrega texto seleccionado a la lista
+
+ALT+WIN+R : abre listRemember.txt
+
+irm : muestra la lista para escoger el item a usar
+
+-------------------------------------------------------------
+
+## Custom Functions
 CTRL+DEL : Delete all in file
 ALT+DEL : Delete current line
 )

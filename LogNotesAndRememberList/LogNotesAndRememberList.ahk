@@ -1,67 +1,29 @@
-#NoEnv
-#SingleInstance Force 
 
-SetWorkingDir %A_ScriptDir% 
+InitRememberList()
 
-Gui, rl:New, AlwaysOnTop ToolWindow -DPIScale -Caption
-Gui, Font, s10 Arial cA9A9A7
-Gui, rl:Add, Edit, w400 x0 y0 vFilter gUpdate HwndEditId ;h35
-Gui, Font, s10 Arial cA9A9A7
-Gui, rl:Color, EEAA99, F3282923
-Gui +LastFound 
-WinSet, TransColor, EEAA99 220
-Gui, rl:Add, ListView, w400 h300 x0 y25 -Multi gMyListView AltSubmit -Hdr vLV2 HwndLVRLID, item ;important diff v and Hwn
-LV_SetImageList( DllCall( "ImageList_Create", Int,2, Int, 20, Int,0x18, Int,1, Int,1 ), 1 ) ;set row height to 25
-
-FileRead, listContent, rememberList.txt
-Loop, Parse, listContent, `n
-	{
-		if  A_LoopField
-			LV_Add("", A_LoopField)
-	}
-LV_ModifyCol()	
-		
-gosub SelectFirstRow
-
-FileDelete, ShortKeys.txt
-FileAppend, 
-(
-SHIFT+F1 : abre esta archivo para recordar los comandos
-
-LOG DE NOTAS
-
-CTRL+ALT+SPACE : agregar texto seleccionado al log
-
-WIN+ALT+SPACE : abre caja de texto para escribir directamente al log
-
-CTRL+ALT+O : abrir log del dia actual
-
-CTRL+ALT+D : abrir log por fecha del calendario
-
-CTRL+WIN+C : agregar captura de pantalla al log de imagenes
-
-CTRL+WIN+O : abrir log de imagenes del dia actual
-
-CTRL+WIN+D : abrir log de imagenes por fecha del calendario
-
-----------------------------------------------------------------
-
-REMEBER LIST
-
-ESCAPE : oculta la lista
-
-CTRL+WIN+R : agrega texto seleccionado a la lista
-
-ALT+WIN+R : abre listRemember.txt
-
-irm : muestra la lista para escoger el item a usar
-), ShortKeys.txt
-		
-;COMMON
-
-+F1::
-Run, ShortKeys.txt
 return
+
+InitRememberList() {
+	Gui, rl:New, AlwaysOnTop ToolWindow -DPIScale -Caption
+	Gui, Font, s10 Arial cA9A9A7
+	Gui, rl:Add, Edit, w400 x0 y0 vFilter gUpdateRememberFilter HwndEditId ;h35
+	Gui, Font, s10 Arial cA9A9A7
+	Gui, rl:Color, EEAA99, F3282923
+	Gui +LastFound 
+	WinSet, TransColor, EEAA99 220
+	Gui, rl:Add, ListView, w400 h300 x0 y25 -Multi gListViewRLEvent AltSubmit -Hdr vLV2 HwndLVRLID, item ;important diff v and Hwn
+	LV_SetImageList( DllCall( "ImageList_Create", Int,2, Int, 20, Int,0x18, Int,1, Int,1 ), 1 ) ;set row height to 25
+
+	FileRead, listContent, rememberList.txt
+	Loop, Parse, listContent, `n
+		{
+			if  A_LoopField
+				LV_Add("", A_LoopField)
+		}
+	LV_ModifyCol()	
+			
+	gosub selectFirstRowRemember
+}
 
 showMessage(message, time)
 {
@@ -79,7 +41,7 @@ OSD_OFF:
 Progress, off
 return
 
-sendCopy:   
+sendLiteCopy:   
    Send ^c
    ClipWait 1
    if ErrorLevel  ; ClipWait timed out.
@@ -95,7 +57,7 @@ addToLog:
 return
 
 ^!Space::
-	gosub sendCopy
+	gosub sendLiteCopy
 	gosub addToLog	
 	showMessage("Text added to log", 1000)	
 return
@@ -176,7 +138,7 @@ return
 
 ;REMEMBER LIST
 
-MyListView:
+ListViewRLEvent:
 if(A_GuiEvent = "I") ; AltSubmit is necesary option
     {        
         selectedIndex:= LV_GetNext() ; new focused row  
@@ -184,7 +146,7 @@ if(A_GuiEvent = "I") ; AltSubmit is necesary option
     }
 return
 
-Update:
+UpdateRememberFilter:    
     GuiControlGet Filter ;get content of control of associate var
     LV_Delete()
     Loop, Read, rememberList.txt
@@ -192,22 +154,18 @@ Update:
 		if  InStr(A_LoopReadLine, Filter) or (Filter = )
 			LV_Add("", A_LoopReadLine)
 	}
-    gosub selectFirstRow
+    gosub selectFirstRowRemember
 	LV_ModifyCol()
     return
 
-selectFirstRow:
+selectFirstRowRemember:
     LV_ModifyCol(1, "Sort")
     LV_Modify(1, "+Select +Focus")
 return
 
-~Escape::
-	Gui, rl:Hide
-return
-
 ^#r:: ; add to list remember
 	Clipboard :=
-	gosub sendCopy
+	gosub sendLiteCopy
 	if Clipboard
 	{
 		gosub addToLog
@@ -235,6 +193,14 @@ else
 	showFailMessage("rememberList.txt is not created!", 1500)
 return 
 
+RememberListHide()
+{
+	Gui, rl:Hide
+	return
+}
+
+#IfWinActive, rememberList
+
 ~Enter::
 IfWinActive, rememberlist    
     gosub invokeText
@@ -261,3 +227,4 @@ return
 ^!t:: ; tasks
 return
 
+#if
