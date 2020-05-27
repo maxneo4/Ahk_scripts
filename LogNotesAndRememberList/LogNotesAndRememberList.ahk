@@ -1,9 +1,10 @@
+InitRememberList("LogNotesAndRememberList\rememberList.txt")
 
-InitRememberList()
+InitRememberList(rememberListFileParam) {
+	global rememberListFile
+	rememberListFile := rememberListFileParam
+	static LV2
 
-return
-
-InitRememberList() {
 	Gui, rl:New, AlwaysOnTop ToolWindow -DPIScale -Caption
 	Gui, Font, s10 Arial cA9A9A7
 	Gui, rl:Add, Edit, w400 x0 y0 vFilter gUpdateRememberFilter HwndEditId ;h35
@@ -14,7 +15,7 @@ InitRememberList() {
 	Gui, rl:Add, ListView, w400 h300 x0 y25 -Multi gListViewRLEvent AltSubmit -Hdr vLV2 HwndLVRLID, item ;important diff v and Hwn
 	LV_SetImageList( DllCall( "ImageList_Create", Int,2, Int, 20, Int,0x18, Int,1, Int,1 ), 1 ) ;set row height to 25
 
-	FileRead, listContent, rememberList.txt
+	FileRead, listContent, %rememberListFile%
 	Loop, Parse, listContent, `n
 		{
 			if  A_LoopField
@@ -146,10 +147,11 @@ if(A_GuiEvent = "I") ; AltSubmit is necesary option
     }
 return
 
-UpdateRememberFilter:    
+UpdateRememberFilter:
+	global rememberListFile  
     GuiControlGet Filter ;get content of control of associate var
     LV_Delete()
-    Loop, Read, rememberList.txt
+    Loop, Read, %rememberListFile%
 	{
 		if  InStr(A_LoopReadLine, Filter) or (Filter = )
 			LV_Add("", A_LoopReadLine)
@@ -164,13 +166,14 @@ selectFirstRowRemember:
 return
 
 ^#r:: ; add to list remember
+	global rememberListFile
 	Clipboard :=
 	gosub sendLiteCopy
 	if Clipboard
 	{
 		gosub addToLog
 		Clipboard :=  StrReplace(Clipboard, "`r`n")
-		FileAppend, %Clipboard%`r`n, rememberList.txt 
+		FileAppend, %Clipboard%`r`n, %rememberListFile%
 		showMessage("Text added to remember", 1000)
 	}		
 return
@@ -187,8 +190,9 @@ return
 return
 
 !#r:: ; open remember list file
-IfExist, rememberList.txt
-	Run, rememberList.txt
+global rememberListFile
+IfExist, %rememberListFile%
+	Run, %rememberListFile%
 else
 	showFailMessage("rememberList.txt is not created!", 1500)
 return 

@@ -8,7 +8,7 @@ FileCreateShortcut, %A_ScriptFullPath%, %A_Startup%\LauncherToolsShortCut.lnk, %
 #Include Ahk Resources\AhkLibs\json.ahk
 #include CommandSelector\CommandSelector.ahk
 InitCommandSelector("CommandSelector\commands-max.json")
-;#include LogNotesAndRememberList\LogNotesAndRememberList.ahk
+#include LogNotesAndRememberList\LogNotesAndRememberList.ahk
 
 ;O ommit the end character
 ;* ommit to need end character	
@@ -43,23 +43,18 @@ return
 
 ~Escape::   
     CommandSelectorHide()
-	;RememberListHide()
+	RememberListHide()
 return 
 
 ^F1::
 helpText = 
 (
 ##CommandSelector
-
 ALT+SPACE : open command selector
 
 --------------------------------------------------------------
 
 ## Log Notes
-
-SHIFT+F1 : abre esta archivo para recordar los comandos
-
-LOG DE NOTAS
 
 CTRL+ALT+SPACE : agregar texto seleccionado al log
 
@@ -89,7 +84,7 @@ irm : muestra la lista para escoger el item a usar
 
 -------------------------------------------------------------
 
-## Custom Functions
+## Utilities HotKeys
 CTRL+DEL : Delete all in file
 ALT+DEL : Delete current line
 )
