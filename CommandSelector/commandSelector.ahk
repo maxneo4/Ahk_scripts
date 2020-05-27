@@ -1,7 +1,10 @@
 #include CommandSelector\custom_functions.ahk
 
-InitCommandSelector() {   
+InitCommandSelector(configFile) {   
     global Search
+    global EditId ;global cause is used in other functions
+
+    static LVID
 
     Gui, mw:New, AlwaysOnTop ToolWindow -DPIScale -Caption
     Gui, Font, s18 Arial cA9A9A7
@@ -19,7 +22,7 @@ InitCommandSelector() {
     LV_SetImageList( DllCall( "ImageList_Create", Int,2, Int, 30, Int,0x18, Int,1, Int,1 ), 1 ) ;set row height to 30
         
     ; load json config
-    FileRead, jsonContent, CommandSelector\commands-max.json
+    FileRead, jsonContent, %configFile%
     global valueCSjson := JSON.Load( jsonContent )
 
     Loop, % valueCSjson.Commands.MaxIndex() {
@@ -33,6 +36,39 @@ InitCommandSelector() {
     LV_ModifyCol(4, 0)
     LV_ModifyCol(5, 0)
     LV_ModifyCol(6, 0)
+
+    ;#IfWinActive, CommandS
+    Hotkey, IfWinActive, CommandS
+    Hotkey, ~Enter, invokeCommand, On
+    Hotkey, ~Del, Del, On
+    Hotkey, ~BackSpace, FocusText, On
+    Hotkey, ~Down, Down, On
+    Hotkey, ~Up, Up, On
+    Hotkey, If
+    Hotkey, !Space, Space, On
+
+    Del:   
+        GuiControl, ,%EditId% ;clear text box
+        FocusText()
+    return
+
+    Down:    
+        ControlGetFocus, OutVar, CommandS    
+        if OutVar contains edit ;retrive edit or similar        
+                GuiControl, Focus, %LVID% 
+    return
+        
+    Up:     
+        global selectedIndex
+        ControlGetFocus, OutVar, CommandS
+        if (OutVar contains listView) and (selectedIndex < 2)
+            GuiControl, Focus, %EditId%
+        return
+    
+    Space:
+    Gui, mw:Show, autosize xCenter y34, CommandS
+    GuiControl, Focus, %editId%
+    return
 }
 
 Add_item(item) {
@@ -74,19 +110,18 @@ MyListView() {
     else if(A_GuiEvent = "I") ; AltSubmit is necesary option
         {
             ;selectedIndex:= A_EventInfo ; last focused row
+            global selectedIndex
             selectedIndex:= LV_GetNext() ; new focused row  
             Get_selected_command_vars()
         }
     return
 }
 
-FocusText() {
-    IfWinActive, CommandS
-    {
-        ControlGetFocus, OutVar, CommandS    
-        if OutVar not contains edit ;retrive edit or similar
-            GuiControl, Focus, %editId%
-    }    
+FocusText() {    
+    global EditId
+    ControlGetFocus, OutVar, CommandS    
+    if OutVar not contains edit ;retrive edit or similar
+        GuiControl, Focus, %EditId%    
     return
 }
 
@@ -108,43 +143,6 @@ Update() {
     selectFirstRow()    
     return
 }
-
-
-#IfWinActive, CommandS
-
-~Enter::   
-    invokeCommand()
-return
-
-~Del::
-    IfWinActive, CommandS
-        GuiControl, ,%EditId% ;clear text box
-    FocusText()
-return
-
-~BackSpace::
-    FocusText()
-return
-
-~Down::    
-    ControlGetFocus, OutVar, CommandS    
-    if OutVar contains edit ;retrive edit or similar        
-            GuiControl, Focus, %LVID% 
-return
-    
-~Up::       
-    ControlGetFocus, OutVar, CommandS
-    if (OutVar contains listView) and (selectedIndex < 2)
-        GuiControl, Focus, %EditId%
-	return
-
-#if
-
-^?::
-!Space::
-Gui, mw:Show, autosize xCenter y34, CommandS
-GuiControl, Focus, %editId%
-return
 
 CommandSelectorHide()
 {    

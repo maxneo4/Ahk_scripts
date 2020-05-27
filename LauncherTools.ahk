@@ -7,8 +7,8 @@ FileCreateShortcut, %A_ScriptFullPath%, %A_Startup%\LauncherToolsShortCut.lnk, %
    
 #Include Ahk Resources\AhkLibs\json.ahk
 #include CommandSelector\CommandSelector.ahk
-InitCommandSelector()
-#include LogNotesAndRememberList\LogNotesAndRememberList.ahk
+InitCommandSelector("CommandSelector\commands-max.json")
+;#include LogNotesAndRememberList\LogNotesAndRememberList.ahk
 
 ;O ommit the end character
 ;* ommit to need end character	
@@ -43,7 +43,7 @@ return
 
 ~Escape::   
     CommandSelectorHide()
-	RememberListHide()
+	;RememberListHide()
 return 
 
 ^F1::
