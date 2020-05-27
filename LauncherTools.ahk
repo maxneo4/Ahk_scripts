@@ -7,6 +7,7 @@ FileCreateShortcut, %A_ScriptFullPath%, %A_Startup%\LauncherToolsShortCut.lnk, %
    
 #Include Ahk Resources\AhkLibs\json.ahk
 #include CommandSelector\CommandSelector.ahk
+InitCommandSelector()
 #include LogNotesAndRememberList\LogNotesAndRememberList.ahk
 
 ;O ommit the end character

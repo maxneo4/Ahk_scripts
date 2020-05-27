@@ -1,6 +1,3 @@
-
-InitCommandSelector()
-
 #include CommandSelector\custom_functions.ahk
 
 InitCommandSelector() {   
@@ -30,7 +27,6 @@ InitCommandSelector() {
         Add_item(item)
     }
     selectFirstRow()
-    ;LV_ModifyCol()  ; Auto-size each column to fit its contents.
     LV_ModifyCol(1, 185)
     LV_ModifyCol(2, 385)
     LV_ModifyCol(3, 0)
@@ -98,9 +94,8 @@ Update() {
     global Search
     global valueCSjson
     Gui, mw:Default
-    Gui, Submit, NoHide
-    ;GuiControlGet Search ;get content of control of associate var
-    ;SplashTextOn,,, "S:'"%Search%"'"
+    ;Gui, Submit, NoHide
+    GuiControlGet Search ;get content of control of associate var
     LV_Delete()
     Loop, % valueCSjson.Commands.MaxIndex()  
     {
