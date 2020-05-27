@@ -60,13 +60,14 @@ addToLog:
 return
 
 #Space::
-	Input, text, L3 T3, , l,il,o,d
+	Input, text, L3 T3, , l,il,o,d,c
 	Switch text
     {
         case "l": addSelectedToLog()
         case "il": InputToLog()
         case "o": openTodayLog()
         case "d": openLogByDate()
+        case "c": addCaptureToLog()
     }		
 return
 
@@ -89,15 +90,18 @@ InputToLog(){
 	return
 }
 
-^#c::
-global folder
-FormatTime, DateString,, ddMMMyyyy
-FormatTime, TimeString,, HH-mm-ss
-IfNotExist, %folder%\%DateString%.txt
-   FileCreateDir, %folder%\%DateString%.txt
-SendInput, #+s
-Run, "%A_ScriptDir%\ClipboardImageToFile.exe" -secondsToWait 20 -imagePath "%DateString%/%TimeString%.png"
-return
+^!c::
+addCaptureToLog(){
+	global folder
+	FormatTime, DateString,, ddMMMyyyy
+	FormatTime, TimeString,, HH-mm-ss
+	IfNotExist, %folder%\%DateString%
+	   FileCreateDir, %folder%\%DateString%
+	SendInput, #+s	
+	Clipboard = %A_ScriptDir%\%folder%\ClipboardImageToFile.exe -secondsToWait 20 -imagePath "%A_ScriptDir%\%folder%\%DateString%\%TimeString%.png"
+	Run, %A_ScriptDir%\%folder%\ClipboardImageToFile.exe -secondsToWait 20 -imagePath "%A_ScriptDir%\%folder%\%DateString%\%TimeString%.png"
+	return
+}
 
 ^#o::
 global folder

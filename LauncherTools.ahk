@@ -71,7 +71,8 @@ WIN+SPACE => o: abrir log del dia actual
 CTRL+ALT+D 
 WIN+SPACE => d: abrir log por fecha del calendario
 
-CTRL+WIN+C : agregar captura de pantalla al log de imagenes
+CTRL+ALT+C 
+WIN+SPACE => c: agregar captura de pantalla al log de imagenes
 
 CTRL+WIN+O : abrir log de imagenes del dia actual
 
