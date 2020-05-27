@@ -45,7 +45,7 @@ InitCommandSelector(configFile) {
     Hotkey, ~Down, Down, On
     Hotkey, ~Up, Up, On
     Hotkey, If
-    Hotkey, !Space, Space, On
+    Hotkey, !Space, ShowCommandSelector, On
 
     Del:   
         GuiControl, ,%EditId% ;clear text box
@@ -65,7 +65,7 @@ InitCommandSelector(configFile) {
             GuiControl, Focus, %EditId%
         return
     
-    Space:
+    ShowCommandSelector:
     Gui, mw:Show, autosize xCenter y34, CommandS
     GuiControl, Focus, %editId%
     return

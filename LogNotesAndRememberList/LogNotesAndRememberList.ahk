@@ -1,13 +1,14 @@
 InitRememberList("LogNotesAndRememberList\rememberList.txt")
 
 InitRememberList(rememberListFileParam) {
+	global folder = "LogNotesAndRememberList"
 	global rememberListFile
 	rememberListFile := rememberListFileParam
 	static LV2
 
 	Gui, rl:New, AlwaysOnTop ToolWindow -DPIScale -Caption
 	Gui, Font, s10 Arial cA9A9A7
-	Gui, rl:Add, Edit, w400 x0 y0 vFilter gUpdateRememberFilter HwndEditId ;h35
+	Gui, rl:Add, Edit, w400 x0 y0 vFilter gUpdateRememberFilter HwndFilterId ;h35
 	Gui, Font, s10 Arial cA9A9A7
 	Gui, rl:Color, EEAA99, F3282923
 	Gui +LastFound 
@@ -52,52 +53,71 @@ return
 ;LOG NOTES
 
 addToLog:	
+	global folder
 	FormatTime, DateString,, ddMMMyyyy
 	FormatTime, TimeString,, HH:mm:ss
-	FileAppend, >>[%TimeString%] `r`n%Clipboard%`r`n`r`n, %DateString%.txt 
+	FileAppend, >>[%TimeString%] `r`n%Clipboard%`r`n`r`n, %folder%\%DateString%.txt 
 return
 
-^!Space::
+#Space::
+	Input, text, L3 T3, , l,il,o,d
+	Switch text
+    {
+        case "l": addSelectedToLog()
+        case "il": InputToLog()
+        case "o": openTodayLog()
+        case "d": openLogByDate()
+    }		
+return
+
+^!L::
+addSelectedToLog(){
 	gosub sendLiteCopy
 	gosub addToLog	
-	showMessage("Text added to log", 1000)	
-return
-
-#!Space::
-InputBox, textToLog, , Text to log., , 500, 140
-if ErrorLevel 
-	ShowFailMessage("You cancel the dialog", 1000)
-else
-{
-	Clipboard := textToLog
-	gosub addToLog
+	showMessage("Text added to log", 1000)
 }
-return
+
+InputToLog(){
+	InputBox, textToLog, , Text to log., , 500, 140
+	if ErrorLevel 
+		ShowFailMessage("You cancel the dialog", 1000)
+	else
+	{
+		Clipboard := textToLog
+		gosub addToLog
+	}
+	return
+}
 
 ^#c::
+global folder
 FormatTime, DateString,, ddMMMyyyy
 FormatTime, TimeString,, HH-mm-ss
-IfNotExist, %DateString%
-   FileCreateDir, %DateString%
+IfNotExist, %folder%\%DateString%.txt
+   FileCreateDir, %folder%\%DateString%.txt
 SendInput, #+s
 Run, "%A_ScriptDir%\ClipboardImageToFile.exe" -secondsToWait 20 -imagePath "%DateString%/%TimeString%.png"
 return
 
 ^#o::
+global folder
 FormatTime, DateString,, ddMMMyyyy
-IfExist, %DateString%
-	Run, %DateString%
+IfExist, %folder%\%DateString%
+	Run, %folder%\%DateString%
 else
 	showFailMessage("images log not created!", 2000)
 return
 
-^!o::
-FormatTime, DateString,, ddMMMyyyy
-IfExist, %DateString%.txt
-	Run, %DateString%.txt
-else
-	showFailMessage(DateString ".txt is not created!", 1500)
-return 
+^!O::
+openTodayLog(){
+	global folder
+	FormatTime, DateString,, ddMMMyyyy
+	IfExist, %folder%\%DateString%.txt
+		Run, %folder%\%DateString%.txt
+	else
+		showFailMessage(DateString ".txt is not created!", 1500)
+	return 
+}
 
 openCalendar:
 Gui, dt:New, AlwaysOnTop ToolWindow -DPIScale -Caption
@@ -108,9 +128,12 @@ Gui, Show
 return
 
 ^!d:: ;open by selected date
-mode := "file"
-gosub openCalendar
-return 
+openLogByDate(){
+	global mode
+	mode := "file"
+	gosub openCalendar
+	return 
+}
 
 ^#d::
 mode := "folder"
@@ -118,20 +141,21 @@ gosub openCalendar
 return
 
 selectedDate:
+global folder
 Gui, Submit ; important when selected date is today
 FormatTime, DateString, %MyCalendar%000000 , ddMMMyyyy
 Gui, dt:Hide
 if(mode = "file")
 {
-	IfExist, %DateString%.txt
-		Run, %DateString%.txt
+	IfExist, %folder%\%DateString%.txt
+		Run, %folder%\%DateString%.txt
 	else
 		showFailMessage(DateString ".txt is not created!", 2000)
 }
 if(mode = "folder")
 {
-	IfExist, %DateString%
-		Run, %DateString%
+	IfExist, %folder%\%DateString%
+		Run, %folder%\%DateString%
 	else
 		showFailMessage(DateString " images log not created!", 2000)
 }
@@ -180,13 +204,13 @@ return
 
 :*:irm:: 
 	CoordMode, Caret, Screen 
-	GuiControl, ,%EditId% 	
+	GuiControl, ,%FilterId% 	
 	Sleep, 100
 	if A_CaretX	
 		Gui, rl:show, AutoSize x%A_CaretX% y%A_CaretY% ,rememberlist	
 	else
 		Gui, rl:show, AutoSize Center , rememberlist
-	GuiControl, Focus, %EditId%
+	GuiControl, Focus, %FilterId%
 return
 
 !#r:: ; open remember list file
@@ -225,7 +249,7 @@ return
 ~Up::       
     ControlGetFocus, OutVar, rememberlist
     if (OutVar contains listView) and (selectedIndex < 2)
-        GuiControl, Focus, %EditId%
+        GuiControl, Focus, %FilterId%
 	return
 
 ^!t:: ; tasks
