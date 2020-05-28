@@ -33,8 +33,8 @@ InitRememberList(rememberListFileParam) {
     Hotkey, ~Enter, invokeText, On
     Hotkey, ~Down, DownRL, On
     Hotkey, ~Up, UpRL, On
-
     Hotkey, if
+    Hotkey, ^Space , WaitSubCommandKeys, On
 
     DownRL:  
 	    ControlGetFocus, OutVar, rememberlist    
@@ -76,9 +76,7 @@ sendLiteCopy(){
     return	
 }
 
-;LOG NOTES
-
-^Space::
+WaitSubCommandKeys(){
 	Input, text, L3 T3, , l,il,o,d,cs,co,cd,ra,ro,ri
 	Switch text
     {
@@ -93,7 +91,10 @@ sendLiteCopy(){
         case "ro": openRememberList()
         case "ri": invokeRememberList()
     }		
-return
+	return
+}
+
+;LOG NOTES
 
 ^!L::
 addSelectedToLog(){
@@ -205,7 +206,6 @@ return
 ;REMEMBER LIST
 
 invokeText(){
-	SplashTextOn, , , invocando text
 	global SelectedText
     Gui, rl:Hide
 	Clipboard := SelectedText	
@@ -265,9 +265,9 @@ invokeRememberList(){
 	GuiControl, ,%FilterId% 	
 	Sleep, 100
 	if A_CaretX	
-		Gui, rl:show, AutoSize x%A_CaretX% y%A_CaretY% ,rememberlist	
+		Gui, rl:show, AutoSize x%A_CaretX% y%A_CaretY% ,rememberList	
 	else
-		Gui, rl:show, AutoSize Center , rememberlist
+		Gui, rl:show, AutoSize Center , rememberList
 	GuiControl, Focus, %FilterId%
 	return
 }
@@ -288,13 +288,6 @@ RememberListHide()
 	return
 }
 
-#IfWinActive, rememberList
-
-
-
-
 
 ^!t:: ; tasks
 return
-
-#if
