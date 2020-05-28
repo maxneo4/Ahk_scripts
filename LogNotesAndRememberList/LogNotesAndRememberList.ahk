@@ -48,17 +48,28 @@ InitRememberList(rememberListFileParam) {
     Hotkey, ^#r , addSelectedTextToList, On
     Hotkey, ^#o , openRememberList, On
 
-    DownRL:  
-	    ControlGetFocus, OutVar, rememberlist    
+    DownRL:      	
+	    ControlGetFocus, OutVar, rememberList    
 	    if OutVar contains edit ;retrive edit or similar        
             GuiControl, Focus, %LVRLID% 
 	return
     
 	UpRL:  
 		global selectedIndexRL
-	    ControlGetFocus, OutVar, rememberlist
+	    ControlGetFocus, OutVar, rememberList
 	    if (OutVar contains listView) and (selectedIndexRL < 2)
 	        GuiControl, Focus, %FilterId%
+	return
+
+	invokeRememberList:
+		CoordMode, Caret, Screen 
+		GuiControl, ,%FilterId% 	
+		Sleep, 100
+		if A_CaretX	
+			Gui, rl:show, AutoSize x%A_CaretX% y%A_CaretY% ,rememberList	
+		else
+			Gui, rl:show, AutoSize Center , rememberList
+		GuiControl, Focus, %FilterId%
 	return
 
 }
@@ -101,7 +112,7 @@ WaitSubCommandKeys(){
         case "cd": openScreenCaptureByDate()
         case "ra": addSelectedTextToList()
         case "ro": openRememberList()
-        case "ri": invokeRememberList()
+        ;case "ri": gosub invokeRememberList
     }		
 	return
 }
@@ -269,18 +280,6 @@ addSelectedTextToList(){
 		FileAppend, %Clipboard%`r`n, %rememberListFile%
 		showMessage("Text added to remember", 1000)
 	}		
-	return
-}
-
-invokeRememberList(){
-	CoordMode, Caret, Screen 
-	GuiControl, ,%FilterId% 	
-	Sleep, 100
-	if A_CaretX	
-		Gui, rl:show, AutoSize x%A_CaretX% y%A_CaretY% ,rememberList	
-	else
-		Gui, rl:show, AutoSize Center , rememberList
-	GuiControl, Focus, %FilterId%
 	return
 }
 
