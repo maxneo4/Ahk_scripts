@@ -52,22 +52,20 @@ return
 
 ;LOG NOTES
 
-addToLog:	
-	global folder
-	FormatTime, DateString,, ddMMMyyyy
-	FormatTime, TimeString,, HH:mm:ss
-	FileAppend, >>[%TimeString%] `r`n%Clipboard%`r`n`r`n, %folder%\%DateString%.txt 
-return
-
-#Space::
-	Input, text, L3 T3, , l,il,o,d,c
+^Space::
+	Input, text, L3 T3, , l,il,o,d,cs,co,cd,ra,ro,ri
 	Switch text
     {
         case "l": addSelectedToLog()
         case "il": InputToLog()
         case "o": openTodayLog()
         case "d": openLogByDate()
-        case "c": addCaptureToLog()
+        case "cs": addCaptureToLog()
+        case "co": openScreenCaptureLog()
+        case "cd": openScreenCaptureByDate()
+        case "ra": addSelectedTextToList()
+        case "ro": openRememberList()
+        case "ri": invokeRememberList()
     }		
 return
 
@@ -90,7 +88,27 @@ InputToLog(){
 	return
 }
 
-^!c::
+^!O::
+openTodayLog(){
+	global folder
+	FormatTime, DateString,, ddMMMyyyy
+	IfExist, %folder%\%DateString%.txt
+		Run, %folder%\%DateString%.txt
+	else
+		showFailMessage(DateString ".txt is not created!", 1500)
+	return 
+}
+
+
+^!d:: ;open by selected date
+openLogByDate(){
+	global mode
+	mode := "file"
+	gosub openCalendar
+	return 
+}
+
+^+c::
 addCaptureToLog(){
 	global folder
 	FormatTime, DateString,, ddMMMyyyy
@@ -103,45 +121,37 @@ addCaptureToLog(){
 	return
 }
 
-^#o::
-global folder
-FormatTime, DateString,, ddMMMyyyy
-IfExist, %folder%\%DateString%
-	Run, %folder%\%DateString%
-else
-	showFailMessage("images log not created!", 2000)
-return
-
-^!O::
-openTodayLog(){
+^+o::
+openScreenCaptureLog(){
 	global folder
 	FormatTime, DateString,, ddMMMyyyy
-	IfExist, %folder%\%DateString%.txt
-		Run, %folder%\%DateString%.txt
+	IfExist, %folder%\%DateString%
+		Run, %folder%\%DateString%
 	else
-		showFailMessage(DateString ".txt is not created!", 1500)
-	return 
+		showFailMessage("images log not created!", 2000)
+	return
 }
 
-openCalendar:
-Gui, dt:New, AlwaysOnTop ToolWindow -DPIScale -Caption
-Gui, dt:Add, MonthCal, vMyCalendar
-Gui, Font, s10
-Gui, dt:Add, Button, gSelectedDate x100, Ok
-Gui, Show
+^+d::
+openScreenCaptureByDate(){
+	mode := "folder"
+	gosub openCalendar
+	return
+}
+
+addToLog:	
+	global folder
+	FormatTime, DateString,, ddMMMyyyy
+	FormatTime, TimeString,, HH:mm:ss
+	FileAppend, >>[%TimeString%] `r`n%Clipboard%`r`n`r`n, %folder%\%DateString%.txt 
 return
 
-^!d:: ;open by selected date
-openLogByDate(){
-	global mode
-	mode := "file"
-	gosub openCalendar
-	return 
-}
-
-^#d::
-mode := "folder"
-gosub openCalendar
+openCalendar:
+	Gui, dt:New, AlwaysOnTop ToolWindow -DPIScale -Caption
+	Gui, dt:Add, MonthCal, vMyCalendar
+	Gui, Font, s10
+	Gui, dt:Add, Button, gSelectedDate x100, Ok
+	Gui, Show
 return
 
 selectedDate:
@@ -194,6 +204,7 @@ selectFirstRowRemember:
 return
 
 ^#r:: ; add to list remember
+addSelectedTextToList(){
 	global rememberListFile
 	Clipboard :=
 	gosub sendLiteCopy
@@ -204,9 +215,11 @@ return
 		FileAppend, %Clipboard%`r`n, %rememberListFile%
 		showMessage("Text added to remember", 1000)
 	}		
-return
+	return
+}
 
-:*:irm:: 
+:*:irm::
+invokeRememberList(){
 	CoordMode, Caret, Screen 
 	GuiControl, ,%FilterId% 	
 	Sleep, 100
@@ -215,15 +228,18 @@ return
 	else
 		Gui, rl:show, AutoSize Center , rememberlist
 	GuiControl, Focus, %FilterId%
-return
+	return
+}
 
-!#r:: ; open remember list file
-global rememberListFile
-IfExist, %rememberListFile%
-	Run, %rememberListFile%
-else
-	showFailMessage("rememberList.txt is not created!", 1500)
-return 
+^#o:: ; open remember list file
+openRememberList(){
+	global rememberListFile
+	IfExist, %rememberListFile%
+		Run, %rememberListFile%
+	else
+		showFailMessage("rememberList.txt is not created!", 1500)
+	return 
+}
 
 RememberListHide()
 {

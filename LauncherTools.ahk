@@ -32,17 +32,6 @@ InitCommandSelector("CommandSelector\commands-max.json")
 :O:baorcl::User Id=BizagiAdmon;Password=bizagi;Data Source=dev-oracle122:1521/orcl
 :O:baorcll::User Id=BizagiAdmon;Password=bizagi;Data Source=orcl-12-2-w1252:1521/orcl
 
-
-^Del::
-SendInput ^a
-SendInput {Delete}
-return
-
-!Del::
-SendInput +{Home}
-SendInput {Delete}
-return
-
 ~Escape::   
     CommandSelectorHide()
 	RememberListHide()
@@ -57,44 +46,40 @@ ALT+SPACE : open command selector
 ESCAPE : oculta la lista de comandos
 
 --------------------------------------------------------------
-
 ## Log Notes
-
 CTRL+ALT+L
-WIN+SPACE => l: agregar texto seleccionado al log
+CTRL+SPACE => L: [Log] agregar texto seleccionado al log
 
-WIN+SPACE => il: abre caja de texto para escribir directamente al log
+CTRL+SPACE => IL: [Input log] abre caja de texto para escribir directamente al log
 
 CTRL+ALT+O
-WIN+SPACE => o: abrir log del dia actual
+CTRL+SPACE => O: [Open] abrir log del dia actual
 
 CTRL+ALT+D 
-WIN+SPACE => d: abrir log por fecha del calendario
+CTRL+SPACE => D: [Date] abrir log por fecha del calendario
 
-CTRL+ALT+C 
-WIN+SPACE => c: agregar captura de pantalla al log de imagenes
+CTRL+SHIFT+C 
+CTRL+SPACE => CS: [Capture screen] agregar captura de pantalla al log de imagenes
 
-CTRL+WIN+O : abrir log de imagenes del dia actual
+CTRL+SHIFT+O : 
+CTRL+SPACE => CO: [Capture open] abrir log de imagenes del dia actual
 
-CTRL+WIN+D : abrir log de imagenes por fecha del calendario
+CTRL+SHIFT+D 
+CTRL+SPACE => CD: [Capture date] abrir log de imagenes por fecha del calendario
 
 ----------------------------------------------------------------
-
 ## REMEBER LIST
-
 ESCAPE : oculta la lista
 
-CTRL+WIN+R : agrega texto seleccionado a la lista
+CTRL+WIN+R 
+CTRL+SPACE => RA: [Remember add] agrega texto seleccionado a la lista
 
-ALT+WIN+R : abre listRemember.txt
+CTRL+WIN+O
+CTRL+SPACE => RO: [Remember open] abre listRemember.txt
 
-irm : muestra la lista para escoger el item a usar
+irm : [Invoke Re-Member] muestra la lista para escoger el item a usar
+CTRL+SPACE => RI : [Remember invoke] muestra la lista para escoger el item a usar
 
--------------------------------------------------------------
-
-## Utilities HotKeys
-CTRL+DEL : Delete all in file
-ALT+DEL : Delete current line
 )
 MsgBox, ,Help, %helptext%, 
 Return
