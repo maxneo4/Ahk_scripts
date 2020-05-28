@@ -34,7 +34,19 @@ InitRememberList(rememberListFileParam) {
     Hotkey, ~Down, DownRL, On
     Hotkey, ~Up, UpRL, On
     Hotkey, if
+
     Hotkey, ^Space , WaitSubCommandKeys, On
+
+    Hotkey, ^!L , addSelectedToLog, On
+    Hotkey, ^!O , openTodayLog, On
+    Hotkey, ^!d , openLogByDate, On
+    Hotkey, ^+c , addCaptureToLog, On
+    Hotkey, ^+o , openScreenCaptureLog, On
+    Hotkey, ^+d , openScreenCaptureByDate, On
+
+    Hotstring(":X*:irm", "invokeRememberList")
+    Hotkey, ^#r , addSelectedTextToList, On
+    Hotkey, ^#o , openRememberList, On
 
     DownRL:  
 	    ControlGetFocus, OutVar, rememberlist    
@@ -96,7 +108,6 @@ WaitSubCommandKeys(){
 
 ;LOG NOTES
 
-^!L::
 addSelectedToLog(){
 	sendLiteCopy()
 	addToLog()
@@ -115,7 +126,6 @@ InputToLog(){
 	return
 }
 
-^!O::
 openTodayLog(){
 	global folder
 	FormatTime, DateString,, ddMMMyyyy
@@ -127,15 +137,14 @@ openTodayLog(){
 }
 
 
-^!d:: ;open by selected date
+;open by selected date
 openLogByDate(){
 	global mode
 	mode := "file"
-	gosub openCalendar
+	openCalendar()
 	return 
 }
 
-^+c::
 addCaptureToLog(){
 	global folder
 	FormatTime, DateString,, ddMMMyyyy
@@ -148,7 +157,6 @@ addCaptureToLog(){
 	return
 }
 
-^+o::
 openScreenCaptureLog(){
 	global folder
 	FormatTime, DateString,, ddMMMyyyy
@@ -159,10 +167,10 @@ openScreenCaptureLog(){
 	return
 }
 
-^+d::
 openScreenCaptureByDate(){
+	global mode
 	mode := "folder"
-	gosub openCalendar
+	openCalendar()
 	return
 }
 
@@ -174,34 +182,39 @@ addToLog(){
 	return
 }
 
-openCalendar:
+openCalendar(){
+	global MyCalendar
 	Gui, dt:New, AlwaysOnTop ToolWindow -DPIScale -Caption
 	Gui, dt:Add, MonthCal, vMyCalendar
 	Gui, Font, s10
 	Gui, dt:Add, Button, gSelectedDate x100, Ok
 	Gui, Show
-return
+	return
+}
 
-selectedDate:
-global folder
-Gui, Submit ; important when selected date is today
-FormatTime, DateString, %MyCalendar%000000 , ddMMMyyyy
-Gui, dt:Hide
-if(mode = "file")
-{
-	IfExist, %folder%\%DateString%.txt
-		Run, %folder%\%DateString%.txt
-	else
-		showFailMessage(DateString ".txt is not created!", 2000)
+selectedDate(){
+	global folder
+	global mode
+	global MyCalendar
+	Gui, dt:Submit ; important when selected date is today
+	FormatTime, DateString, %MyCalendar%000000 , ddMMMyyyy
+	Gui, dt:Hide
+	if(mode = "file")
+	{
+		IfExist, %folder%\%DateString%.txt
+			Run, %folder%\%DateString%.txt
+		else
+			showFailMessage(DateString ".txt is not created!", 2000)
+	}
+	if(mode = "folder")
+	{
+		IfExist, %folder%\%DateString%
+			Run, %folder%\%DateString%
+		else
+			showFailMessage(DateString " images log not created!", 2000)
+	}
+	return
 }
-if(mode = "folder")
-{
-	IfExist, %folder%\%DateString%
-		Run, %folder%\%DateString%
-	else
-		showFailMessage(DateString " images log not created!", 2000)
-}
-return
 
 ;REMEMBER LIST
 
@@ -244,7 +257,7 @@ selectFirstRowRemember(){
 	return
 }
 
-^#r:: ; add to list remember
+; add to list remember
 addSelectedTextToList(){
 	global rememberListFile
 	Clipboard :=
@@ -259,7 +272,6 @@ addSelectedTextToList(){
 	return
 }
 
-:*:irm::
 invokeRememberList(){
 	CoordMode, Caret, Screen 
 	GuiControl, ,%FilterId% 	
@@ -272,7 +284,7 @@ invokeRememberList(){
 	return
 }
 
-^#o:: ; open remember list file
+; open remember list file
 openRememberList(){
 	global rememberListFile
 	IfExist, %rememberListFile%
@@ -282,12 +294,7 @@ openRememberList(){
 	return 
 }
 
-RememberListHide()
-{
+RememberListHide(){
 	Gui, rl:Hide
 	return
 }
-
-
-^!t:: ; tasks
-return
