@@ -36,8 +36,7 @@ InitCommandSelector(configFile) {
     LV_ModifyCol(4, 0)
     LV_ModifyCol(5, 0)
     LV_ModifyCol(6, 0)
-
-    ;#IfWinActive, CommandS
+    
     Hotkey, IfWinActive, CommandS
     Hotkey, ~Enter, invokeCommand, On
     Hotkey, ~Del, Del, On
@@ -55,7 +54,7 @@ InitCommandSelector(configFile) {
     Down:    
         ControlGetFocus, OutVar, CommandS    
         if OutVar contains edit ;retrive edit or similar        
-                GuiControl, Focus, %LVID% 
+            GuiControl, Focus, %LVID% 
     return
         
     Up:     
@@ -63,7 +62,7 @@ InitCommandSelector(configFile) {
         ControlGetFocus, OutVar, CommandS
         if (OutVar contains listView) and (selectedIndex < 2)
             GuiControl, Focus, %EditId%
-        return
+    return
     
     ShowCommandSelector:
     Gui, mw:Show, autosize xCenter y34, CommandS

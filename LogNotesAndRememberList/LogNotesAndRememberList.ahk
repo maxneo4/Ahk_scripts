@@ -3,7 +3,11 @@ InitRememberList("LogNotesAndRememberList\rememberList.txt")
 InitRememberList(rememberListFileParam) {
 	global folder = "LogNotesAndRememberList"
 	global rememberListFile
+		
 	rememberListFile := rememberListFileParam
+
+	static FilterId
+	static LVRLID
 	static LV2
 
 	Gui, rl:New, AlwaysOnTop ToolWindow -DPIScale -Caption
@@ -22,9 +26,29 @@ InitRememberList(rememberListFileParam) {
 			if  A_LoopField
 				LV_Add("", A_LoopField)
 		}
-	LV_ModifyCol()	
-			
-	gosub selectFirstRowRemember
+	LV_ModifyCol()				
+	selectFirstRowRemember()
+
+	Hotkey, IfWinActive, rememberList
+    Hotkey, ~Enter, invokeText, On
+    Hotkey, ~Down, DownRL, On
+    Hotkey, ~Up, UpRL, On
+
+    Hotkey, if
+
+    DownRL:  
+	    ControlGetFocus, OutVar, rememberlist    
+	    if OutVar contains edit ;retrive edit or similar        
+            GuiControl, Focus, %LVRLID% 
+	return
+    
+	UpRL:  
+		global selectedIndexRL
+	    ControlGetFocus, OutVar, rememberlist
+	    if (OutVar contains listView) and (selectedIndexRL < 2)
+	        GuiControl, Focus, %FilterId%
+	return
+
 }
 
 showMessage(message, time)
@@ -39,16 +63,18 @@ showFailMessage(message, time)
 	SetTimer, OSD_OFF, -%time%
 }
 
-OSD_OFF:
-Progress, off
-return
+OSD_OFF(){
+	Progress, off
+	return
+}
 
-sendLiteCopy:   
+sendLiteCopy(){
+   Clipboard :=
    Send ^c
    ClipWait 1
    if ErrorLevel  ; ClipWait timed out.
-    return
-return
+    return	
+}
 
 ;LOG NOTES
 
@@ -71,8 +97,8 @@ return
 
 ^!L::
 addSelectedToLog(){
-	gosub sendLiteCopy
-	gosub addToLog	
+	sendLiteCopy()
+	addToLog()
 	showMessage("Text added to log", 1000)
 }
 
@@ -83,7 +109,7 @@ InputToLog(){
 	else
 	{
 		Clipboard := textToLog
-		gosub addToLog
+		addToLog()
 	}
 	return
 }
@@ -139,12 +165,13 @@ openScreenCaptureByDate(){
 	return
 }
 
-addToLog:	
+addToLog(){	
 	global folder
 	FormatTime, DateString,, ddMMMyyyy
 	FormatTime, TimeString,, HH:mm:ss
 	FileAppend, >>[%TimeString%] `r`n%Clipboard%`r`n`r`n, %folder%\%DateString%.txt 
-return
+	return
+}
 
 openCalendar:
 	Gui, dt:New, AlwaysOnTop ToolWindow -DPIScale -Caption
@@ -177,13 +204,26 @@ return
 
 ;REMEMBER LIST
 
-ListViewRLEvent:
-if(A_GuiEvent = "I") ; AltSubmit is necesary option
-    {        
-        selectedIndex:= LV_GetNext() ; new focused row  
-        LV_GetText(selectedText, A_EventInfo, 1)
-    }
-return
+invokeText(){
+	SplashTextOn, , , invocando text
+	global SelectedText
+    Gui, rl:Hide
+	Clipboard := SelectedText	
+	SendInput ^v
+	return
+}
+
+ListViewRLEvent(){
+	Gui, rl:Default
+    global selectedText
+	if(A_GuiEvent = "I") ; AltSubmit is necesary option
+	    {        
+	    	global selectedIndexRL
+	        selectedIndexRL:= LV_GetNext() ; new focused row  
+	        LV_GetText(selectedText, A_EventInfo, 1)
+	    }
+	return
+}
 
 UpdateRememberFilter:
 	global rememberListFile  
@@ -194,23 +234,24 @@ UpdateRememberFilter:
 		if  InStr(A_LoopReadLine, Filter) or (Filter = )
 			LV_Add("", A_LoopReadLine)
 	}
-    gosub selectFirstRowRemember
+    selectFirstRowRemember()
 	LV_ModifyCol()
     return
 
-selectFirstRowRemember:
+selectFirstRowRemember(){
     LV_ModifyCol(1, "Sort")
     LV_Modify(1, "+Select +Focus")
-return
+	return
+}
 
 ^#r:: ; add to list remember
 addSelectedTextToList(){
 	global rememberListFile
 	Clipboard :=
-	gosub sendLiteCopy
+	sendLiteCopy()
 	if Clipboard
 	{
-		gosub addToLog
+		addToLog()
 		Clipboard :=  StrReplace(Clipboard, "`r`n")
 		FileAppend, %Clipboard%`r`n, %rememberListFile%
 		showMessage("Text added to remember", 1000)
@@ -249,28 +290,9 @@ RememberListHide()
 
 #IfWinActive, rememberList
 
-~Enter::
-IfWinActive, rememberlist    
-    gosub invokeText
-return
 
-invokeText:
-    Gui, rl:Hide
-	Clipboard := SelectedText	
-	SendInput ^v
-return
 
-~Down::    
-    ControlGetFocus, OutVar, rememberlist    
-    if OutVar contains edit ;retrive edit or similar        
-            GuiControl, Focus, %LVRLID% 
-return
-    
-~Up::       
-    ControlGetFocus, OutVar, rememberlist
-    if (OutVar contains listView) and (selectedIndex < 2)
-        GuiControl, Focus, %FilterId%
-	return
+
 
 ^!t:: ; tasks
 return
