@@ -7,7 +7,7 @@ FileCreateShortcut, %A_ScriptFullPath%, %A_Startup%\LauncherToolsShortCut.lnk, %
    
 #Include Ahk Resources\AhkLibs\json.ahk
 #include CommandSelector\CommandSelector.ahk
-InitCommandSelector("CommandSelector\commands-max.json")
+InitCommandSelector("CommandSelector\commands.json")
 #include LogNotesAndRememberList\LogNotesAndRememberList.ahk
 InitRememberList("LogNotesAndRememberList\rememberList.txt")
 
