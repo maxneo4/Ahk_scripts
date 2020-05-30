@@ -9,6 +9,7 @@ FileCreateShortcut, %A_ScriptFullPath%, %A_Startup%\LauncherToolsShortCut.lnk, %
 #include CommandSelector\CommandSelector.ahk
 InitCommandSelector("CommandSelector\commands-max.json")
 #include LogNotesAndRememberList\LogNotesAndRememberList.ahk
+InitRememberList("LogNotesAndRememberList\rememberList.txt")
 
 ;O ommit the end character separator
 ;* ommit to need end character	

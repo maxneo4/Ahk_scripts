@@ -1,14 +1,14 @@
-InitRememberList("LogNotesAndRememberList\rememberList.txt")
-
 InitRememberList(rememberListFileParam) {
 	global folder = "LogNotesAndRememberList"
 	global rememberListFile
-		
+	global Filter
+	
 	rememberListFile := rememberListFileParam
 
 	static FilterId
 	static LVRLID
 	static LV2
+
 
 	Gui, rl:New, AlwaysOnTop ToolWindow -DPIScale -Caption
 	Gui, Font, s10 Arial cA9A9A7
@@ -249,8 +249,9 @@ ListViewRLEvent(){
 	return
 }
 
-UpdateRememberFilter:
-	global rememberListFile  
+UpdateRememberFilter(){
+	global rememberListFile
+	Gui, rl:Default 
     GuiControlGet Filter ;get content of control of associate var
     LV_Delete()
     Loop, Read, %rememberListFile%
@@ -261,6 +262,7 @@ UpdateRememberFilter:
     selectFirstRowRemember()
 	LV_ModifyCol()
     return
+}
 
 selectFirstRowRemember(){
     LV_ModifyCol(1, "Sort")
