@@ -43,7 +43,7 @@ helpText =
 (
 ##CommandSelector
 ALT+SPACE : open command selector
-ESCAPE : oculta la lista de comandos
+ESCAPE : oculta la lista de comandos 
 
 --------------------------------------------------------------
 ## Log Notes
@@ -78,7 +78,7 @@ CTRL+WIN+O
 CTRL+SPACE => RO: [Remember open] abre listRemember.txt
 
 irm : [Invoke Re-Member] muestra la lista para escoger el item a usar
-CTRL+SPACE => RI : [Remember invoke] muestra la lista para escoger el item a usar
+//DISABLED CTRL+SPACE => RI : [Remember invoke] muestra la lista para escoger el item a usar
 
 )
 MsgBox, ,Help, %helptext%, 

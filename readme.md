@@ -5,6 +5,9 @@
 
 - http://fincs.ahk4.net/scite4ahk/
 
+### Vim Ahk
+https://github.com/jongbinjung/ahk-vim-navigation/blob/master/ViNavigation.ahk
+
 ### Base urls
 
 - https://www.autohotkey.com/docs/Variables.htm
