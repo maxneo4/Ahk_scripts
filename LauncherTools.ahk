@@ -3,13 +3,15 @@
 #SingleInstance Force
 SendMode Input
 SetWorkingDir %A_ScriptDir%
-FileCreateShortcut, %A_ScriptFullPath%, %A_Startup%\LauncherToolsShortCut.lnk, %A_ScriptDir%replaceFileSeparator:
+FileCreateShortcut, %A_ScriptFullPath%, %A_Startup%\LauncherToolsShortCut.lnk, %A_ScriptDir%
    
 #Include Ahk Resources\AhkLibs\json.ahk
 #include CommandSelector\CommandSelector.ahk
 InitCommandSelector("CommandSelector\commands.json")
 #include LogNotesAndRememberList\LogNotesAndRememberList.ahk
 InitRememberList("LogNotesAndRememberList\rememberList.txt")
+#Include samples\sharats.me\time-osd.ahk
+TimeOSDInit()
 
 ;O ommit the end character separator
 ;* ommit to need end character	

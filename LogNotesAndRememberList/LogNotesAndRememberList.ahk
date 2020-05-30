@@ -276,11 +276,15 @@ addSelectedTextToList(){
 	Clipboard :=
 	sendLiteCopy()
 	if Clipboard
-	{
-		addToLog()
+	{		
 		Clipboard :=  StrReplace(Clipboard, "`r`n")
-		FileAppend, %Clipboard%`r`n, %rememberListFile%
-		showMessage("Text added to remember", 1000)
+		Clipboard := Trim(Clipboard)
+		if(Clipboard)
+		{
+			addToLog()
+			FileAppend, %Clipboard%`r`n, %rememberListFile%
+			showMessage("Text added to remember", 1000)
+		}		
 	}		
 	return
 }
