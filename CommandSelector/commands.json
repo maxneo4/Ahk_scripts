@@ -34,6 +34,11 @@
       "category": "config",
       "command": "addSelectedFileAsCommand",
       "name": "add selected item as new command"
+    },
+    {
+      "category": "config",
+      "command": "addSelectedTextAsCommand",
+      "name": "add selected text as new command"
     }
   ]
 }

@@ -1,12 +1,22 @@
-addSelectedFileAsCommand(){	
-	global valueCSjson
-	global commandsPath
-	
+addSelectedFileAsCommand(){		
 	GroupAdd, FileListers, ahk_class CabinetWClass
 	GroupAdd, FileListers, ahk_class WorkerW
 	GroupAdd, FileListers, ahk_class #32770, ShellView
 	IfWinActive ahk_group FileListers
 		path := Explorer_GetSelected()
+	Clipboard := path
+	addClipboardContentAsCommand()
+}
+
+addSelectedTextAsCommand(){
+	sendCopy()
+	addClipboardContentAsCommand()
+}
+
+addClipboardContentAsCommand(){
+	global valueCSjson
+	global commandsPath
+	path := Clipboard
 	if path
 	{
 		InputBox, categoryAndName, command to add %path% , Set category and name separated by : , , 500, 140		
@@ -30,7 +40,7 @@ addSelectedFileAsCommand(){
 				showFailMessage("You enter an incorrect format", 1000)
 			}			
 		}
-	}	
+	}
 }
 
 replaceFileSeparator() {
