@@ -1,3 +1,18 @@
+copySelectedFileContentToClipboard(){
+	GroupAdd, FileListers, ahk_class CabinetWClass
+	GroupAdd, FileListers, ahk_class WorkerW
+	GroupAdd, FileListers, ahk_class #32770, ShellView
+	IfWinActive ahk_group FileListers
+		path := Explorer_GetSelected()
+	if path {		
+		if InStr(FileExist(path), "A")
+		{
+			FileRead, contentFile, %path%
+			Clipboard := contentFile
+		}
+	}
+}
+
 addSelectedFileAsCommand(){		
 	GroupAdd, FileListers, ahk_class CabinetWClass
 	GroupAdd, FileListers, ahk_class WorkerW

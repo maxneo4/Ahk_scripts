@@ -39,6 +39,11 @@
       "category": "config",
       "command": "addSelectedTextAsCommand",
       "name": "add selected text as new command"
+    },
+    {
+      "category": "copy",
+      "command": "copySelectedFileContentToClipboard",
+      "name": "copy content selected file"
     }
   ]
 }
