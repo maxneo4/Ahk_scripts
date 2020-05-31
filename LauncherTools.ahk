@@ -92,7 +92,7 @@ CTRL+SPACE => RO: [Remember open] abre listRemember.txt
 ESCAPE : oculta la lista
 
 irm : [Invoke Re-Member] muestra la lista para escoger el item a usar
-//DISABLED CTRL+SPACE => RI : [Remember invoke] muestra la lista para escoger el item a usar
+CTRL+SPACE => RI : [Remember invoke] muestra la lista para escoger el item a usar
 )
 MsgBox, ,Help, %helptext%, 
 Return

@@ -2,14 +2,14 @@ InitRememberList(rememberListFileParam) {
 	global folder = "LogNotesAndRememberList"
 	global rememberListFile
 	global Filter
+	global FilterId
 	
 	rememberListFile := rememberListFileParam
-
-	static FilterId
+	
+	
 	static LVRLID
-	static LV2
-
-
+	static LV2	
+	
 	Gui, rl:New, AlwaysOnTop ToolWindow -DPIScale -Caption
 	Gui, Font, s10 Arial cA9A9A7
 	Gui, rl:Add, Edit, w400 x0 y0 vFilter gUpdateRememberFilter HwndFilterId ;h35
@@ -19,59 +19,47 @@ InitRememberList(rememberListFileParam) {
 	WinSet, TransColor, EEAA99 220
 	Gui, rl:Add, ListView, w400 h300 x0 y25 -Multi gListViewRLEvent AltSubmit -Hdr vLV2 HwndLVRLID, item ;important diff v and Hwn
 	LV_SetImageList( DllCall( "ImageList_Create", Int,2, Int, 20, Int,0x18, Int,1, Int,1 ), 1 ) ;set row height to 25
-
+	
 	FileRead, listContent, %rememberListFile%
 	Loop, Parse, listContent, `n
-		{
-			if  A_LoopField
-				LV_Add("", A_LoopField)
-		}
+	{
+		if  A_LoopField
+			LV_Add("", A_LoopField)
+	}
 	LV_ModifyCol()				
 	selectFirstRowRemember()
-
+	
 	Hotkey, IfWinActive, rememberList
-    Hotkey, ~Enter, invokeText, On
-    Hotkey, ~Down, DownRL, On
-    Hotkey, ~Up, UpRL, On
-    Hotkey, if
-
-    Hotkey, ^Space , WaitSubCommandKeys, On
-
-    Hotkey, ^!L , addSelectedToLog, On
-    Hotkey, ^!O , openTodayLog, On
-    Hotkey, ^!d , openLogByDate, On
-    Hotkey, ^+c , addCaptureToLog, On
-    Hotkey, ^+o , openScreenCaptureLog, On
-    Hotkey, ^+d , openScreenCaptureByDate, On
-
-    Hotstring(":X*:irm", "invokeRememberList")
-    Hotkey, ^#r , addSelectedTextToList, On
-    Hotkey, ^#o , openRememberList, On
-
-    DownRL:      	
-	    ControlGetFocus, OutVar, rememberList    
-	    if OutVar contains edit ;retrive edit or similar        
-            GuiControl, Focus, %LVRLID% 
+	Hotkey, ~Enter, invokeText, On
+	Hotkey, ~Down, DownRL, On
+	Hotkey, ~Up, UpRL, On
+	Hotkey, if
+	
+	Hotkey, ^Space , WaitSubCommandKeys, On
+	
+	Hotkey, ^!L , addSelectedToLog, On
+	Hotkey, ^!O , openTodayLog, On
+	Hotkey, ^!d , openLogByDate, On
+	Hotkey, ^+c , addCaptureToLog, On
+	Hotkey, ^+o , openScreenCaptureLog, On
+	Hotkey, ^+d , openScreenCaptureByDate, On
+	
+	Hotstring(":X*:irm", "invokeRememberList")
+	Hotkey, ^#r , addSelectedTextToList, On
+	Hotkey, ^#o , openRememberList, On
+	
+	DownRL:      	
+	ControlGetFocus, OutVar, rememberList    
+	if OutVar contains edit ;retrive edit or similar        
+		GuiControl, Focus, %LVRLID% 
 	return
-    
+	
 	UpRL:  
-		global selectedIndexRL
-	    ControlGetFocus, OutVar, rememberList
-	    if (OutVar contains listView) and (selectedIndexRL < 2)
-	        GuiControl, Focus, %FilterId%
-	return
-
-	invokeRememberList:
-		CoordMode, Caret, Screen 
-		GuiControl, ,%FilterId% 	
-		Sleep, 100
-		if A_CaretX	
-			Gui, rl:show, AutoSize x%A_CaretX% y%A_CaretY% ,rememberList	
-		else
-			Gui, rl:show, AutoSize Center , rememberList
+	global selectedIndexRL
+	ControlGetFocus, OutVar, rememberList
+	if (OutVar contains listView) and (selectedIndexRL < 2)
 		GuiControl, Focus, %FilterId%
 	return
-
 }
 
 sendLiteCopy(){
@@ -96,9 +84,8 @@ WaitSubCommandKeys(){
 		case "co": openScreenCaptureLog()
 		case "cd": openScreenCaptureByDate()
 		case "ra": addSelectedTextToList()
-		case "ro": openRememberList()
-		
-        ;case "ri": gosub invokeRememberList
+		case "ro": openRememberList()		
+		case "ri": invokeRememberList()
 	}		
 	return
 }
@@ -155,18 +142,7 @@ addCaptureToLog(sendToCaptureScreen=1){
 }
 
 openCapture(){
-	SendInput, ^{PrintScreen}
-	;SendInput, #+s
-	; ShareX 3.1 best editor to join
-	;ClipWait, 20, 1
-	;if ErrorLevel 
-	;	showFailMessage("The 20 seconds to take screen capture has expired", 1000)
-	;else {
-	;	Run, mspaint.exe
-	;	WinWait, Paint, , 5
-	;	WinActivate, Paint
-	;	Send, ^v
-	;}
+	SendInput, ^{PrintScreen}	
 }
 
 clipboardCaptureToLog(){
@@ -234,6 +210,18 @@ selectedDate(){
 }
 
 ;REMEMBER LIST
+
+invokeRememberList(){
+	CoordMode, Caret, Screen 
+	GuiControl, ,%FilterId% 	
+	Sleep, 100
+	if A_CaretX	
+		Gui, rl:show, AutoSize x%A_CaretX% y%A_CaretY% ,rememberList	
+	else
+		Gui, rl:show, AutoSize Center , rememberList
+	GuiControl, Focus, %FilterId%
+	return
+}
 
 invokeText(){
 	global SelectedText
