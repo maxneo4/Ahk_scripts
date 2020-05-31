@@ -48,11 +48,11 @@ return
 helpText = 
 (
 ##CommandSelector
+
 ALT+SPACE : open command selector
-ESCAPE : oculta la lista de comandos 
 CTRL+ALT+R : reload commands from config
 CTRL+ALT+E : open commands file config
-Default commands: [add selected item as new command(Select file/folder first in explorer)]
+ESCAPE : oculta la lista de comandos 
 
 --------------------------------------------------------------
 ## Log Notes
@@ -69,6 +69,9 @@ CTRL+SPACE => D: [Date] abrir log por fecha del calendario
 
 CTRL+SHIFT+C 
 CTRL+SPACE => CS: [Capture screen] agregar captura de pantalla al log de imagenes
+
+CTRL+SPACE => CE: [Capture edit] pone la captura de pantalla en paint3d para su edicion
+CTRL+SPACE => CC: [Capture clipboard] guarda una imagen en el portapapeles al log
 
 CTRL+SHIFT+O : 
 CTRL+SPACE => CO: [Capture open] abrir log de imagenes del dia actual
@@ -88,7 +91,6 @@ CTRL+SPACE => RO: [Remember open] abre listRemember.txt
 
 irm : [Invoke Re-Member] muestra la lista para escoger el item a usar
 //DISABLED CTRL+SPACE => RI : [Remember invoke] muestra la lista para escoger el item a usar
-
 )
 MsgBox, ,Help, %helptext%, 
 Return

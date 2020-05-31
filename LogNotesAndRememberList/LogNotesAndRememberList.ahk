@@ -100,20 +100,23 @@ sendLiteCopy(){
 }
 
 WaitSubCommandKeys(){
-	Input, text, L3 T3, , l,il,o,d,cs,co,cd,ra,ro,ri
+	Input, text, L3 T3, , l,il,o,d,cs,co,cd,ra,ro,ri,ce,cc
 	Switch text
-    {
-        case "l": addSelectedToLog()
-        case "il": InputToLog()
-        case "o": openTodayLog()
-        case "d": openLogByDate()
-        case "cs": addCaptureToLog()
-        case "co": openScreenCaptureLog()
-        case "cd": openScreenCaptureByDate()
-        case "ra": addSelectedTextToList()
-        case "ro": openRememberList()
+	{
+		case "l": addSelectedToLog()
+		case "il": InputToLog()
+		case "o": openTodayLog()
+		case "d": openLogByDate()
+		case "cs": addCaptureToLog()
+		case "ce": openCapture()
+		case "cc": clipboardCaptureToLog()
+		case "co": openScreenCaptureLog()
+		case "cd": openScreenCaptureByDate()
+		case "ra": addSelectedTextToList()
+		case "ro": openRememberList()
+		
         ;case "ri": gosub invokeRememberList
-    }		
+	}		
 	return
 }
 
@@ -156,16 +159,34 @@ openLogByDate(){
 	return 
 }
 
-addCaptureToLog(){
+addCaptureToLog(sendToCaptureScreen=1){
 	global folder
 	FormatTime, DateString,, ddMMMyyyy
 	FormatTime, TimeString,, HH-mm-ss
 	IfNotExist, %folder%\%DateString%
 	   FileCreateDir, %folder%\%DateString%
-	SendInput, #+s	
-	Clipboard = %A_ScriptDir%\%folder%\ClipboardImageToFile.exe -secondsToWait 20 -imagePath "%A_ScriptDir%\%folder%\%DateString%\%TimeString%.png"
+	if sendToCaptureScreen
+		SendInput, #+s
 	Run, %A_ScriptDir%\%folder%\ClipboardImageToFile.exe -secondsToWait 20 -imagePath "%A_ScriptDir%\%folder%\%DateString%\%TimeString%.png"
 	return
+}
+
+openCapture(){
+	SendInput, #+s
+	; ShareX 3.1 best editor to join
+	;ClipWait, 20, 1
+	;if ErrorLevel 
+	;	showFailMessage("The 20 seconds to take screen capture has expired", 1000)
+	;else {
+	;	Run, mspaint.exe
+	;	WinWait, Paint, , 5
+	;	WinActivate, Paint
+	;	Send, ^v
+	;}
+}
+
+clipboardCaptureToLog(){
+	addCaptureToLog(0)
 }
 
 openScreenCaptureLog(){
