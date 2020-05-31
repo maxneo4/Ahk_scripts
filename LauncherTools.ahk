@@ -72,7 +72,7 @@ CTRL+SPACE => D: [Date] abrir log por fecha del calendario
 CTRL+SHIFT+C 
 CTRL+SPACE => CS: [Capture screen] agregar captura de pantalla al log de imagenes
 
-CTRL+SPACE => CE: [Capture edit] pone la captura de pantalla en paint3d para su edicion
+CTRL+SPACE => CE: [Capture edit] envia CTRL+PrintScreen captura region con ShareX
 CTRL+SPACE => CC: [Capture clipboard] guarda una imagen en el portapapeles al log
 
 CTRL+SHIFT+O : 

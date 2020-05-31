@@ -155,7 +155,8 @@ addCaptureToLog(sendToCaptureScreen=1){
 }
 
 openCapture(){
-	SendInput, #+s
+	SendInput, ^{PrintScreen}
+	;SendInput, #+s
 	; ShareX 3.1 best editor to join
 	;ClipWait, 20, 1
 	;if ErrorLevel 
