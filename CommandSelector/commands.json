@@ -1,34 +1,39 @@
 {
-  "Commands": [    
+  "Commands": [
     {
       "category": "generate",
-      "name": "new Guid",
-      "command": "generateGuidInClipboard"
-    },   
-    {
-      "category": "convertCase",
-      "name": "to lower",
-      "command": "toLower"
+      "command": "generateGuidInClipboard",
+      "name": "new Guid"
     },
     {
       "category": "convertCase",
-      "name": "to upper",
-      "command": "toUpper"
+      "command": "toLower",
+      "name": "to lower"
+    },
+    {
+      "category": "convertCase",
+      "command": "toUpper",
+      "name": "to upper"
     },
     {
       "category": "copy",
-      "name": "file from full path",
-      "command": "copyFileFromFullPath"
+      "command": "copyFileFromFullPath",
+      "name": "file from full path"
     },
     {
       "category": "convertData",
-      "name": "get 'where in ()' from list",
-      "command": "listToWhereIn"
-    },    
+      "command": "listToWhereIn",
+      "name": "get 'where in ()' from list"
+    },
     {
       "category": "replace",
-      "name": "change \\ by /",
-      "command": "replaceFileSeparator"
+      "command": "replaceFileSeparator",
+      "name": "change \\ by /"
+    },
+    {
+      "category": "config",
+      "command": "addSelectedFileAsCommand",
+      "name": "add selected item as new command"
     }
   ]
 }

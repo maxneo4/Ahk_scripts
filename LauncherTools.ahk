@@ -4,10 +4,13 @@
 SendMode Input
 SetWorkingDir %A_ScriptDir%
 FileCreateShortcut, %A_ScriptFullPath%, %A_Startup%\LauncherToolsShortCut.lnk, %A_ScriptDir%
-   
+
+global commandsPath = "CommandSelector\commands.json"
+
 #Include Ahk Resources\AhkLibs\json.ahk
+#Include Ahk Resources\AhkLibs\SelectedPath.ahk
 #include CommandSelector\CommandSelector.ahk
-InitCommandSelector("CommandSelector\commands.json")
+InitCommandSelector(commandsPath)
 #include LogNotesAndRememberList\LogNotesAndRememberList.ahk
 InitRememberList("LogNotesAndRememberList\rememberList.txt")
 #Include samples\sharats.me\time-osd.ahk
@@ -36,8 +39,8 @@ TimeOSDInit()
 :O:baorcll::User Id=BizagiAdmon;Password=bizagi;Data Source=orcl-12-2-w1252:1521/orcl
 
 ~Escape::   
-    CommandSelectorHide()
-	RememberListHide()
+CommandSelectorHide()
+RememberListHide()
 return 
 
 +F1::
@@ -47,6 +50,7 @@ helpText =
 ##CommandSelector
 ALT+SPACE : open command selector
 ESCAPE : oculta la lista de comandos 
+Default commands: [add selected item as new command(Select file/folder first in explorer)]
 
 --------------------------------------------------------------
 ## Log Notes

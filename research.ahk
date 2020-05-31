@@ -1,10 +1,5 @@
-#SingleInstance Force 
-
-#Include C:\git\Ahk_scripts\samples\sharats.me\time-osd.ahk
-TimeOSDInit()
-
+#SingleInstance Force
 SetWorkingDir %A_ScriptDir% 
-
 
 
 !Space::
@@ -16,7 +11,6 @@ SetWorkingDir %A_ScriptDir%
         case "ol": MsgBox,,, Open L
     }
 return
-
 
 
 GroupAdd, FileListers, ahk_class CabinetWClass
@@ -109,20 +103,6 @@ CreateFolderHierarchy() {
     }
     Explorer_GetWindow().Navigate2(loc . "\" . folders[folders.Length()])
 }
-
-^w::
-CoordMode, Caret, Screen 
-Gui, New, AlwaysOnTop ToolWindow -DPIScale -Caption
-Gui, Add, ListBox, r5 vColorChoice, Red|Green|Blue|Black|White
-posY := 20 
-posX := 0
-if A_CaretX
-	posX += A_CaretX
-if A_CaretY
-	posY += A_CaretY
-Gui, show, x%posX% y%posY%
-return
-
 
 ^i::
 Pics := []

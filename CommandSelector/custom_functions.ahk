@@ -1,3 +1,38 @@
+addSelectedFileAsCommand(){
+	
+	global valueCSjson
+	global commandsPath
+	
+	GroupAdd, FileListers, ahk_class CabinetWClass
+	GroupAdd, FileListers, ahk_class WorkerW
+	GroupAdd, FileListers, ahk_class #32770, ShellView
+	IfWinActive ahk_group FileListers
+		path := Explorer_GetSelected()
+	if path
+	{
+		InputBox, categoryAndName, , Set category and name separated by :, , 500, 140
+		if ErrorLevel 
+			ShowFailMessage("You cancel to add command", 1000)
+		else
+		{
+			parts := StrSplit(categoryAndName, ":")		
+			if(parts.MaxIndex() = 2)
+			{
+				category := parts[1]
+				name := parts[2]
+				StringReplace, path, path, `\, /, 1
+				valueCSjson.Commands.Push({ category: category, name: name, command: path })
+				fullJson := JSON.Dump(valueCSjson,,2)
+				FileDelete, %commandsPath%
+				FileAppend, %fullJson%, %commandsPath%
+				run, %commandsPath%
+			}else{
+				showFailMessage("You enter an incorrect format", 1000)
+			}			
+		}
+	}	
+}
+
 replaceFileSeparator() {
    path :=  clipboard
    StringReplace, path, path, `\, /, 1   
