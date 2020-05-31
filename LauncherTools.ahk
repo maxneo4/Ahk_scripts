@@ -50,6 +50,8 @@ helpText =
 ##CommandSelector
 ALT+SPACE : open command selector
 ESCAPE : oculta la lista de comandos 
+CTRL+ALT+R : reload commands from config
+CTRL+ALT+E : open commands file config
 Default commands: [add selected item as new command(Select file/folder first in explorer)]
 
 --------------------------------------------------------------

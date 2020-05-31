@@ -1,5 +1,4 @@
-addSelectedFileAsCommand(){
-	
+addSelectedFileAsCommand(){	
 	global valueCSjson
 	global commandsPath
 	
@@ -10,7 +9,7 @@ addSelectedFileAsCommand(){
 		path := Explorer_GetSelected()
 	if path
 	{
-		InputBox, categoryAndName, , Set category and name separated by :, , 500, 140
+		InputBox, categoryAndName, command to add %path% , Set category and name separated by : , , 500, 140		
 		if ErrorLevel 
 			ShowFailMessage("You cancel to add command", 1000)
 		else
@@ -26,6 +25,7 @@ addSelectedFileAsCommand(){
 				FileDelete, %commandsPath%
 				FileAppend, %fullJson%, %commandsPath%
 				run, %commandsPath%
+				Reload 
 			}else{
 				showFailMessage("You enter an incorrect format", 1000)
 			}			
