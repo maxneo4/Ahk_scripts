@@ -59,16 +59,17 @@ ESCAPE : oculta la lista de comandos
 --------------------------------------------------------------
 ## Log Notes
 CTRL+ALT+L
-CTRL+SPACE => L: [Log] agregar texto seleccionado al log
+CTRL+SPACE => LA: [Log add] agregar texto seleccionado al log
 
-CTRL+SPACE => IL: [Input log] abre caja de texto para escribir directamente al log
+CTRL+SPACE => LI: [Log input] abre caja de texto para escribir directamente al log
 
 CTRL+ALT+O
-CTRL+SPACE => O: [Open] abrir log del dia actual
+CTRL+SPACE => LO: [Log open] abrir log del dia actual
 
 CTRL+ALT+D 
-CTRL+SPACE => D: [Date] abrir log por fecha del calendario
+CTRL+SPACE => LD: [Log date] abrir log por fecha del calendario
 
+## Images Notes
 CTRL+SHIFT+C 
 CTRL+SPACE => CS: [Capture screen] agregar captura de pantalla al log de imagenes
 
@@ -83,13 +84,12 @@ CTRL+SPACE => CD: [Capture date] abrir log de imagenes por fecha del calendario
 
 ----------------------------------------------------------------
 ## REMEBER LIST
-ESCAPE : oculta la lista
 
 CTRL+WIN+R 
 CTRL+SPACE => RA: [Remember add] agrega texto seleccionado a la lista
-
 CTRL+WIN+O
 CTRL+SPACE => RO: [Remember open] abre listRemember.txt
+ESCAPE : oculta la lista
 
 irm : [Invoke Re-Member] muestra la lista para escoger el item a usar
 //DISABLED CTRL+SPACE => RI : [Remember invoke] muestra la lista para escoger el item a usar

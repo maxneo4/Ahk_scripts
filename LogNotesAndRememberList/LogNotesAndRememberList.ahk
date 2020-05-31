@@ -83,13 +83,13 @@ sendLiteCopy(){
 }
 
 WaitSubCommandKeys(){
-	Input, text, L3 T3, , l,il,o,d,cs,co,cd,ra,ro,ri,ce,cc
+	Input, text, L3 T3, , la,li,lo,ld,cs,co,cd,ra,ro,ri,ce,cc
 	Switch text
 	{
-		case "l": addSelectedToLog()
-		case "il": InputToLog()
-		case "o": openTodayLog()
-		case "d": openLogByDate()
+		case "la": addSelectedToLog()
+		case "li": InputToLog()
+		case "lo": openTodayLog()
+		case "ld": openLogByDate()
 		case "cs": addCaptureToLog()
 		case "ce": openCapture()
 		case "cc": clipboardCaptureToLog()
