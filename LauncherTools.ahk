@@ -9,6 +9,8 @@ global commandsPath = "CommandSelector\commands.json"
 
 #Include Ahk Resources\AhkLibs\json.ahk
 #Include Ahk Resources\AhkLibs\SelectedPath.ahk
+#include CommandSelector\custom_functions.ahk
+
 #include CommandSelector\CommandSelector.ahk
 InitCommandSelector(commandsPath)
 #include LogNotesAndRememberList\LogNotesAndRememberList.ahk

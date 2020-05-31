@@ -58,6 +58,23 @@ addClipboardContentAsCommand(){
 	}
 }
 
+showMessage(message, time)
+{
+	Progress, B1 W300 H28 ZH0 FS11 WS900 Y400 CT0000FF, %message%
+	SetTimer, OSD_OFF, -%time%
+}
+
+showFailMessage(message, time)
+{
+	Progress, B1 W350 H28 ZH0 FS11 WS900 Y400 CTFF0000, %message%
+	SetTimer, OSD_OFF, -%time%
+}
+
+OSD_OFF(){
+	Progress, off
+	return
+}
+
 replaceFileSeparator() {
    path :=  clipboard
    StringReplace, path, path, `\, /, 1   

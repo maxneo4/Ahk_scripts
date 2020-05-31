@@ -74,23 +74,6 @@ InitRememberList(rememberListFileParam) {
 
 }
 
-showMessage(message, time)
-{
-	Progress, B1 W200 H28 ZH0 FS11 WS900 Y400 CT0000FF, %message%
-	SetTimer, OSD_OFF, -%time%
-}
-
-showFailMessage(message, time)
-{
-	Progress, B1 W300 H28 ZH0 FS11 WS900 Y400 CTFF0000, %message%
-	SetTimer, OSD_OFF, -%time%
-}
-
-OSD_OFF(){
-	Progress, off
-	return
-}
-
 sendLiteCopy(){
    Clipboard :=
    Send ^c
@@ -187,6 +170,7 @@ openCapture(){
 
 clipboardCaptureToLog(){
 	addCaptureToLog(0)
+	showMessage("Saving clipboard image to images log",1000)
 }
 
 openScreenCaptureLog(){

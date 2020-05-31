@@ -1,5 +1,3 @@
-#include CommandSelector\custom_functions.ahk
-
 InitCommandSelector(configFile) {   
 	global Search
 	global EditId ;global cause is used in other functions
@@ -72,6 +70,8 @@ InitCommandSelector(configFile) {
 	return
 	
 	ReloadCommands:
+	showMessage("Reloading launcher tools...", 1000)
+	Sleep, 1000
 	Reload
 	return
 	
