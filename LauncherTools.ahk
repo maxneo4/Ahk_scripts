@@ -26,8 +26,8 @@ TimeOSDInit()
 :*:wg::where guidobject in(){Left 1}
 ::ij::inner join
 ::lj::left join
-:O:btc::fnBA_DB_ClobToBlob(){Left 1}
-:O:ctb::fnBA_DB_BlobToClob(){Left 1}
+:O:btc::fnBA_DB_BlobToClob(){Left 1}
+:O:ctb::fnBA_DB_ClobToBlob(){Left 1}
 ::obj::object
 ::gobj::guidobject
 :O:ddlc::select DBMS_METADATA.GET_DDL('REF_CONSTRAINT', '') from dual{left 12}
@@ -49,6 +49,7 @@ return
 ^F1::
 helpText = 
 (
+V 0.5.1
 ##CommandSelector
 
 ALT+SPACE : open command selector

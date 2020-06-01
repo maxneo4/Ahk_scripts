@@ -212,6 +212,9 @@ selectedDate(){
 ;REMEMBER LIST
 
 invokeRememberList(){
+	global FilterId
+	
+	UpdateRememberFilter()
 	CoordMode, Caret, Screen 
 	GuiControl, ,%FilterId% 	
 	Sleep, 100
@@ -244,8 +247,8 @@ ListViewRLEvent(){
 }
 
 UpdateRememberFilter(){
-	global rememberListFile
-	Gui, rl:Default 
+    global rememberListFile
+    Gui, rl:Default 
     GuiControlGet Filter ;get content of control of associate var
     LV_Delete()
     Loop, Read, %rememberListFile%

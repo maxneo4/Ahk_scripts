@@ -67,6 +67,7 @@ InitCommandSelector(configFile) {
 	ShowCommandSelector:
 	Gui, mw:Show, autosize xCenter y34, CommandS
 	GuiControl, Focus, %editId%
+	Send, ^a
 	return
 	
 	ReloadCommands:
