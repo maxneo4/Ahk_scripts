@@ -84,6 +84,14 @@ replaceFileSeparator() {
    return
 }
 
+sendLiteCopy(){
+	Clipboard :=
+	Send ^c
+	ClipWait 1
+	if ErrorLevel  ; ClipWait timed out.
+		return	
+}
+
 sendCopy(){
    Sleep, 100
    Send ^c
@@ -92,6 +100,11 @@ sendCopy(){
     return
    Sleep, 100
    return
+}
+
+RemoveBreakLinesAndTrimClipboard(){
+	Clipboard :=  StrReplace(Clipboard, "`r`n")
+	Clipboard := Trim(Clipboard)
 }
 
 listToWhereIn(){

@@ -53,14 +53,6 @@ InitRememberList(rememberListFileParam) {
 	return
 }
 
-sendLiteCopy(){
-   Clipboard :=
-   Send ^c
-   ClipWait 1
-   if ErrorLevel  ; ClipWait timed out.
-    return	
-}
-
 WaitSubCommandKeys(){
 	Input, text, L3 T3, , la,li,lo,ld,cs,co,cd,ra,ro,ri,ce,cc
 	Switch text
@@ -85,8 +77,11 @@ WaitSubCommandKeys(){
 
 addSelectedToLog(){
 	sendLiteCopy()
-	addToLog()
-	showMessage("Text added to log", 1000)
+	RemoveBreakLinesAndTrimClipboard()
+	if Clipboard {
+		addToLog()
+		showMessage("Text added to log", 1000)
+	}	
 }
 
 InputToLog(){
@@ -261,18 +256,13 @@ selectFirstRowRemember(){
 ; add to list remember
 addSelectedTextToList(){
 	global rememberListFile
-	Clipboard :=
 	sendLiteCopy()
+	RemoveBreakLinesAndTrimClipboard()
 	if Clipboard
 	{		
-		Clipboard :=  StrReplace(Clipboard, "`r`n")
-		Clipboard := Trim(Clipboard)
-		if(Clipboard)
-		{
-			addToLog()
-			FileAppend, %Clipboard%`r`n, %rememberListFile%
-			showMessage("Text added to remember", 1000)
-		}		
+		addToLog()
+		FileAppend, %Clipboard%`r`n, %rememberListFile%
+		showMessage("Text added to remember", 1000)
 	}		
 	return
 }
