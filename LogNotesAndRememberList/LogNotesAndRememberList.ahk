@@ -35,18 +35,9 @@ InitRememberList(rememberListFileParam) {
 	Hotkey, ~Up, UpRL, On
 	Hotkey, if
 	
-	Hotkey, ^Space , WaitSubCommandKeys, On
-	
-	Hotkey, ^!L , addSelectedToLog, On
-	Hotkey, ^!O , openTodayLog, On
-	Hotkey, ^!d , openLogByDate, On
-	Hotkey, ^+c , addCaptureToLog, On
-	Hotkey, ^+o , openScreenCaptureLog, On
-	Hotkey, ^+d , openScreenCaptureByDate, On
-	
+	Hotkey, ^!Space , WaitSubCommandKeys, On
+	Hotkey, +Space , WaitSubCommandKeys, On
 	Hotstring(":X*:irm", "invokeRememberList")
-	Hotkey, ^#r , addSelectedTextToList, On
-	Hotkey, ^#o , openRememberList, On
 	
 	DownRL:      	
 	ControlGetFocus, OutVar, rememberList    

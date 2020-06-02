@@ -52,48 +52,44 @@ helpText =
 V 0.5.1
 ##CommandSelector
 
-ALT+SPACE : open command selector
-CTRL+ALT+R : reload commands from config
-CTRL+ALT+E : open commands file config
-ESCAPE : oculta la lista de comandos 
+ALT+SPACE : abre selector de comandos
+CTRL+ALT+R : recarga comandos del config
+CTRL+ALT+E : abre el archivo de comandos para editarlo/verlo
+ESCAPE : oculta el selector de comandos
 
 --------------------------------------------------------------
+
+# Master command = (CTRL+ALT+SPACE = ALT GR+SPACE), SHIFT+SPACE
+
 ## Log Notes
-CTRL+ALT+L
-CTRL+SPACE => LA: [Log add] agregar texto seleccionado al log
+Master command => LA: [Log add] agregar texto seleccionado al log
 
-CTRL+SPACE => LI: [Log input] abre caja de texto para escribir directamente al log
+Master command => LI: [Log input] abre caja de texto para escribir directamente al log
 
-CTRL+ALT+O
-CTRL+SPACE => LO: [Log open] abrir log del dia actual
+Master command => LO: [Log open] abrir log del dia actual
 
-CTRL+ALT+D 
-CTRL+SPACE => LD: [Log date] abrir log por fecha del calendario
+Master command => LD: [Log date] abrir log por fecha del calendario
+
 
 ## Images Notes
-CTRL+SHIFT+C 
-CTRL+SPACE => CS: [Capture screen] agregar captura de pantalla al log de imagenes
+Master command => CS: [Capture screen] agregar captura de pantalla al log de imagenes
 
-CTRL+SPACE => CE: [Capture edit] envia CTRL+PrintScreen captura region con ShareX
-CTRL+SPACE => CC: [Capture clipboard] guarda una imagen en el portapapeles al log
+Master command => CE: [Capture edit] envia CTRL+PrintScreen captura region con ShareX
+Master command => CC: [Capture clipboard] guarda una imagen del portapapeles al log
 
-CTRL+SHIFT+O : 
-CTRL+SPACE => CO: [Capture open] abrir log de imagenes del dia actual
+Master command => CO: [Capture open] abrir log de imagenes del dia actual
 
-CTRL+SHIFT+D 
-CTRL+SPACE => CD: [Capture date] abrir log de imagenes por fecha del calendario
+Master command => CD: [Capture date] abrir log de imagenes por fecha del calendario
 
 ----------------------------------------------------------------
 ## REMEBER LIST
 
-CTRL+WIN+R 
-CTRL+SPACE => RA: [Remember add] agrega texto seleccionado a la lista
-CTRL+WIN+O
-CTRL+SPACE => RO: [Remember open] abre listRemember.txt
+Master command => RA: [Remember add] agrega texto seleccionado a la lista
+Master command => RO: [Remember open] abre listRemember.txt
 ESCAPE : oculta la lista
 
 irm : [Invoke Re-Member] muestra la lista para escoger el item a usar
-CTRL+SPACE => RI : [Remember invoke] muestra la lista para escoger el item a usar
+Master command => RI : [Remember invoke] muestra la lista para escoger el item a usar
 )
 MsgBox, ,Help, %helptext%, 
 Return
