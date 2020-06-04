@@ -21,6 +21,9 @@ TimeOSDInit()
 ;O ommit the end character separator
 ;* ommit to need end character	
 ;Bizagi developer hotStrings
+
+#IfWinNotActive ahk_exe strwinclt.exe
+
 ::sf::select * from
 ::tcat::BABIZAGICATALOG
 :*:wg::where guidobject in(){Left 1}
@@ -39,6 +42,8 @@ TimeOSDInit()
 :O:btrace::E:\Bizagi\Trace
 :O:baorcl::User Id=BizagiAdmon;Password=bizagi;Data Source=dev-oracle122:1521/orcl
 :O:baorcll::User Id=BizagiAdmon;Password=bizagi;Data Source=orcl-12-2-w1252:1521/orcl
+
+#if
 
 ~Escape::   
 CommandSelectorHide()

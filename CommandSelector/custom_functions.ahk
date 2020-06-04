@@ -102,8 +102,9 @@ sendCopy(){
    return
 }
 
-RemoveBreakLinesAndTrimClipboard(){
-	Clipboard :=  StrReplace(Clipboard, "`r`n")
+RemoveBreakLinesAndTrimClipboard(){	
+	;Clipboard := RegExReplace(Clipboard, "`am)^[\s\R]*") ;remove al empty lines if is useful to another flow tool
+	Clipboard := Trim(Clipboard, "`r`n")
 	Clipboard := Trim(Clipboard)
 }
 
