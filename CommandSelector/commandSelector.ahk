@@ -93,13 +93,13 @@ selectFirstRow(){
 }
 
 invokeCommand(){    
-    Gui, mw:Hide
-    global selectedCommand
-    if InStr(selectedCommand, ".") or InStr(selectedCommand, "`/")
-        RunPathSwitch(selectedCommand, selectedRunAs, selectedTitle)  
-    else if selectedCommand
-        %selectedCommand%()
-    return
+	Gui, mw:Hide
+	global selectedCommand
+	if InStr(selectedCommand, ".") or InStr(selectedCommand, "`/") or InStr(selectedCommand, "\")
+		RunPathSwitch(selectedCommand, selectedRunAs, selectedTitle)  
+	else if selectedCommand
+		%selectedCommand%()
+	return
 }
 
 Get_selected_command_vars(){

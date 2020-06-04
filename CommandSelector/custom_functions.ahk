@@ -44,7 +44,8 @@ addClipboardContentAsCommand(){
 			{
 				category := parts[1]
 				name := parts[2]
-				StringReplace, path, path, `\, /, 1
+				if not instr(path, "`\`\") ;avoid to change network folders					
+					StringReplace, path, path, `\, /, 1
 				valueCSjson.Commands.Push({ category: category, name: name, command: path })
 				fullJson := JSON.Dump(valueCSjson,,2)
 				FileDelete, %commandsPath%
