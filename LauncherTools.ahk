@@ -54,7 +54,7 @@ return
 ^F1::
 helpText = 
 (
-V 0.5.2
+V 0.5.3
 ##CommandSelector
 
 ALT+SPACE : abre selector de comandos

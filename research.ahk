@@ -1,11 +1,59 @@
 #SingleInstance Force
 SetWorkingDir %A_ScriptDir% 
 
+showText(title, text, milis_time, width=300, height=60)
+{	
+	SplashTextOn,  width , height, %title%, %text%
+	Sleep, milis_time
+	SplashTextOff
+}
 
-!Space::
-    Input, text, L3 T3, , oi,ol,ob
-    Switch text
-    {
+pos = 1
+windowsDic := {}
+windows := []
+
+F9::
+WinGet, active_id, ID, A
+WinGetTitle, wTitle, A
+windowsDic[wTitle] := active_id
+windows.Push(wTitle)
+pos := windows.MaxIndex()
+currentAddedWindow := % "Added window '" . wTitle . "' in pos " . Windows.MaxIndex()
+showText("gestor window", currentAddedWindow, 1500)
+return
+
+F7::
+WinGetTitle, wTitle, A
+if (windowsDic.HasKey(wTitle))
+{
+	posW := ObjIndexOf(windows, wTitle)
+	windowsDic.Delete(wTitle)
+	windows.RemoveAt(posW)
+	messageRemovedW := % "removed window " . wTitle . " from pos " . posW
+	showText("gestor window", messageRemovedW, 1500)	
+}
+return
+
+F8::
+pos++
+if ( pos > windows.MaxIndex() )	
+	pos = 1
+w := windowsDic[windows[pos]]
+WinActivate, ahk_id %w%
+return
+
+ObjIndexOf(obj, item, case_sensitive:=false)
+{
+	for i, val in obj {
+		if (case_sensitive ? (val == item) : (val = item))
+			return i
+	}
+}
+
+^!f::
+Input, text, L3 T3, , oi,ol,ob
+Switch text
+{
         case "oi": MsgBox,,, Open I
         case "ob": MsgBox,,, Open B
         case "ol": MsgBox,,, Open L

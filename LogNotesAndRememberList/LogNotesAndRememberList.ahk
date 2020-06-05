@@ -37,7 +37,10 @@ InitRememberList(rememberListFileParam) {
 	
 	Hotkey, ^!Space , WaitSubCommandKeys, On
 	Hotkey, +Space , WaitSubCommandKeys, On
+	
+	Hotkey, IfWinNotActive, ahk_exe strwinclt.exe
 	Hotstring(":X*:irm", "invokeRememberList")
+	Hotkey, if
 	
 	DownRL:      	
 	ControlGetFocus, OutVar, rememberList    
