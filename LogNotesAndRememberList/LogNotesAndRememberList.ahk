@@ -239,6 +239,7 @@ UpdateRememberFilter(){
     global rememberListFile
     Gui, rl:Default 
     GuiControlGet Filter ;get content of control of associate var
+    Filter := Trim(Filter)
     LV_Delete()
     Loop, Read, %rememberListFile%
 	{

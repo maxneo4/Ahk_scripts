@@ -50,7 +50,7 @@ addClipboardContentAsCommand(){
 				fullJson := JSON.Dump(valueCSjson,,2)
 				FileDelete, %commandsPath%
 				FileAppend, %fullJson%, %commandsPath%
-				run, %commandsPath%
+				;run, %commandsPath%
 				Reload 
 			}else{
 				showFailMessage("You enter an incorrect format", 1000)
