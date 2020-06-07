@@ -142,6 +142,7 @@ Update() {
     Gui, mw:Default
     ;Gui, Submit, NoHide
     GuiControlGet Search ;get content of control of associate var
+    Search := Trim(Search)
     LV_Delete()
     Loop, % valueCSjson.Commands.MaxIndex()  
     {

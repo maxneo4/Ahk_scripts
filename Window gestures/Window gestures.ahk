@@ -18,7 +18,7 @@ AddWindowById()
 	windows.Push(active_id)
 	pos := windows.MaxIndex()
 	currentAddedWindow := % "Added window '" . SubStr(wTitle, 1, 35) . "' in pos " . Windows.MaxIndex()
-	showText("gestor window", currentAddedWindow, 1500)	
+	showText("gestor window", currentAddedWindow, 1000)	
 }
 
 
@@ -28,7 +28,7 @@ MoveNextWindow()
 	global windows
 	
 	pos++
-	if ( pos > windows.MaxIndex() )	
+	if ( pos > windows.MaxIndex() && windows.MaxIndex() > 0)	
 		pos = 1
 	w := windows[pos]
 	WinActivate, ahk_id %w%
@@ -38,17 +38,16 @@ MoveNextWindow()
 RemoveActiveWindow()
 {
 	global pos
-	global windowsDic
 	global windows
 	
 	WinGet, active_id, ID, A
 	WinGetTitle, wTitle, A
 	if (ObjIndexOf(windows, active_id))
 	{
-		posW := ObjIndexOf(windows, active_id)
+		posW := ObjIndexOf(windows, active_id)		
+		messageRemovedW := % "removed window " . SubStr(wTitle, 1, 35) . " from pos " . posW . " of " . Windows.MaxIndex()
 		windows.RemoveAt(posW)
-		messageRemovedW := % "removed window " . SubStr(wTitle, 1, 35) . " from pos " . posW
-		showText("gestor window", messageRemovedW, 1500)	
+		showText("gestor window", messageRemovedW, 1000)	
 	}
 }
 
