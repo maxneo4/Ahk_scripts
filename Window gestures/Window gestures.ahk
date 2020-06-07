@@ -1,6 +1,5 @@
 ﻿WindowGesturesInit(){
-	global pos = 1
-	global windowsDic := {}
+	global pos = 1	
 	global windows := []
 	
 	Hotkey, Tab & a, AddWindowById, On
@@ -12,15 +11,13 @@
 AddWindowById()
 {	
 	global pos
-	global windowsDic
 	global windows
 	
 	WinGet, active_id, ID, A
 	WinGetTitle, wTitle, A
-	windowsDic[active_id] := wTitle
 	windows.Push(active_id)
 	pos := windows.MaxIndex()
-	currentAddedWindow := % "Added window '" . wTitle . "' in pos " . Windows.MaxIndex()
+	currentAddedWindow := % "Added window '" . SubStr(wTitle, 1, 35) . "' in pos " . Windows.MaxIndex()
 	showText("gestor window", currentAddedWindow, 1500)	
 }
 
@@ -35,7 +32,7 @@ MoveNextWindow()
 		pos = 1
 	w := windows[pos]
 	WinActivate, ahk_id %w%
-	showText("gestor window", %pos%, 500, 200, 20)
+	;showText("gestor window", pos, 400, 100, 20)
 }
 
 RemoveActiveWindow()
@@ -46,11 +43,11 @@ RemoveActiveWindow()
 	
 	WinGet, active_id, ID, A
 	WinGetTitle, wTitle, A
-	if (windowsDic.HasKey(active_id))
+	if (ObjIndexOf(windows, active_id))
 	{
 		posW := ObjIndexOf(windows, active_id)
 		windows.RemoveAt(posW)
-		messageRemovedW := % "removed window " . wTitle . " from pos " . posW
+		messageRemovedW := % "removed window " . SubStr(wTitle, 1, 35) . " from pos " . posW
 		showText("gestor window", messageRemovedW, 1500)	
 	}
 }

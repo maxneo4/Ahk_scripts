@@ -44,6 +44,11 @@
       "category": "copy",
       "command": "copySelectedFileContentToClipboard",
       "name": "copy content selected file"
+    },
+    {
+      "category": "web",
+      "command": "https://www.amazon.com/exec/obidos/ASIN/B07LFCH1V4/ezvid02-20?th=1 ",
+      "name": "umbrella"
     }
   ]
 }
