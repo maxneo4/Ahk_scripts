@@ -54,12 +54,11 @@ CommandSelectorHide()
 RememberListHide()
 return 
 
-+F1::
 ^F1::
 helpText = 
 (
-V 0.5.3
-##CommandSelector
+V 0.5.4
+# CommandSelector
 
 ALT+SPACE : abre selector de comandos
 CTRL+ALT+R : recarga comandos del config
@@ -68,9 +67,23 @@ ESCAPE : oculta el selector de comandos
 
 --------------------------------------------------------------
 
-# Master command = (CTRL+ALT+SPACE = ALT GR+SPACE), SHIFT+SPACE
+# Window gestures
+TAB + A : agrega ventana al gestor
+TAB + S : remueve ventana del gestor
+TAB + Q : Navega a la siguiente ventana del gestor de forma ciclica
 
-## Log Notes
+)
+MsgBox, ,Help, %helptext%, 
+Return
+
++F1::
+helpText = 
+(
+V 0.5.4
+Master command = (CTRL+ALT+SPACE = ALT GR+SPACE), SHIFT+SPACE
+----------------------------------------------------------------
+
+# Log notes #
 Master command => LA: [Log add] agregar texto seleccionado al log
 
 Master command => LI: [Log input] abre caja de texto para escribir directamente al log
@@ -79,8 +92,7 @@ Master command => LO: [Log open] abrir log del dia actual
 
 Master command => LD: [Log date] abrir log por fecha del calendario
 
-
-## Images Notes
+# Images notes #
 Master command => CS: [Capture screen] agregar captura de pantalla al log de imagenes
 
 Master command => CE: [Capture edit] envia CTRL+PrintScreen captura region con ShareX
@@ -91,7 +103,7 @@ Master command => CO: [Capture open] abrir log de imagenes del dia actual
 Master command => CD: [Capture date] abrir log de imagenes por fecha del calendario
 
 ----------------------------------------------------------------
-## REMEBER LIST
+# Remember list #
 
 Master command => RA: [Remember add] agrega texto seleccionado a la lista
 Master command => RO: [Remember open] abre listRemember.txt
