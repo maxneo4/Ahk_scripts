@@ -59,6 +59,21 @@ addClipboardContentAsCommand(){
 	}
 }
 
+ObjIndexOf(obj, item, case_sensitive:=false)
+{
+	for i, val in obj {
+		if (case_sensitive ? (val == item) : (val = item))
+			return i
+	}
+}
+
+showText(title, text, milis_time, width=300, height=60)
+{	
+	SplashTextOn,  width , height, %title%, %text%
+	Sleep, milis_time
+	SplashTextOff
+}
+
 showMessage(message, time)
 {
 	Progress, B1 W300 H28 ZH0 FS11 WS900 Y400 CT0000FF, %message%

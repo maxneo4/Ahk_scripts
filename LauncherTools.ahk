@@ -15,6 +15,10 @@ global commandsPath = "CommandSelector\commands.json"
 InitCommandSelector(commandsPath)
 #include LogNotesAndRememberList\LogNotesAndRememberList.ahk
 InitRememberList("LogNotesAndRememberList\rememberList.txt")
+
+#include Window Gestures\Window Gestures.ahk
+WindowGesturesInit()
+
 #Include samples\sharats.me\time-osd.ahk
 TimeOSDInit()
 
