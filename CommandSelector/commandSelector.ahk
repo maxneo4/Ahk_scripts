@@ -156,6 +156,67 @@ Update() {
     return
 }
 
+copySelectedFileContentToClipboard(){
+	GroupAdd, FileListers, ahk_class CabinetWClass
+	GroupAdd, FileListers, ahk_class WorkerW
+	GroupAdd, FileListers, ahk_class #32770, ShellView
+	IfWinActive ahk_group FileListers
+		path := Explorer_GetSelected()
+	if path {		
+		if InStr(FileExist(path), "A")
+		{
+			FileRead, contentFile, %path%
+			Clipboard := contentFile
+		}
+	}
+}
+
+addSelectedFileAsCommand(){		
+	GroupAdd, FileListers, ahk_class CabinetWClass
+	GroupAdd, FileListers, ahk_class WorkerW
+	GroupAdd, FileListers, ahk_class #32770, ShellView
+	IfWinActive ahk_group FileListers
+		path := Explorer_GetSelected()
+	Clipboard := path
+	addClipboardContentAsCommand()
+}
+
+addSelectedTextAsCommand(){
+	sendCopy()
+	addClipboardContentAsCommand()
+}
+
+addClipboardContentAsCommand(){
+	global valueCSjson
+	global commandsPath
+	path := Clipboard
+	if path
+	{
+		InputBox, categoryAndName, command to add %path% , Set category and name separated by : , , 500, 140		
+		if ErrorLevel 
+			ShowFailMessage("You cancel to add command", 1000)
+		else
+		{
+			parts := StrSplit(categoryAndName, ":")		
+			if(parts.MaxIndex() = 2)
+			{
+				category := parts[1]
+				name := parts[2]
+				if not instr(path, "`\`\") ;avoid to change network folders					
+					StringReplace, path, path, `\, /, 1
+				valueCSjson.Commands.Push({ category: category, name: name, command: path })
+				fullJson := JSON.Dump(valueCSjson,,2)
+				FileDelete, %commandsPath%
+				FileAppend, %fullJson%, %commandsPath%
+				;run, %commandsPath%
+				Reload 
+			}else{
+				showFailMessage("You enter an incorrect format", 1000)
+			}			
+		}
+	}
+}
+
 CommandSelectorHide()
 {    
     Gui, mw:Hide

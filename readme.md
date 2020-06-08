@@ -15,6 +15,9 @@ https://github.com/Masonjar13/AHK-Library/blob/master/Lib/imageSearchc.ahk
 ### Vim Ahk
 https://github.com/jongbinjung/ahk-vim-navigation/blob/master/ViNavigation.ahk
 
+### using ms word
+http://cedeq.com/enterpad/en/autohotkey/useful-ahk-scripts/set-font-size-in-ms-word
+
 ### Base urls
 
 - https://www.autohotkey.com/docs/objects/Object.htm
