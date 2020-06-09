@@ -13,6 +13,11 @@ showText(title, text, milis_time, width=300, height=60)
 	SplashTextOff
 }
 
+showProgress(message, width=300, height=28)
+{
+	Progress, B1 W%width% H%height% ZH0 FS11 WS900 Y400 CT0000FF, %message%
+}
+
 showMessage(message, time)
 {
 	Progress, B1 W300 H28 ZH0 FS11 WS900 Y400 CT0000FF, %message%

@@ -82,12 +82,15 @@ RunTemplate(){
 		if ErrorLevel
 			MsgBox,,, %ErrorLevel%
 		
+		ShowProgress("initializing word...")
+		
 		oWord := ComObjCreate("Word.Application")
 		wordFile := % Folder . "\Word template.docx"
-		;MsgBox,,, %wordFile%
+		
+		ShowProgress(wordFile, 400)
+		
 		oWord.Documents.Add(wordFile)
-		;Run, %Folder%\Word template.docx 
-		;WinWait, Word template
+		
 		
 		oWord.Selection.TypeParagraph
 		oWord.Selection.Font.Size := 32
@@ -97,15 +100,17 @@ RunTemplate(){
 		
 		Loop Files, %Folder%\web\images\*.png
 		{
+			ShowProgress("adding " . A_LoopFileFullPath, 550
+			)
 			oWord.Selection.TypeParagraph
 			oWord.Selection.Font.Size := 24
 			step := % "Step " . A_Index
 			oWord.Selection.TypeText(step)
 			oWord.Selection.TypeParagraph
 			oWord.Selection.InlineShapes.AddPicture(A_LoopFileFullPath,0,1)
-			oWord.Selection.TypeParagraph			
+			oWord.Selection.TypeParagraph				
 		}
-		
+		OSD_OFF()
 		oWord.Visible := True
 		oWord.Activate
 		

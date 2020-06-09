@@ -35,7 +35,7 @@ TimeOSDShow(timeText, bg) {
     GuiControl, Text, TimeOSDLabel, It's %timeText% already!
     y := A_ScreenHeight - 120
     Gui, Show, xCenter y%y% NoActivate
-    SetTimer, TimeOSDClose, -10000
+    SetTimer, TimeOSDClose, -20000
 }
 
 TimeOSDClose() {
