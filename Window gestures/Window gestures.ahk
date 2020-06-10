@@ -5,7 +5,16 @@
 	Hotkey, Tab & a, AddWindowById, On
 	Hotkey, Tab & s, RemoveActiveWindow, On
 	Hotkey, Tab & q, MoveNextWindow, On
+	Hotkey, Tab & w, MovePreviousWindow, On
+	Hotkey, Tab & r, RemoveAll, On
 	Hotkey, *Tab, SendTab, On	
+}
+
+RemoveAll()
+{
+	global pos = 1
+	global windows := []
+	showText("gestor windows", "Removed all windows", 800)
 }
 
 AddWindowById()
@@ -27,9 +36,26 @@ MoveNextWindow()
 	global pos
 	global windows
 	
+	updtePosToActiveWindow()
+	
 	pos++
 	if ( pos > windows.MaxIndex() && windows.MaxIndex() > 0)	
 		pos = 1
+	w := windows[pos]
+	WinActivate, ahk_id %w%
+	;showText("gestor window", pos, 400, 100, 20)
+}
+
+MovePreviousWindow()
+{
+	global pos
+	global windows
+	
+	updtePosToActiveWindow()
+	
+	pos--	
+	if ( pos < 1 && windows.MaxIndex() > 0)	
+		pos := windows.MaxIndex()	
 	w := windows[pos]
 	WinActivate, ahk_id %w%
 	;showText("gestor window", pos, 400, 100, 20)
@@ -49,6 +75,17 @@ RemoveActiveWindow()
 		windows.RemoveAt(posW)
 		showText("gestor window", messageRemovedW, 1000)	
 	}
+}
+
+updtePosToActiveWindow()
+{
+	global pos
+	global windows
+	
+	WinGet, active_id, ID, A
+	posFound := ObjIndexOf(windows, active_id)
+	if posFound		
+		pos := posFound		
 }
 
 SendTab(){

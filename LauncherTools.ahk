@@ -57,7 +57,7 @@ return
 ^F1::
 helpText = 
 (
-V 0.5.4
+V 0.5.5
 # CommandSelector
 
 ALT+SPACE : abre selector de comandos
@@ -71,6 +71,8 @@ ESCAPE : oculta el selector de comandos
 TAB + A : agrega ventana al gestor
 TAB + S : remueve ventana del gestor
 TAB + Q : Navega a la siguiente ventana del gestor de forma ciclica
+TAB + W : navega a la anterior ventana del gestor de forma ciclica
+TAB + R : remueve todas las ventanas del gestor
 
 )
 MsgBox, ,Help, %helptext%, 
@@ -79,7 +81,7 @@ Return
 +F1::
 helpText = 
 (
-V 0.5.4
+V 0.5.5
 Master command = (CTRL+ALT+SPACE = ALT GR+SPACE), SHIFT+SPACE
 ----------------------------------------------------------------
 

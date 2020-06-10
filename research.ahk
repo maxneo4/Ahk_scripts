@@ -1,6 +1,21 @@
 #SingleInstance Force
 SetWorkingDir %A_ScriptDir% 
 
+init()
+{	
+	Hotkey, ~RControl, DoubleA, On
+}
+
+
+DoubleA(){
+	if(A_PriorHotkey != "~RControl" or A_TimeSincePriorHotkey > 400)
+	{
+		KeyWait, RControl
+		return
+	}
+	MsgBox,,, You double pressed a key	
+}
+
 
 ^!f::
 Input, text, L3 T3, , oi,ol,ob

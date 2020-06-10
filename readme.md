@@ -4,12 +4,12 @@
 ### Editors
 
 - http://fincs.ahk4.net/scite4ahk/
+- https://github.com/maestrith/AHK-Studio
 
 ### Run as admin
 https://stackoverflow.com/questions/43298908/how-to-add-administrator-privileges-to-autohotkey-script/43299069
 
 ### ImageSearch extended     
-
 https://github.com/Masonjar13/AHK-Library/blob/master/Lib/imageSearchc.ahk
 
 ### Vim Ahk
