@@ -21,8 +21,19 @@ InitVimNeo()
 	
 	Hotkey, IfWinNotExist, VimT
 	Hotkey, ~RControl, DoubleRControl, On
+	
 	Hotkey, IfWinExist, VimT
 	Hotkey, Escape, DisableVim, On
+	Hotkey, h, sendLeft, On
+	Hotkey, j, sendDown, On
+	Hotkey, k, sendUp, On
+	Hotkey, l, sendRight, On
+	Hotkey, w, sendWordNext, On
+	Hotkey, b, sendWordBack, On
+	Hotkey, z, SendBottom, On
+	Hotkey, q, sendTop, On
+	Hotkey, 0, SendBeginLine, On
+	Hotkey, $, SendEndLine, On
 	Hotkey, if	
 	
 }
@@ -38,10 +49,52 @@ DoubleRControl(){
 
 EnableVim()
 {
+	WinGet, active_id, ID, A
 	Gui, vim:Show, autosize xCenter y-8, VimT
+	WinActivate, ahk_id %active_id%
 }
 
 DisableVim()
 {
 	Gui, vim:Hide
+}
+
+sendLeft(){
+	SendInput {Left}
+}
+
+sendDown(){
+	SendInput {Down}
+}
+
+sendUp(){
+	SendInput {Up}
+}
+
+sendRight(){
+	SendInput {Right}
+}
+
+sendWordNext(){
+	SendInput, ^{Right}
+}
+
+sendWordBack(){
+	SendInput, ^{Left}
+}
+
+SendBottom(){
+	SendInput, ^{End}
+}
+
+SendTop(){
+	SendInput, ^{Home}
+}
+
+SendBeginLine(){
+	SendInput, {Home}
+}
+
+SendEndLine(){
+	SendInput, {End}
 }
