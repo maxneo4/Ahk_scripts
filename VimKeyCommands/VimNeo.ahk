@@ -13,11 +13,11 @@ InitVimNeo()
 	global vimEnabled = false
 	
 	Gui, vim:New, AlwaysOnTop ToolWindow -DPIScale -Caption
-	Gui, vim:Color, EEAA99, Blue
-	Gui, vim:Font, s14 Arial A9A9A7
-	Gui, vim:Add, Text, cBlue Border , Vim enabled	
+	Gui, vim:Color, EEAA99, OOOO00
+	Gui, vim:Font, s14 Arial bold
+	Gui, vim:Add, Text, cBlue -Background , Vim enabled	
 	Gui +LastFound 
-	WinSet, TransColor, EEAA99 160
+	WinSet, TransColor, EEAA99 150
 	
 	Hotkey, IfWinNotExist, VimT
 	Hotkey, ~RControl, DoubleRControl, On
