@@ -4,7 +4,7 @@
 ### Editors
 
 - http://fincs.ahk4.net/scite4ahk/
-- https://github.com/maestrith/AHK-Studio
+- https://github.com/maestrith/AHK-Studio           
 
 ### Run as admin
 https://stackoverflow.com/questions/43298908/how-to-add-administrator-privileges-to-autohotkey-script/43299069
@@ -14,6 +14,10 @@ https://github.com/Masonjar13/AHK-Library/blob/master/Lib/imageSearchc.ahk
 
 ### Vim Ahk
 https://github.com/jongbinjung/ahk-vim-navigation/blob/master/ViNavigation.ahk
+https://github.com/mihaifm/vim.ahk
+
+El mas actual y complejo
+https://github.com/rcmdnk/vim_ahk
 
 ### using ms word
 http://cedeq.com/enterpad/en/autohotkey/useful-ahk-scripts/set-font-size-in-ms-word
