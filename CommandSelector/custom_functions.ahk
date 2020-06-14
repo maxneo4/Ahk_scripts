@@ -44,6 +44,21 @@ replaceFileSeparator() {
    return
 }
 
+sendSmartCopy(){
+	if(Clipboard)
+	{
+		showMessage("Taken from previous clipboard",500)		
+	}else{
+		Send ^c
+		ClipWait 1
+		if ErrorLevel
+			showFailMessage("Error...",1000)
+		Sleep, 100
+	}
+	if  Clipboard = 
+		showFailMessage("There is'nt clipboard content",2000)
+}
+
 sendLiteCopy(){
 	Clipboard :=
 	Send ^c
