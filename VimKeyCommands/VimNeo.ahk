@@ -147,8 +147,11 @@ DeleteLine(){
 OverrideKey(){
 	global multiMode
 	if(multiMode = 1)
-		SendInput, %A_ThisHotkey%
-	return multiMode = 0
+		{
+			SendInput, %A_ThisHotkey%
+			return false
+		}
+	return true
 }
 
 ManageCopy(){	
