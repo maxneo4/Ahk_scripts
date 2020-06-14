@@ -11,6 +11,8 @@ InitVimNeo()
 {
 	global lastCommand = "{Shift}{ShiftUp}"
 	global vimEnabled = false
+	global multiMode = 0
+	global visualMode = 
 	
 	Gui, vim:New, AlwaysOnTop ToolWindow -DPIScale -Caption
 	Gui, vim:Color, EEAA99, OOOO00
@@ -24,16 +26,27 @@ InitVimNeo()
 	
 	Hotkey, IfWinExist, VimT
 	Hotkey, Escape, DisableVim, On
-	Hotkey, h, sendLeft, On
-	Hotkey, j, sendDown, On
-	Hotkey, k, sendUp, On
-	Hotkey, l, sendRight, On
-	Hotkey, w, sendWordNext, On
-	Hotkey, b, sendWordBack, On
-	Hotkey, z, SendBottom, On
-	Hotkey, q, sendTop, On
-	Hotkey, 0, SendBeginLine, On
-	Hotkey, $, SendEndLine, On
+	Hotkey, *h, sendLeft, On
+	Hotkey, *j, sendDown, On
+	Hotkey, *k, sendUp, On
+	Hotkey, *l, sendRight, On		
+	Hotkey, *w, sendWordNext, On
+	Hotkey, *b, sendWordBack, On
+	Hotkey, *z, SendBottom, On
+	Hotkey, *q, sendTop, On
+	Hotkey, *0, SendBeginLine, On
+	Hotkey, *$, SendEndLine, On
+	Hotkey, o, SendCreateNewLine, On
+	Hotkey, u, SendUndo, On
+	Hotkey, x, SendDel, On
+	Hotkey, +d, DeleteLine, On
+	
+	Hotkey, y, ManageCopy, On
+	Hotkey, d, ManageCut, On
+	Hotkey, p, sendPaste, On
+	
+	Hotkey, v, ManageVisual, On
+	
 	Hotkey, if	
 	
 }
@@ -56,45 +69,129 @@ EnableVim()
 
 DisableVim()
 {
+	Send, {ShiftUp}
 	Gui, vim:Hide
 }
 
 sendLeft(){
-	SendInput {Left}
+	global visualMode
+	SendInput %visualMode%{Left}
 }
 
 sendDown(){
-	SendInput {Down}
+	global visualMode
+	SendInput %visualMode%{Down}
 }
 
 sendUp(){
-	SendInput {Up}
+	global visualMode
+	SendInput %visualMode%{Up}
 }
 
 sendRight(){
-	SendInput {Right}
+	global visualMode
+	if(OverrideKey())
+		SendInput %visualMode%{Right}
 }
 
 sendWordNext(){
-	SendInput, ^{Right}
+	global visualMode
+	if (OverrideKey())
+		SendInput, %visualMode%^{Right}
 }
 
 sendWordBack(){
-	SendInput, ^{Left}
+	global visualMode
+	SendInput, %visualMode%^{Left}
 }
 
 SendBottom(){
-	SendInput, ^{End}
+	global visualMode
+	SendInput, %visualMode%^{End}
 }
 
 SendTop(){
-	SendInput, ^{Home}
+	global visualMode
+	SendInput, %visualMode%^{Home}
 }
 
 SendBeginLine(){
-	SendInput, {Home}
+	global visualMode
+	SendInput, %visualMode%{Home}
 }
 
 SendEndLine(){
-	SendInput, {End}
+	global visualMode
+	SendInput, %visualMode%{End}
+}
+
+SendCreateNewLine(){
+	SendEndLine()
+	SendInput, {Enter}
+}
+
+SendUndo(){
+	SendInput, ^z
+}
+
+SendDel(){
+	SendInput, {Delete}
+}
+
+DeleteLine(){
+	SendBeginLine()
+	SendInput, +{End}
+	SendDel()
+}
+
+OverrideKey(){
+	global multiMode
+	if(multiMode = 1)
+		SendInput, %A_ThisHotkey%
+	return multiMode = 0
+}
+
+ManageCopy(){	
+	global multiMode
+	multiMode = 1
+	Input, text, L1 T1, , w,y,s	;[selected]
+	Switch text
+	{
+		case "w": SelectWord()
+		case "l": SelectLine()		
+	}	
+	multiMode = 0
+	SendInput, ^c
+}
+
+ManageCut(){
+	ManageCopy()
+	SendInput, {Delete}
+}
+
+SelectWord(){
+	sendWordBack()
+	SendInput, +^{Right}	
+}
+
+SelectLine(){
+	SendBeginLine()
+	SendInput, +{End}
+}
+
+sendPaste(){
+	SendInput, ^v
+}
+
+ManageVisual()
+{
+	global visualMode
+	if visualMode != +
+	{
+		visualMode = +
+		SendInput, {ShiftDown}
+	}else{
+		visualMode = 
+		SendInput, {ShiftUp}
+	}
 }
