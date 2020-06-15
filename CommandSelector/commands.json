@@ -49,6 +49,6 @@
       "category": "get info",
       "command": "getFileInfo",
       "name": "Get dll/file info"
-    },
+    }
   ]
 }
