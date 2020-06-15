@@ -21,12 +21,11 @@ InitVimNeo()
 	Gui, vim:Add, Text, cBlue -Background , Vim enabled	
 	Gui +LastFound 
 	WinSet, TransColor, EEAA99 150
-	
-	storeKeys := ["q","w","e","r","t","y","u","i","o","p","1","2","3","4","5","6","7","8","9","0"]
+		
 	movModifiers := ["","+"]
 	
 	Hotkey, IfWinNotExist, VimT
-	Hotkey, ~Ctrl, DoubleControl, On
+	Hotkey, ~Shift, DoubleShift, On
 	
 	Hotkey, IfWinExist, VimT
 	
@@ -47,7 +46,6 @@ InitVimNeo()
 		Hotkey, %modifier%$, SendEndLine, On
 	}
 	
-	
 	Hotkey, o, SendCreateNewLine, On
 	Hotkey, u, SendUndo, On
 	Hotkey, x, SendDel, On
@@ -58,21 +56,17 @@ InitVimNeo()
 	Hotkey, d, ManageCut, On
 	Hotkey, p, sendPaste, On
 	
-	Hotkey, v, ManageVisual, On	
-	
-	loop, % storeKeys.MaxIndex()
-	{
-		element := storeKeys[A_Index]
-		Hotkey, !%element%, setSlotClipboad, On
-		Hotkey, ^%element%, getSlotClipboad, On		
-	}		
+	Hotkey, s, ManageSelected, On		
+		
+	Hotkey, c, StoreSlotClipboad, On
+	Hotkey, v, RetrieveSlotClipboad, On
 	
 	Hotkey, if	
 	
 }
 
-DoubleControl(){
-	if(A_PriorHotkey != "~Ctrl" or A_TimeSincePriorHotkey > 400)
+DoubleShift(){
+	if(A_PriorHotkey != "~Shift" or A_TimeSincePriorHotkey > 400)
 	{
 		KeyWait, RControl
 		return
@@ -94,17 +88,20 @@ DisableVim()
 
 sendLeft(){
 	global visualMode
-	SendInput %visualMode%{Left}
+	if(OverrideKey())
+		SendInput %visualMode%{Left}
 }
 
 sendDown(){
 	global visualMode
-	SendInput %visualMode%{Down}
+	if(OverrideKey())
+		SendInput %visualMode%{Down}
 }
 
 sendUp(){
 	global visualMode
-	SendInput %visualMode%{Up}
+	if(OverrideKey())
+		SendInput %visualMode%{Up}
 }
 
 sendRight(){
@@ -121,46 +118,57 @@ sendWordNext(){
 
 sendWordBack(){
 	global visualMode
-	SendInput, %visualMode%^{Left}
+	if(OverrideKey())
+		SendInput, %visualMode%^{Left}
 }
 
 SendBottom(){
 	global visualMode
-	SendInput, %visualMode%^{End}
+	if(OverrideKey())
+		SendInput, %visualMode%^{End}
 }
 
 SendTop(){
 	global visualMode
-	SendInput, %visualMode%^{Home}
+	if(OverrideKey())
+		SendInput, %visualMode%^{Home}
 }
 
 SendBeginLine(){
 	global visualMode
-	SendInput, %visualMode%{Home}
+	if(OverrideKey())
+		SendInput, %visualMode%{Home}
 }
 
 SendEndLine(){
 	global visualMode
-	SendInput, %visualMode%{End}
+	if(OverrideKey())
+		SendInput, %visualMode%{End}
 }
 
 SendCreateNewLine(){
-	SendEndLine()
-	SendInput, {Enter}
+	if(OverrideKey()){
+		SendEndLine()
+		SendInput, {Enter}
+	}	
 }
 
 SendUndo(){
-	SendInput, ^z
+	if(OverrideKey())
+		SendInput, ^z
 }
 
 SendDel(){
-	SendInput, {Delete}
+	if(OverrideKey())
+		SendInput, {Delete}
 }
 
 DeleteLine(){
-	SendBeginLine()
-	SendInput, +{End}
-	SendDel()
+	if(OverrideKey()){
+		SendBeginLine()
+		SendInput, +{End}
+		SendDel()
+	}
 }
 
 OverrideKey(){
@@ -175,20 +183,26 @@ OverrideKey(){
 
 ManageCopy(){	
 	global multiMode
+	;if(OverrideKey()){		
 	multiMode = 1
-	Input, text, L1 T1, , w,y,s	;[selected]
+	Input, text, L1 T1, , w,l,s	
+	multiMode = 0
 	Switch text
 	{
 		case "w": SelectWord()
 		case "l": SelectLine()		
 	}	
-	multiMode = 0
+	
 	SendInput, ^c
+	;}
 }
 
 ManageCut(){
-	ManageCopy()
-	SendInput, {Delete}
+	if(OverrideKey())
+	{
+		ManageCopy()
+		SendInput, {Delete}
+	}	
 }
 
 SelectWord(){
@@ -202,33 +216,46 @@ SelectLine(){
 }
 
 sendPaste(){
-	SendInput, ^v
+	if(OverrideKey())
+		SendInput, ^v
 }
 
-ManageVisual()
+ManageSelected()
 {
-	global visualMode
-	if visualMode != +
-	{
-		visualMode = +		
-	}else{
-		visualMode = 		
+	if(OverrideKey()){
+		global visualMode
+		if visualMode != +
+		{
+			visualMode = +		
+		}else{
+			visualMode = 		
+		}
 	}
 }
 
-setSlotClipboad()
+StoreSlotClipboad()
 {
-	global slotClipboard
-	sendSmartCopy()
-	key := StrReplace(A_ThisHotkey, "!", "")	
-	slotClipboard[key] := Clipboard
-	Clipboard := 
+	global slotClipboard	
+	global multiMode	
+	multiMode = 1
+	Input, key, T1 L1
+	multiMode = 0
+	if(key)
+	{
+		sendSmartCopy()
+		slotClipboard[key] := Clipboard
+		showMessage("Stored in slot " . key, 1000)
+		Clipboard := 		
+	}	
 }
 
-getSlotClipboad()
+RetrieveSlotClipboad()
 {
 	global slotClipboard
-	key := StrReplace(A_ThisHotkey, "^", "")
+	global multiMode	
+	multiMode = 1
+	Input, key, T1 L1
+	multiMode = 0
 	if(slotClipboard.HasKey(key))
 	{		 
 		Clipboard := slotClipboard[key]
@@ -237,4 +264,5 @@ getSlotClipboad()
 		Clipboard := 
 	}else
 		showFailMessage("slot " . key . " is empty", 1500)
+		
 }
