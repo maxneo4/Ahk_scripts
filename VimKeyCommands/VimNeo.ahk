@@ -13,6 +13,7 @@ InitVimNeo()
 	global vimEnabled = false
 	global multiMode = 0
 	global visualMode = 
+	global slotClipboard = {}
 	
 	Gui, vim:New, AlwaysOnTop ToolWindow -DPIScale -Caption
 	Gui, vim:Color, EEAA99, OOOO00
@@ -21,38 +22,57 @@ InitVimNeo()
 	Gui +LastFound 
 	WinSet, TransColor, EEAA99 150
 	
+	storeKeys := ["q","w","e","r","t","y","u","i","o","p","1","2","3","4","5","6","7","8","9","0"]
+	movModifiers := ["","+"]
+	
 	Hotkey, IfWinNotExist, VimT
-	Hotkey, ~RControl, DoubleRControl, On
+	Hotkey, ~Ctrl, DoubleControl, On
 	
 	Hotkey, IfWinExist, VimT
+	
 	Hotkey, Escape, DisableVim, On
-	Hotkey, *h, sendLeft, On
-	Hotkey, *j, sendDown, On
-	Hotkey, *k, sendUp, On
-	Hotkey, *l, sendRight, On		
-	Hotkey, *w, sendWordNext, On
-	Hotkey, *b, sendWordBack, On
-	Hotkey, *z, SendBottom, On
-	Hotkey, *q, sendTop, On
-	Hotkey, *0, SendBeginLine, On
-	Hotkey, *$, SendEndLine, On
+	
+	loop, % movModifiers.MaxIndex()
+	{
+		modifier := movModifiers[A_Index]
+		Hotkey, %modifier%h, sendLeft, On
+		Hotkey, %modifier%j, sendDown, On
+		Hotkey, %modifier%k, sendUp, On
+		Hotkey, %modifier%l, sendRight, On		
+		Hotkey, %modifier%w, sendWordNext, On
+		Hotkey, %modifier%b, sendWordBack, On
+		Hotkey, %modifier%z, SendBottom, On
+		Hotkey, %modifier%q, sendTop, On
+		Hotkey, %modifier%0, SendBeginLine, On
+		Hotkey, %modifier%$, SendEndLine, On
+	}
+	
+	
 	Hotkey, o, SendCreateNewLine, On
 	Hotkey, u, SendUndo, On
 	Hotkey, x, SendDel, On
+	
 	Hotkey, +d, DeleteLine, On
 	
 	Hotkey, y, ManageCopy, On
 	Hotkey, d, ManageCut, On
 	Hotkey, p, sendPaste, On
 	
-	Hotkey, v, ManageVisual, On
+	Hotkey, v, ManageVisual, On	
+	
+	loop, % storeKeys.MaxIndex()
+	{
+		element := storeKeys[A_Index]
+		Hotkey, !%element%, setSlotClipboad, On
+		Hotkey, ^%element%, getSlotClipboad, On		
+	}		
 	
 	Hotkey, if	
 	
 }
 
-DoubleRControl(){
-	if(A_PriorHotkey != "~RControl" or A_TimeSincePriorHotkey > 400)
+DoubleControl(){
+	if(A_PriorHotkey != "~Ctrl" or A_TimeSincePriorHotkey > 400)
 	{
 		KeyWait, RControl
 		return
@@ -68,8 +88,7 @@ EnableVim()
 }
 
 DisableVim()
-{
-	Send, {ShiftUp}
+{	
 	Gui, vim:Hide
 }
 
@@ -147,10 +166,10 @@ DeleteLine(){
 OverrideKey(){
 	global multiMode
 	if(multiMode = 1)
-		{
-			SendInput, %A_ThisHotkey%
-			return false
-		}
+	{
+		SendInput, %A_ThisHotkey%
+		return false
+	}
 	return true
 }
 
@@ -191,10 +210,31 @@ ManageVisual()
 	global visualMode
 	if visualMode != +
 	{
-		visualMode = +
-		SendInput, {ShiftDown}
+		visualMode = +		
 	}else{
-		visualMode = 
-		SendInput, {ShiftUp}
+		visualMode = 		
 	}
+}
+
+setSlotClipboad()
+{
+	global slotClipboard
+	sendSmartCopy()
+	key := StrReplace(A_ThisHotkey, "!", "")	
+	slotClipboard[key] := Clipboard
+	Clipboard := 
+}
+
+getSlotClipboad()
+{
+	global slotClipboard
+	key := StrReplace(A_ThisHotkey, "^", "")
+	if(slotClipboard.HasKey(key))
+	{		 
+		Clipboard := slotClipboard[key]
+		SendInput, ^v
+		Sleep, 100
+		Clipboard := 
+	}else
+		showFailMessage("slot " . key . " is empty", 1500)
 }
