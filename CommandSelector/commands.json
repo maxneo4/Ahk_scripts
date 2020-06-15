@@ -44,6 +44,11 @@
       "category": "copy",
       "command": "copySelectedFileContentToClipboard",
       "name": "copy content selected file"
-    }
+    },
+    {
+      "category": "get info",
+      "command": "getFileInfo",
+      "name": "Get dll/file info"
+    },
   ]
 }
