@@ -45,9 +45,11 @@ replaceFileSeparator() {
 }
 
 sendSmartCopy(){
+	lastClipboard :=
 	if(Clipboard)
-	{
-		showMessage("Taken from previous clipboard",500)		
+	{		
+		lastClipboard := Clipboard
+		Clipboard :=
 	}else{
 		Send ^c
 		ClipWait 1
@@ -56,7 +58,15 @@ sendSmartCopy(){
 		Sleep, 100
 	}
 	if  Clipboard = 
-		showFailMessage("There is'nt clipboard content",2000)
+	{
+		if(lastClipboard)
+		{
+			Clipboard := lastClipboard
+			showMessage("Taken from previous clipboard", 1000)
+		}
+		else
+			showFailMessage("There is'nt clipboard content",2000)
+	}
 }
 
 sendLiteCopy(){

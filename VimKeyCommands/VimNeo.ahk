@@ -15,6 +15,8 @@ InitVimNeo()
 	global visualMode = 
 	global slotClipboard = {}
 	
+	global slotMouse = {}
+	
 	Gui, vim:New, AlwaysOnTop ToolWindow -DPIScale -Caption
 	Gui, vim:Color, EEAA99, OOOO00
 	Gui, vim:Font, s14 Arial bold
@@ -63,8 +65,8 @@ InitVimNeo()
 	Hotkey, +d, DeleteLine, On	
 	Hotkey, d, ManageCut, On	
 	
-	
-	nullKeys := [".",",","a","e","f","g","m","n","ñ","r","t","w","1","2","3","4","5","6","7","8","9",";","-","_","{","}","[","]","+","*","/","!","#","%","&","(",")","=","'","?","¿","<",">",""""]
+	;"m","n"
+	nullKeys := [".",",","a","e","f","g","ñ","r","t","1","2","3","4","5","6","7","8","9",";","-","_","{","}","[","]","+","*","/","!","#","%","&","(",")","=","'","?","¿","<",">",""""]
 	
 	Loop, % nullKeys.MaxIndex()
 	{
