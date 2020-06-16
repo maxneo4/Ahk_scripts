@@ -21,7 +21,7 @@ InitVimNeo()
 	Gui, vim:Add, Text, cBlue -Background , Vim enabled	
 	Gui +LastFound 
 	WinSet, TransColor, EEAA99 150
-		
+	
 	movModifiers := ["","+"]
 	
 	Hotkey, IfWinNotExist, VimT
@@ -41,25 +41,31 @@ InitVimNeo()
 		Hotkey, %modifier%w, sendWordNext, On
 		Hotkey, %modifier%b, sendWordBack, On
 		Hotkey, %modifier%z, SendBottom, On
-		Hotkey, %modifier%q, sendTop, On
-		Hotkey, %modifier%0, SendBeginLine, On
-		Hotkey, %modifier%$, SendEndLine, On
+		Hotkey, %modifier%q, sendTop, On		
+		Hotkey, %modifier%i, SendF2, On
+		
+		Hotkey, %modifier%o, SendCreateNewLine, On
+		Hotkey, %modifier%u, SendUndo, On
+		
+		Hotkey, %modifier%x, SendDel, On
+		
+		Hotkey, %modifier%y, ManageCopy, On
+		Hotkey, %modifier%p, sendPaste, On
+		
+		Hotkey, %modifier%s, ManageSelected, On		
+		
+		Hotkey, %modifier%c, StoreSlotClipboad, On
+		Hotkey, %modifier%v, RetrieveSlotClipboad, On
 	}
 	
-	Hotkey, o, SendCreateNewLine, On
-	Hotkey, u, SendUndo, On
-	Hotkey, x, SendDel, On
+	Hotkey, 0, SendBeginLine, On
+	Hotkey, $, SendEndLine, On	
 	
-	Hotkey, +d, DeleteLine, On
+	Hotkey, +d, DeleteLine, On	
+	Hotkey, d, ManageCut, On	
 	
-	Hotkey, y, ManageCopy, On
-	Hotkey, d, ManageCut, On
-	Hotkey, p, sendPaste, On
 	
-	Hotkey, s, ManageSelected, On		
-		
-	Hotkey, c, StoreSlotClipboad, On
-	Hotkey, v, RetrieveSlotClipboad, On
+	nullKeys := ["a","e","f","g","m","n","ñ","r","t","w","1","2","3","4","5","6","7","8","9",";","-","_","{","}","[","]","+","*","/","!","#","%","&","(",")","=","'","?","¿","<",">",""""]
 	
 	Hotkey, if	
 	
@@ -265,4 +271,8 @@ RetrieveSlotClipboad()
 	}else
 		showFailMessage("slot " . key . " is empty", 1500)
 		
+}
+
+SendF2(){
+	SendInput, {F2}
 }
