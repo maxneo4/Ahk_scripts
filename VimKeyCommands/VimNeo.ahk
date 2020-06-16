@@ -20,17 +20,16 @@ InitVimNeo()
 	Gui, vim:Font, s14 Arial bold
 	Gui, vim:Add, Text, cBlue -Background , Vim enabled	
 	Gui +LastFound 
-	WinSet, TransColor, EEAA99 150
-	
-	movModifiers := ["","+"]
+	WinSet, TransColor, EEAA99 150	
 	
 	Hotkey, IfWinNotExist, VimT
-	Hotkey, ~Shift, DoubleShift, On
+	Hotkey, ~Shift, DoubleKey, On
 	
 	Hotkey, IfWinExist, VimT
 	
 	Hotkey, Escape, DisableVim, On
 	
+	movModifiers := ["","+"]	
 	loop, % movModifiers.MaxIndex()
 	{
 		modifier := movModifiers[A_Index]
@@ -77,10 +76,10 @@ InitVimNeo()
 	
 }
 
-DoubleShift(){
+DoubleKey(){
 	if(A_PriorHotkey != "~Shift" or A_TimeSincePriorHotkey > 400)
 	{
-		KeyWait, RControl
+		KeyWait, Shift
 		return
 	}
 	EnableVim()
@@ -195,18 +194,18 @@ OverrideKey(){
 
 ManageCopy(){	
 	global multiMode
-	;if(OverrideKey()){		
-	multiMode = 1
-	Input, text, L1 T1, , w,l,s	
-	multiMode = 0
-	Switch text
-	{
-		case "w": SelectWord()
-		case "l": SelectLine()		
-	}	
-	
-	SendInput, ^c
-	;}
+	if(OverrideKey()){		
+		multiMode = 1
+		Input, text, L1 T1, , w,l,s	
+		multiMode = 0
+		Switch text
+		{
+			case "w": SelectWord()
+			case "l": SelectLine()		
+		}	
+		
+		SendInput, ^c
+	}
 }
 
 ManageCut(){
