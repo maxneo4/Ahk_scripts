@@ -57,6 +57,9 @@ InitVimNeo()
 		
 		Hotkey, %modifier%c, StoreSlotClipboad, On
 		Hotkey, %modifier%v, RetrieveSlotClipboad, On
+		
+		Hotkey, %modifier%n, StoreMousePosition, On
+		Hotkey, %modifier%m, ClickMousePosition, On
 	}
 	
 	Hotkey, 0, SendBeginLine, On
@@ -280,6 +283,38 @@ RetrieveSlotClipboad()
 		
 }
 
+StoreMousePosition()
+{	
+	global slotMouse
+	global multiMode
+	multiMode = 1
+	Input, key, T1 L1
+	multiMode = 0
+	if(key){
+		MouseGetPos, posX, posY, wId
+		slotMouse[key] := {x:posX, y:posY, id:wId}
+		showMessage("Stored in slot " . key, 1000)
+	}
+}
+
+ClickMousePosition()
+{
+	global slotMouse
+	global multiMode
+	multiMode = 1
+	Input, key, T1 L1
+	multiMode = 0
+	if(slotMouse.HasKey(key))
+	{
+		mouseInfo := slotMouse[key]
+		winId := mouseInfo.id
+		WinActivate, ahk_id %winId%
+		MouseClick, Left, mouseInfo.x, mouseInfo.y		
+	}else
+		showFailMessage("slot " . key . " is empty", 1000)
+}
+
 SendF2(){
-	SendInput, {F2}
+	if(OverrideKey())
+		SendInput, {F2}
 }
