@@ -20,12 +20,12 @@ InitVimNeo()
 	Gui, vim:New, AlwaysOnTop ToolWindow -DPIScale -Caption
 	Gui, vim:Color, EEAA99, OOOO00
 	Gui, vim:Font, s14 Arial bold
-	Gui, vim:Add, Text, cBlue -Background , Vim enabled	
+	Gui, vim:Add, Text, cBlue -Background , Vim [N]	
 	Gui +LastFound 
-	WinSet, TransColor, EEAA99 150	
+	WinSet, TransColor, EEAA99 100	
 	
 	Hotkey, IfWinNotExist, VimT
-	Hotkey, ~Shift, DoubleKey, On
+	Hotkey, ~Escape, DoubleKeyToActivate, On
 	
 	Hotkey, IfWinExist, VimT
 	
@@ -69,7 +69,7 @@ InitVimNeo()
 	Hotkey, d, ManageCut, On	
 	
 	;"m","n"
-	nullKeys := [".",",","a","e","f","g","ñ","r","t","1","2","3","4","5","6","7","8","9",";","-","_","{","}","[","]","+","*","/","!","#","%","&","(",")","=","'","?","¿","<",">",""""]
+	nullKeys := ["Space",".",",","a","e","f","g","ñ","r","t","1","2","3","4","5","6","7","8","9",";","-","_","{","}","[","]","+","*","/","!","#","%","&","(",")","=","'","?","¿","<",">",""""]
 	
 	Loop, % nullKeys.MaxIndex()
 	{
@@ -79,21 +79,18 @@ InitVimNeo()
 	
 	Hotkey, if	
 	
-}
-
-DoubleKey(){
-	if(A_PriorHotkey != "~Shift" or A_TimeSincePriorHotkey > 400)
-	{
-		KeyWait, Shift
-		return
-	}
-	EnableVim()
+	DoubleKeyToActivate:
+	if(DoubleKey("Escape"))
+		EnableVim()
+	return
+	
 }
 
 EnableVim()
 {
 	WinGet, active_id, ID, A
-	Gui, vim:Show, autosize xCenter y-8, VimT
+	yPos := A_ScreenHeight - 100
+	Gui, vim:Show, autosize xCenter y%yPos%, VimT
 	WinActivate, ahk_id %active_id%
 }
 
