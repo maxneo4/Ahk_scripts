@@ -60,6 +60,9 @@ InitVimNeo()
 		
 		Hotkey, %modifier%n, StoreMousePosition, On
 		Hotkey, %modifier%m, ClickMousePosition, On
+		
+		Hotkey, %modifier%., sendLeftClick, On
+		Hotkey, %modifier%`,, sendRightClick, On
 	}
 	
 	Hotkey, 0, SendBeginLine, On
@@ -69,7 +72,7 @@ InitVimNeo()
 	Hotkey, d, ManageCut, On	
 	
 	;"m","n"
-	nullKeys := ["Space",".",",","a","e","f","g","ñ","r","t","1","2","3","4","5","6","7","8","9",";","-","_","{","}","[","]","+","*","/","!","#","%","&","(",")","=","'","?","¿","<",">",""""]
+	nullKeys := ["Space","a","e","f","g","ñ","r","t","1","2","3","4","5","6","7","8","9",";","-","_","{","}","[","]","+","*","/","!","#","%","&","(",")","=","'","?","¿","<",">",""""]
 	
 	Loop, % nullKeys.MaxIndex()
 	{
@@ -314,4 +317,12 @@ ClickMousePosition()
 SendF2(){
 	if(OverrideKey())
 		SendInput, {F2}
+}
+
+sendLeftClick(){
+	Click	
+}
+
+sendRightClick(){
+	Click,,, Right
 }
