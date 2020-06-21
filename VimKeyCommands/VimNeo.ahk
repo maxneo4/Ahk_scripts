@@ -17,10 +17,12 @@ InitVimNeo()
 	
 	global slotMouse = {}
 	
+	global LabelId
+	
 	Gui, vim:New, AlwaysOnTop ToolWindow -DPIScale -Caption
 	Gui, vim:Color, EEAA99, OOOO00
 	Gui, vim:Font, s14 Arial bold
-	Gui, vim:Add, Text, cBlue -Background , Vim [N]	
+	Gui, vim:Add, Text, cBlue -Background HwndLabelId , Vim [N]	
 	Gui +LastFound 
 	WinSet, TransColor, EEAA99 100	
 	
@@ -240,12 +242,17 @@ ManageSelected()
 {
 	if(OverrideKey()){
 		global visualMode
+		global LabelId
+		
 		if visualMode != +
 		{
-			visualMode = +		
+			visualMode = +
+			GuiControl, ,%LabelId%, Vim [S]
 		}else{
-			visualMode = 		
+			visualMode = 	
+			GuiControl, ,%LabelId%, Vim [N]
 		}
+		
 	}
 }
 

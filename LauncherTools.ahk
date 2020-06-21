@@ -68,11 +68,11 @@ ESCAPE : oculta el selector de comandos
 --------------------------------------------------------------
 
 # Window gestures
-TAB + A : agrega ventana al gestor
-TAB + S : remueve ventana del gestor
-TAB + Q : Navega a la siguiente ventana del gestor de forma ciclica
-TAB + W : navega a la anterior ventana del gestor de forma ciclica
-TAB + R : remueve todas las ventanas del gestor
+CTRL + UP : agrega ventana al gestor
+CTRL + DOWN : remueve ventana del gestor
+CTRL + RIGHT : Navega a la siguiente ventana del gestor de forma ciclica
+CTRL + LEFT : navega a la anterior ventana del gestor de forma ciclica
+CTRL+ SHIFT + DOWN : remueve todas las ventanas del gestor
 
 )
 MsgBox, ,Help, %helptext%, 
@@ -81,7 +81,7 @@ Return
 +F1::
 helpText = 
 (
-V 0.5.5
+V 0.5.6
 Master command = (CTRL+ALT+SPACE = ALT GR+SPACE), SHIFT+SPACE
 ----------------------------------------------------------------
 

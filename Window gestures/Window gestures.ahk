@@ -2,12 +2,11 @@
 	global pos = 1	
 	global windows := []
 	
-	Hotkey, Tab & a, AddWindowById, On
-	Hotkey, Tab & s, RemoveActiveWindow, On
-	Hotkey, Tab & q, MoveNextWindow, On
-	Hotkey, Tab & w, MovePreviousWindow, On
-	Hotkey, Tab & r, RemoveAll, On
-	Hotkey, *Tab, SendTab, On	
+	Hotkey, ^Up, AddWindowById, On
+	Hotkey, ^Down, RemoveActiveWindow, On
+	Hotkey, ^Right, MoveNextWindow, On
+	Hotkey, ^Left, MovePreviousWindow, On
+	Hotkey, ^+Down, RemoveAll, On
 }
 
 RemoveAll()
@@ -33,6 +32,7 @@ AddWindowById()
 
 MoveNextWindow()
 {
+	
 	global pos
 	global windows
 	
