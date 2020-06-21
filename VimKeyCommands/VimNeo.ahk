@@ -45,12 +45,9 @@ InitVimNeo()
 		Hotkey, %modifier%b, sendWordBack, On
 		Hotkey, %modifier%z, SendBottom, On
 		Hotkey, %modifier%q, sendTop, On		
-		Hotkey, %modifier%i, SendF2, On
 		
 		Hotkey, %modifier%o, SendCreateNewLine, On
 		Hotkey, %modifier%u, SendUndo, On
-		
-		Hotkey, %modifier%x, SendDel, On
 		
 		Hotkey, %modifier%y, ManageCopy, On
 		Hotkey, %modifier%p, sendPaste, On
@@ -65,6 +62,9 @@ InitVimNeo()
 		
 		Hotkey, %modifier%., sendLeftClick, On
 		Hotkey, %modifier%`,, sendRightClick, On
+		
+		Hotkey, %modifier%r, SendF2, On
+		Hotkey, %modifier%i, allowInsert, On
 	}
 	
 	Hotkey, 0, SendBeginLine, On
@@ -73,8 +73,11 @@ InitVimNeo()
 	Hotkey, +d, DeleteLine, On	
 	Hotkey, d, ManageCut, On	
 	
+	Hotkey, x, SendBackspace, On
+	Hotkey, +x, SendDel, On
+	
 	;"m","n"
-	nullKeys := ["Space","a","e","f","g","ñ","r","t","1","2","3","4","5","6","7","8","9",";","-","_","{","}","[","]","+","*","/","!","#","%","&","(",")","=","'","?","¿","<",">",""""]
+	nullKeys := ["Space","a","e","f","g","ñ","t","1","2","3","4","5","6","7","8","9",";","-","_","{","}","[","]","+","*","/","!","#","%","&","(",")","=","'","?","¿","<",">",""""]
 	
 	Loop, % nullKeys.MaxIndex()
 	{
@@ -181,11 +184,30 @@ SendDel(){
 		SendInput, {Delete}
 }
 
+SendBackspace(){
+	if(OverrideKey())
+		SendInput, {Backspace}
+}
+
 DeleteLine(){
 	if(OverrideKey()){
 		SendBeginLine()
 		SendInput, +{End}
 		SendDel()
+	}
+}
+
+allowInsert(){
+	global multiMode
+	global LabelId
+	if(OverrideKey()){
+		GuiControl, ,%LabelId%, Vim [I]
+		multiMode = 1
+		Input, key, T1 L1
+		multiMode = 0
+		if(key)
+			SendInput, %key%
+		GuiControl, ,%LabelId%, Vim [N]
 	}
 }
 
@@ -199,7 +221,7 @@ OverrideKey(){
 	return true
 }
 
-ManageCopy(){	
+ManageCopy(cutMode = false){	
 	global multiMode
 	if(OverrideKey()){		
 		multiMode = 1
@@ -210,17 +232,18 @@ ManageCopy(){
 			case "w": SelectWord()
 			case "l": SelectLine()		
 		}	
-		
-		SendInput, ^c
+		if(cutMode)
+			SendInput, ^x
+		else
+			SendInput, ^c
 	}
 }
 
 ManageCut(){
 	if(OverrideKey())
-	{
-		ManageCopy()
-		SendInput, {Delete}
-	}	
+	
+		ManageCopy(true)		
+		
 }
 
 SelectWord(){
