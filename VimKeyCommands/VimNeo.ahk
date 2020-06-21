@@ -63,7 +63,6 @@ InitVimNeo()
 		Hotkey, %modifier%., sendLeftClick, On
 		Hotkey, %modifier%`,, sendRightClick, On
 		
-		Hotkey, %modifier%r, SendF2, On
 		Hotkey, %modifier%i, allowInsert, On
 	}
 	
@@ -75,6 +74,9 @@ InitVimNeo()
 	
 	Hotkey, x, SendBackspace, On
 	Hotkey, +x, SendDel, On
+	
+	Hotkey, r, replaceChar, On
+	Hotkey, +r, replaceCharDel, On
 	
 	;"m","n"
 	nullKeys := ["Space","a","e","f","g","ñ","t","1","2","3","4","5","6","7","8","9",";","-","_","{","}","[","]","+","*","/","!","#","%","&","(",")","=","'","?","¿","<",">",""""]
@@ -197,7 +199,7 @@ DeleteLine(){
 	}
 }
 
-allowInsert(){
+allowInsert(replace="None"){
 	global multiMode
 	global LabelId
 	if(OverrideKey()){
@@ -206,9 +208,23 @@ allowInsert(){
 		Input, key, T1 L1
 		multiMode = 0
 		if(key)
-			SendInput, %key%
+			{
+				if(replace = "B")
+					SendBackspace()
+				if(replace = "D")
+					SendDel()
+				SendInput, %key%
+			}
 		GuiControl, ,%LabelId%, Vim [N]
 	}
+}
+
+replaceChar(){
+	allowInsert("B")
+}
+
+replaceCharDel(){
+	allowInsert("D")
 }
 
 OverrideKey(){
@@ -342,11 +358,6 @@ ClickMousePosition()
 		MouseClick, Left, mouseInfo.x, mouseInfo.y		
 	}else
 		showFailMessage("slot " . key . " is empty", 1000)
-}
-
-SendF2(){
-	if(OverrideKey())
-		SendInput, {F2}
 }
 
 sendLeftClick(){
