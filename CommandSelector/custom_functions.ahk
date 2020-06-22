@@ -78,16 +78,6 @@ sendSmartCopy(){
 	}
 }
 
-sendCopy(){
-   Sleep, 100
-   Send ^c
-   ClipWait 1
-   if ErrorLevel  ; ClipWait timed out.
-    return
-   Sleep, 100
-   return
-}
-
 RemoveBreakLinesAndTrimClipboard(){	
 	;Clipboard := RegExReplace(Clipboard, "`am)^[\s\R]*") ;remove al empty lines if is useful to another flow tool
 	Clipboard := Trim(Clipboard, "`r`n")
@@ -95,7 +85,7 @@ RemoveBreakLinesAndTrimClipboard(){
 }
 
 listToWhereIn(){
- sendCopy()
+ sendSmartCopy()
  joined := ""
  Loop, Parse, clipboard, `r`n
    if A_loopfield
@@ -105,7 +95,7 @@ listToWhereIn(){
 }
 
 copyFileFromFullPath(){
-   sendCopy()
+   sendSmartCopy()
    fullPath := Clipboard
    InvokeVerb(fullPath, "Copy")
    return
@@ -123,13 +113,13 @@ generateGuidInClipboard(){
 }
 
 toLower(){
- sendCopy()
+ sendSmartCopy()
  StringLower, Clipboard, Clipboard
    return
 }
 
 toUpper(){
- sendCopy()
+ sendSmartCopy()
  StringUpper, Clipboard, Clipboard
  return
 }

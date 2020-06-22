@@ -194,7 +194,7 @@ addSelectedFileAsCommand(){
 }
 
 addSelectedTextAsCommand(){
-	sendCopy()
+	sendSmartCopy()
 	addClipboardContentAsCommand()
 }
 
