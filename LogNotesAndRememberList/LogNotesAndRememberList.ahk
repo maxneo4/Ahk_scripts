@@ -1,5 +1,6 @@
 InitRememberList(rememberListFileParam) {
-	global folder = "LogNotesAndRememberList"
+	global folder := A_ScriptDir . "\LogNotesAndRememberList"
+	global ownFolder := "LogNotesAndRememberList"
 	global rememberListFile
 	global Filter
 	global FilterId
@@ -121,13 +122,14 @@ openLogByDate(){
 
 addCaptureToLog(sendToCaptureScreen=1){
 	global folder
+	global ownFolder
 	FormatTime, DateString,, ddMMMyyyy
 	FormatTime, TimeString,, HH-mm-ss
 	IfNotExist, %folder%\%DateString%
 	   FileCreateDir, %folder%\%DateString%
 	if sendToCaptureScreen
 		SendInput, #+s
-	Run, %A_ScriptDir%\%folder%\ClipboardImageToFile.exe -secondsToWait 20 -imagePath "%A_ScriptDir%\%folder%\%DateString%\%TimeString%.png"
+	Run, %A_ScriptDir%\%ownFolder%\ClipboardImageToFile.exe -secondsToWait 20 -imagePath "%folder%\%DateString%\%TimeString%.png"
 	return
 }
 
@@ -280,6 +282,16 @@ openRememberList(){
 	else
 		showFailMessage("rememberList.txt is not created!", 1500)
 	return 
+}
+
+changeLogNotesWorkSpaceFolder(){
+	global folder
+	newFolder := getSmartCurrentFolder()
+	if(newFolder)
+		{
+			folder := newFolder
+			showMessage("Workspace [log and images] was changed", 1500)
+		}
 }
 
 RememberListHide(){

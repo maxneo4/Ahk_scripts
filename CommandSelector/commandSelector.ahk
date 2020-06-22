@@ -243,4 +243,5 @@ FillDefaultCommands(){
 	defaultCommands.Push({category: "config", command: "addSelectedTextAsCommand", name: "add selected text as new command"})
 	defaultCommands.Push({category: "copy", command: "copySelectedFileContentToClipboard", name: "copy content selected file"})
 	defaultCommands.Push({category: "get version", command: "getFileVersion", name: "Get dll/file version"})
+	defaultCommands.Push({category: "workspace", command: "changeLogNotesWorkSpaceFolder", name: "Set current folder to log notes and images"})
 }

@@ -307,7 +307,7 @@ StoreSlotClipboad()
 	global slotClipboard	
 	global multiMode	
 	multiMode = 1
-	Input, key, T1 L1
+	Input, key, T2 L1
 	multiMode = 0
 	if(key)
 	{
@@ -323,7 +323,7 @@ RetrieveSlotClipboad()
 	global slotClipboard
 	global multiMode	
 	multiMode = 1
-	Input, key, T1 L1
+	Input, key, T2 L1
 	multiMode = 0
 	if(slotClipboard.HasKey(key))
 	{		 
@@ -341,7 +341,7 @@ StoreMousePosition()
 	global slotMouse
 	global multiMode
 	multiMode = 1
-	Input, key, T1 L1
+	Input, key, T2 L1
 	multiMode = 0
 	if(key){
 		MouseGetPos, posX, posY, wId
@@ -355,7 +355,7 @@ ClickMousePosition()
 	global slotMouse
 	global multiMode
 	multiMode = 1
-	Input, key, T1 L1
+	Input, key, T2 L1
 	multiMode = 0
 	if(slotMouse.HasKey(key))
 	{
