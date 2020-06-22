@@ -35,17 +35,19 @@ InitCommandSelector(configFile) {
 	LV_ModifyCol(5, 0)
 	LV_ModifyCol(6, 0)
 	
-	Hotkey, IfWinActive, CommandS
+	Hotkey, IfWinActive, CommandS		
 	Hotkey, ~Enter, invokeCommand, On
 	Hotkey, ~Del, Del, On
 	Hotkey, ~BackSpace, FocusText, On
 	Hotkey, ~Down, Down, On
 	Hotkey, ~Up, Up, On
+	Hotkey, ~Escape, CommandSelectorHide, On
 	Hotkey, If
+	
 	Hotkey, !Space, ShowCommandSelector, On
 	Hotkey, ^!r, ReloadCommands, On
 	Hotkey, ^!e, openCommandsConfig, On
-	
+		
 	Del:   
 	GuiControl, ,%EditId% ;clear text box
 	FocusText()

@@ -7,6 +7,7 @@
 	Hotkey, ^Right, MoveNextWindow, On
 	Hotkey, ^Left, MovePreviousWindow, On
 	Hotkey, ^+Down, RemoveAll, On
+	Hotkey, *Tab, SendTab, On
 }
 
 RemoveAll()

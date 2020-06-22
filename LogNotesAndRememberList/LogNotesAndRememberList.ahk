@@ -33,6 +33,7 @@ InitRememberList(rememberListFileParam) {
 	Hotkey, ~Enter, invokeText, On
 	Hotkey, ~Down, DownRL, On
 	Hotkey, ~Up, UpRL, On
+	Hotkey, ~Escape, RememberListHide, On
 	Hotkey, if
 	
 	Hotkey, ^!Space , WaitSubCommandKeys, On

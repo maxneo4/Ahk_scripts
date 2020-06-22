@@ -22,6 +22,9 @@ WindowGesturesInit()
 #Include samples\sharats.me\time-osd.ahk
 TimeOSDInit()
 
+#Include  VimKeyCommands\VimNeo.ahk
+InitVimNeo()
+
 ;O ommit the end character separator
 ;* ommit to need end character	
 ;Bizagi developer hotStrings
@@ -49,15 +52,10 @@ TimeOSDInit()
 
 #if
 
-~Escape::   
-CommandSelectorHide()
-RememberListHide()
-return 
-
 ^F1::
 helpText = 
 (
-V 0.5.5
+V 0.5.6
 # CommandSelector
 
 ALT+SPACE : abre selector de comandos

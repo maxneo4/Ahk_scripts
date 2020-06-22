@@ -1,15 +1,5 @@
-﻿#NoEnv  ; Recommended for performance and compatibility with future AutoHotkey releases.
-; #Warn  ; Enable warnings to assist with detecting common errors.
-SendMode Input  ; Recommended for new scripts due to its superior speed and reliability.
-SetWorkingDir %A_ScriptDir%  ; Ensures a consistent starting directory.
-
-#Include  ..\CommandSelector\custom_functions.ahk
-
-InitVimNeo()
-
-InitVimNeo()
-{
-	global lastCommand = "{Shift}{ShiftUp}"
+﻿InitVimNeo()
+{	
 	global vimEnabled = false
 	global multiMode = 0
 	global visualMode = 
@@ -18,6 +8,8 @@ InitVimNeo()
 	global slotMouse = {}
 	
 	global LabelId
+	
+	global mouseDelta = 8
 	
 	Gui, vim:New, AlwaysOnTop ToolWindow -DPIScale -Caption
 	Gui, vim:Color, EEAA99, OOOO00
@@ -31,16 +23,14 @@ InitVimNeo()
 	
 	Hotkey, IfWinExist, VimT
 	
-	Hotkey, Escape, DisableVim, On
+	Hotkey, ~Escape, DisableVim, On
+	Hotkey, F1, VimHelp, On
 	
 	movModifiers := ["","+"]	
 	loop, % movModifiers.MaxIndex()
 	{
 		modifier := movModifiers[A_Index]
-		Hotkey, %modifier%h, sendLeft, On
-		Hotkey, %modifier%j, sendDown, On
-		Hotkey, %modifier%k, sendUp, On
-		Hotkey, %modifier%l, sendRight, On		
+		
 		Hotkey, %modifier%w, sendWordNext, On
 		Hotkey, %modifier%b, sendWordBack, On
 		Hotkey, %modifier%z, SendBottom, On
@@ -77,6 +67,16 @@ InitVimNeo()
 	
 	Hotkey, r, replaceChar, On
 	Hotkey, +r, replaceCharDel, On
+	
+	Hotkey, h, sendLeft, On
+	Hotkey, j, sendDown, On
+	Hotkey, k, sendUp, On
+	Hotkey, l, sendRight, On	
+	
+	Hotkey, +h, moveMouseLeft, On
+	Hotkey, +j, moveMouseDown, On
+	Hotkey, +k, moveMouseUp, On
+	Hotkey, +l, moveMouseRight, On	
 	
 	;"m","n"
 	nullKeys := ["Space","a","e","f","g","ñ","t","1","2","3","4","5","6","7","8","9",";","-","_","{","}","[","]","+","*","/","!","#","%","&","(",")","=","'","?","¿","<",">",""""]
@@ -366,4 +366,84 @@ sendLeftClick(){
 
 sendRightClick(){
 	Click,,, Right
+}
+
+translateMouse(x=0,y=0)
+{
+	MouseGetPos, posX, posY
+	posX := posX + x
+	posY := posY + y
+	MouseMove, posX, posY
+}
+
+moveMouseRight(){
+	global mouseDelta
+	translateMouse(mouseDelta, 0)
+}
+
+moveMouseLeft(){
+	global mouseDelta
+	translateMouse(-mouseDelta, 0)
+}
+
+moveMouseUp(){
+	global mouseDelta
+	translateMouse(0, -mouseDelta)
+}
+
+moveMouseDown(){
+	global mouseDelta
+	translateMouse(0, mouseDelta)
+}
+
+VimHelp(){
+helpText = 
+(
+S : Selection Mode (Press S again to set to Normal mode)
+I : Insert one character (wait 1 second)
+R : Replace one character before cursor
+SHIFT + R: Replace one character after cursor
+
+H : Move caret to left
+J : Move caret to down
+K : Move caret to up
+L : Move caret to right
+
+Q : Go to begin of page
+Z : Go to end of page
+W : Go next word
+B : Go back word
+0 : Go to begin of line
+$ : Go to end of line
+
+SHIFT + D : Delete line
+O : New Lines
+
+U : Undo last action	
+X : Send BackSpace, SHIFT + X: Send Supr	
+
+------------------------------------
+#Clipboard actions
+
+YL: Copy line, YW: Copy word, YS: Copy selected
+DL: Cut line, DW, Cut word, DS, Cut selected
+P : Paste from clipboard
+
+C + Any char: Store in clipboard in slot marked by char
+V + Any char: Retrieve from clipboard slot marked by char
+
+------------------------------------
+## Mouse actions
+
+N + Any char: Store in slot mouse position
+M + Any char: Retrieve from slot mouse position
+SHIFT + H : Move mouse to left
+SHIFT + J : Move mouse to down
+SHIFT + K : Move mouse to up
+SHIFT + L : Move mouse to right
+. : Send left Click
+, : Send right Click
+
+)
+	MsgBox, ,Help, %helptext%, 
 }
