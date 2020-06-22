@@ -46,6 +46,10 @@ InitCommandSelector(configFile) {
 	Hotkey, ^!r, ReloadCommands, On
 	Hotkey, ^!e, openCommandsConfig, On
 	
+	GroupAdd, FileListers, ahk_class CabinetWClass
+	GroupAdd, FileListers, ahk_class WorkerW
+	GroupAdd, FileListers, ahk_class #32770, ShellView
+	
 	Del:   
 	GuiControl, ,%EditId% ;clear text box
 	FocusText()
@@ -168,29 +172,20 @@ FilterItem(item){
 		Add_item(item)	
 }
 
-copySelectedFileContentToClipboard(){
-	GroupAdd, FileListers, ahk_class CabinetWClass
-	GroupAdd, FileListers, ahk_class WorkerW
-	GroupAdd, FileListers, ahk_class #32770, ShellView
-	IfWinActive ahk_group FileListers
-		path := Explorer_GetSelected()
-	if path {		
-		if InStr(FileExist(path), "A")
-		{
-			FileRead, contentFile, %path%
-			Clipboard := contentFile
-		}
+copySelectedFileContentToClipboard(){	
+	path := getSmartSelectedFile()
+	if path {			
+		FileRead, contentFile, %path%
+		Clipboard := contentFile		
 	}
 }
 
-addSelectedFileAsCommand(){		
-	GroupAdd, FileListers, ahk_class CabinetWClass
-	GroupAdd, FileListers, ahk_class WorkerW
-	GroupAdd, FileListers, ahk_class #32770, ShellView
-	IfWinActive ahk_group FileListers
-		path := Explorer_GetSelected()
-	Clipboard := path
-	addClipboardContentAsCommand()
+addSelectedItemAsCommand(){
+	path := getSmartSelectedItem()
+	if(path){
+		Clipboard := path
+		addClipboardContentAsCommand()
+	}
 }
 
 addSelectedTextAsCommand(){
@@ -244,8 +239,8 @@ FillDefaultCommands(){
 	defaultCommands.Push({category: "copy", command: "copyFileFromFullPath", name: "file from full path"})
 	defaultCommands.Push({category: "convertData", command: "listToWhereIn", name: "get 'where in ()' from list"})
 	defaultCommands.Push({category: "replace", command: "replaceFileSeparator", name: "change \\ by /"})
-	defaultCommands.Push({category: "config", command: "addSelectedFileAsCommand", name: "add selected item as new command"})
+	defaultCommands.Push({category: "config", command: "addSelectedItemAsCommand", name: "add selected item as new command"})
 	defaultCommands.Push({category: "config", command: "addSelectedTextAsCommand", name: "add selected text as new command"})
 	defaultCommands.Push({category: "copy", command: "copySelectedFileContentToClipboard", name: "copy content selected file"})
-	defaultCommands.Push({category: "get info", command: "getFileInfo", name: "Get dll/file info"})
+	defaultCommands.Push({category: "get version", command: "getFileVersion", name: "Get dll/file version"})
 }
