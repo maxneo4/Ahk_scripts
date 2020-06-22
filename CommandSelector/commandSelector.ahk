@@ -22,11 +22,9 @@ InitCommandSelector(configFile) {
     ; load json config
 	FileRead, jsonContent, %configFile%
 	global valueCSjson := JSON.Load( jsonContent )
+	; add default commands
+	AddDefaultCommands() 		
 	
-	Loop, % valueCSjson.Commands.MaxIndex() {
-		item := valueCSjson.Commands[A_Index]
-		Add_item(item)
-	}
 	selectFirstRow()
 	LV_ModifyCol(1, 185)
 	LV_ModifyCol(2, 385)
@@ -47,7 +45,7 @@ InitCommandSelector(configFile) {
 	Hotkey, !Space, ShowCommandSelector, On
 	Hotkey, ^!r, ReloadCommands, On
 	Hotkey, ^!e, openCommandsConfig, On
-		
+	
 	Del:   
 	GuiControl, ,%EditId% ;clear text box
 	FocusText()
@@ -223,4 +221,19 @@ CommandSelectorHide()
 {    
     Gui, mw:Hide
     return
+}
+
+AddDefaultCommands(){
+	global valueCSjson 
+	
+	valueCSjson.Commands.Push({category: "generate", command: "generateGuidInClipboard", name: "new Guid"})
+	valueCSjson.Commands.Push({category: "convertCase", command: "toLower", name: "to lower"})
+	valueCSjson.Commands.Push({category: "convertCase", command: "toUpper", name: "to upper"})
+	valueCSjson.Commands.Push({category: "copy", command: "copyFileFromFullPath", name: "file from full path"})
+	valueCSjson.Commands.Push({category: "convertData", command: "listToWhereIn", name: "get 'where in ()' from list"})
+	valueCSjson.Commands.Push({category: "replace", command: "replaceFileSeparator", name: "change \\ by /"})
+	valueCSjson.Commands.Push({category: "config", command: "addSelectedFileAsCommand", name: "add selected item as new command"})
+	valueCSjson.Commands.Push({category: "config", command: "addSelectedTextAsCommand", name: "add selected text as new command"})
+	valueCSjson.Commands.Push({category: "copy", command: "copySelectedFileContentToClipboard", name: "copy content selected file"})
+	valueCSjson.Commands.Push({category: "get info", command: "getFileInfo", name: "Get dll/file info"})
 }
