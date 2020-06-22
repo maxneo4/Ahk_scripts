@@ -78,14 +78,6 @@ sendSmartCopy(){
 	}
 }
 
-sendLiteCopy(){
-	Clipboard :=
-	Send ^c
-	ClipWait 1
-	if ErrorLevel  ; ClipWait timed out.
-		return	
-}
-
 sendCopy(){
    Sleep, 100
    Send ^c

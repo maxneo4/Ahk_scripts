@@ -80,7 +80,7 @@ WaitSubCommandKeys(){
 ;LOG NOTES
 
 addSelectedToLog(){
-	sendLiteCopy()
+	sendSmartCopy()
 	RemoveBreakLinesAndTrimClipboard()
 	if Clipboard {
 		addToLog()
@@ -261,7 +261,7 @@ selectFirstRowRemember(){
 ; add to list remember
 addSelectedTextToList(){
 	global rememberListFile
-	sendLiteCopy()
+	sendSmartCopy()
 	RemoveBreakLinesAndTrimClipboard()
 	if Clipboard
 	{		

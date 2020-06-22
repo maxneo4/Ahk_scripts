@@ -23,7 +23,7 @@ InitCommandSelector(configFile) {
 	FileRead, jsonContent, %configFile%
 	global valueCSjson := JSON.Load( jsonContent )
 	; add default commands
-	AddDefaultCommands() 		
+	FillDefaultCommands() 		
 	
 	selectFirstRow()
 	LV_ModifyCol(1, 185)
@@ -137,23 +137,35 @@ FocusText() {
 }
 
 Update() {   
-    global Search
-    global valueCSjson
-    Gui, mw:Default
+	global Search
+	global valueCSjson
+	global defaultCommands
+	Gui, mw:Default
     ;Gui, Submit, NoHide
-    GuiControlGet Search ;get content of control of associate var
-    Search := Trim(Search)
-    LV_Delete()
-    Loop, % valueCSjson.Commands.MaxIndex()  
-    {
-        item := valueCSjson.Commands[A_Index]
-        name := item.name       
-        category := item.category
-        if  InStr(name, Search) or InStr(category, Search) or (Search = )
-            Add_item(item)
-    }    
-    selectFirstRow()    
-    return
+	GuiControlGet Search ;get content of control of associate var
+	Search := Trim(Search)
+	LV_Delete()
+	Loop, % valueCSjson.Commands.MaxIndex()  
+	{
+		item := valueCSjson.Commands[A_Index]
+		FilterItem(item)
+	}
+	Loop, % defaultCommands.MaxIndex()  
+	{
+		item := defaultCommands[A_Index]
+		FilterItem(item)
+	} 
+	
+	selectFirstRow()    
+	return
+}
+
+FilterItem(item){
+	global Search
+	name := item.name       
+	category := item.category
+	if  InStr(name, Search) or InStr(category, Search) or (Search = )
+		Add_item(item)	
 }
 
 copySelectedFileContentToClipboard(){
@@ -223,17 +235,17 @@ CommandSelectorHide()
     return
 }
 
-AddDefaultCommands(){
-	global valueCSjson 
+FillDefaultCommands(){
+	global defaultCommands := []
 	
-	valueCSjson.Commands.Push({category: "generate", command: "generateGuidInClipboard", name: "new Guid"})
-	valueCSjson.Commands.Push({category: "convertCase", command: "toLower", name: "to lower"})
-	valueCSjson.Commands.Push({category: "convertCase", command: "toUpper", name: "to upper"})
-	valueCSjson.Commands.Push({category: "copy", command: "copyFileFromFullPath", name: "file from full path"})
-	valueCSjson.Commands.Push({category: "convertData", command: "listToWhereIn", name: "get 'where in ()' from list"})
-	valueCSjson.Commands.Push({category: "replace", command: "replaceFileSeparator", name: "change \\ by /"})
-	valueCSjson.Commands.Push({category: "config", command: "addSelectedFileAsCommand", name: "add selected item as new command"})
-	valueCSjson.Commands.Push({category: "config", command: "addSelectedTextAsCommand", name: "add selected text as new command"})
-	valueCSjson.Commands.Push({category: "copy", command: "copySelectedFileContentToClipboard", name: "copy content selected file"})
-	valueCSjson.Commands.Push({category: "get info", command: "getFileInfo", name: "Get dll/file info"})
+	defaultCommands.Push({category: "generate", command: "generateGuidInClipboard", name: "new Guid"})
+	defaultCommands.Push({category: "convertCase", command: "toLower", name: "to lower"})
+	defaultCommands.Push({category: "convertCase", command: "toUpper", name: "to upper"})
+	defaultCommands.Push({category: "copy", command: "copyFileFromFullPath", name: "file from full path"})
+	defaultCommands.Push({category: "convertData", command: "listToWhereIn", name: "get 'where in ()' from list"})
+	defaultCommands.Push({category: "replace", command: "replaceFileSeparator", name: "change \\ by /"})
+	defaultCommands.Push({category: "config", command: "addSelectedFileAsCommand", name: "add selected item as new command"})
+	defaultCommands.Push({category: "config", command: "addSelectedTextAsCommand", name: "add selected text as new command"})
+	defaultCommands.Push({category: "copy", command: "copySelectedFileContentToClipboard", name: "copy content selected file"})
+	defaultCommands.Push({category: "get info", command: "getFileInfo", name: "Get dll/file info"})
 }

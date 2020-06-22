@@ -9,6 +9,8 @@
 ### Run as admin
 https://stackoverflow.com/questions/43298908/how-to-add-administrator-privileges-to-autohotkey-script/43299069
 
+https://www.autohotkey.com/docs/commands/Run.htm#RunAs
+
 ### ImageSearch extended     
 https://github.com/Masonjar13/AHK-Library/blob/master/Lib/imageSearchc.ahk
 
