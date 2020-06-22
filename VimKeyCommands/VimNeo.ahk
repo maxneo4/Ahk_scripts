@@ -10,6 +10,7 @@
 	global LabelId
 	
 	global mouseDelta = 8
+	global mouseFastDelta = 80
 	
 	Gui, vim:New, AlwaysOnTop ToolWindow -DPIScale -Caption
 	Gui, vim:Color, EEAA99, OOOO00
@@ -76,7 +77,13 @@
 	Hotkey, +h, moveMouseLeft, On
 	Hotkey, +j, moveMouseDown, On
 	Hotkey, +k, moveMouseUp, On
-	Hotkey, +l, moveMouseRight, On	
+	Hotkey, +l, moveMouseRight, On
+	
+	Hotkey, ^h, moveFastMouseLeft, On
+	Hotkey, ^j, moveFastMouseDown, On
+	Hotkey, ^k, moveFastMouseUp, On
+	Hotkey, ^l, moveFastMouseRight, On
+	
 	
 	;"m","n"
 	nullKeys := ["Space","a","e","f","g","ñ","t","1","2","3","4","5","6","7","8","9",";","-","_","{","}","[","]","+","*","/","!","#","%","&","(",")","=","'","?","¿","<",">",""""]
@@ -396,8 +403,29 @@ moveMouseDown(){
 	translateMouse(0, mouseDelta)
 }
 
+
+moveFastMouseRight(){
+	global mouseFastDelta
+	translateMouse(mouseFastDelta, 0)
+}
+
+moveFastMouseLeft(){
+	global mouseFastDelta
+	translateMouse(-mouseFastDelta, 0)
+}
+
+moveFastMouseUp(){
+	global mouseFastDelta
+	translateMouse(0, -mouseFastDelta)
+}
+
+moveFastMouseDown(){
+	global mouseFastDelta
+	translateMouse(0, mouseFastDelta)
+}
+
 VimHelp(){
-helpText = 
+	helpText = 
 (
 S : Selection Mode (Press S again to set to Normal mode)
 I : Insert one character (wait 1 second)
@@ -437,10 +465,10 @@ V + Any char: Retrieve from clipboard slot marked by char
 
 N + Any char: Store in slot mouse position
 M + Any char: Retrieve from slot mouse position
-SHIFT + H : Move mouse to left
-SHIFT + J : Move mouse to down
-SHIFT + K : Move mouse to up
-SHIFT + L : Move mouse to right
+SHIFT/CTRL + H : Move mouse to left 
+SHIFT/CTRL + J : Move mouse to down
+SHIFT/CTRL + K : Move mouse to up
+SHIFT/CTRL + L : Move mouse to right
 . : Send left Click
 , : Send right Click
 
