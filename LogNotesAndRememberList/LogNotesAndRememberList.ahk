@@ -289,10 +289,10 @@ changeLogNotesWorkSpaceFolder(){
 	global folder
 	newFolder := getSmartCurrentFolder()
 	if(newFolder)
-		{
-			folder := newFolder
-			showText("","Workspace [log and images] was changed", 1500)
-		}
+	{
+		folder := StrReplace(newFolder, "file:", "")
+		showText("","Workspace [log and images] was changed to " . folder, 2000, 500, 60)
+	}
 }
 
 restoreLogNotesWorkSpaceFolder(){
@@ -305,8 +305,8 @@ changeRememberListWorkSpaceFolder(){
 	newFolder := getSmartCurrentFolder()
 	if(newFolder)
 	{
-		rememberListFile := newFolder . "\rememberList.txt"
-		showText("","Workspace [remember list] was changed", 1500)
+		rememberListFile :=  StrReplace(newFolder, "file:", "") . "\rememberList.txt"
+		showText("","Workspace [remember list] was changed to " . newFolder, 2000, 500, 60)
 	}
 }
 
