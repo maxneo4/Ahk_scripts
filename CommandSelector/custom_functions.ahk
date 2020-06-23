@@ -59,13 +59,14 @@ sendSmartCopy(){
 	{		
 		lastClipboard := Clipboard
 		Clipboard :=
-	}else{
-		Send ^c
-		ClipWait 1
-		if ErrorLevel
-			showFailMessage("Error...",1000)
-		Sleep, 100
 	}
+	
+	Send ^c
+	ClipWait 1
+	if ErrorLevel
+		showFailMessage("Error...",1000)
+	Sleep, 100
+	
 	if  Clipboard = 
 	{
 		if(lastClipboard)

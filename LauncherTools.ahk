@@ -85,6 +85,13 @@ CTRL + RIGHT : Navega a la siguiente ventana del gestor de forma ciclica
 CTRL + LEFT : navega a la anterior ventana del gestor de forma ciclica
 CTRL+ SHIFT + DOWN : remueve todas las ventanas del gestor
 
+--------------------------------------------------------------
+
+# Vim mode
+Double ESC to activate
+ESC : exit Vim mode
+F1 : Vim Help (Only when Vim mode is activated)
+
 )
 MsgBox, ,Help, %helptext%, 
 Return

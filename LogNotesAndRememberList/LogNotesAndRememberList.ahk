@@ -5,6 +5,7 @@ InitRememberList(rememberListFileParam) {
 	global Filter
 	global FilterId
 	
+	global defaultRemeberListFile := rememberListFileParam
 	rememberListFile := rememberListFileParam
 	
 	
@@ -290,8 +291,30 @@ changeLogNotesWorkSpaceFolder(){
 	if(newFolder)
 		{
 			folder := newFolder
-			showMessage("Workspace [log and images] was changed", 1500)
+			showText("","Workspace [log and images] was changed", 1500)
 		}
+}
+
+restoreLogNotesWorkSpaceFolder(){
+	global folder := A_ScriptDir . "\LogNotesAndRememberList"
+	showText("","Workspace [log and images] was restored to default", 1500)
+}
+
+changeRememberListWorkSpaceFolder(){
+	global rememberListFile
+	newFolder := getSmartCurrentFolder()
+	if(newFolder)
+	{
+		rememberListFile := newFolder . "\rememberList.txt"
+		showText("","Workspace [remember list] was changed", 1500)
+	}
+}
+
+restoreRememberListWorkSpaceFolder(){
+	global rememberListFile
+	global defaultRemeberListFile
+	rememberListFile := defaultRemeberListFile
+	showText("","Workspace [remember list] was restored to default", 1500)
 }
 
 RememberListHide(){

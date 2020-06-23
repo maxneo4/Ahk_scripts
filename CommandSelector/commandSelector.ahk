@@ -244,4 +244,8 @@ FillDefaultCommands(){
 	defaultCommands.Push({category: "copy", command: "copySelectedFileContentToClipboard", name: "copy content selected file"})
 	defaultCommands.Push({category: "get version", command: "getFileVersion", name: "Get dll/file version"})
 	defaultCommands.Push({category: "workspace", command: "changeLogNotesWorkSpaceFolder", name: "Set current folder to log notes and images"})
+	defaultCommands.Push({category: "workspace", command: "restoreLogNotesWorkSpaceFolder", name: "Default folder to log notes and images"})
+	defaultCommands.Push({category: "workspace", command: "changeRememberListWorkSpaceFolder", name: "Set current folder to remember list"})
+	defaultCommands.Push({category: "workspace", command: "restoreRememberListWorkSpaceFolder", name: "Default folder to remember list"})
+		
 }
