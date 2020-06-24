@@ -155,9 +155,8 @@ toUpper(){
  return
 }
 
-getFileInfo(){
-	filePath := getSmartSelectedFile()	
-	FileGetTime, dateModified, filePath, M
+getFileVersion(){
+	filePath := getSmartSelectedFile()		
 	f := FileGetVersionInfo_AW(filePath, "ProductVersion", "FileVersion")
 	pv := f.productVersion 
 	fv := f.fileVersion
