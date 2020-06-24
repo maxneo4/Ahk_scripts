@@ -1,3 +1,8 @@
+openCurrentFolderInCMD(){
+	currdir := getSmartCurrentFolder()
+	Run, cmd, % currdir ? currdir : "C:\"
+}
+
 DoubleKey(key){
 	if(A_PriorHotkey != "~" . key or A_TimeSincePriorHotkey > 400)
 	{

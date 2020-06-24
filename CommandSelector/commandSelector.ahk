@@ -247,5 +247,5 @@ FillDefaultCommands(){
 	defaultCommands.Push({category: "workspace", command: "restoreLogNotesWorkSpaceFolder", name: "Default folder to log notes and images"})
 	defaultCommands.Push({category: "workspace", command: "changeRememberListWorkSpaceFolder", name: "Set current folder to remember list"})
 	defaultCommands.Push({category: "workspace", command: "restoreRememberListWorkSpaceFolder", name: "Default folder to remember list"})
-		
+	defaultCommands.Push({category: "CMD", command: "openCurrentFolderInCMD", name: "Open current folder in CMD"})
 }
