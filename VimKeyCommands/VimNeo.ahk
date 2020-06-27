@@ -1,7 +1,6 @@
 ﻿InitVimNeo()
 {	
-	global vimEnabled = "OFF"
-	global multiMode = 0
+	global vimEnabled = "OFF"	
 	global visualMode = 
 	global slotClipboard = {}
 	
@@ -92,7 +91,7 @@
 	Loop, % nullKeys.MaxIndex()
 	{
 		nullKey := nullKeys[A_Index]
-		Hotkey, %nullKey%, OverrideKey, On		
+		Hotkey, %nullKey%, DisableKey, On		
 	}	
 	
 	Hotkey, if	
@@ -130,112 +129,95 @@ DisableVim()
 
 sendLeft(){
 	global visualMode
-	if(OverrideKey())
-		SendInput %visualMode%{Left}
+	SendInput %visualMode%{Left}
 }
 
 sendDown(){
 	global visualMode
-	if(OverrideKey())
-		SendInput %visualMode%{Down}
+	SendInput %visualMode%{Down}
 }
 
 sendUp(){
 	global visualMode
-	if(OverrideKey())
-		SendInput %visualMode%{Up}
+	SendInput %visualMode%{Up}
 }
 
 sendRight(){
 	global visualMode
-	if(OverrideKey())
-		SendInput %visualMode%{Right}
+	SendInput %visualMode%{Right}
 }
 
 sendWordNext(){
 	global visualMode
-	if (OverrideKey())
-		SendInput, %visualMode%^{Right}
+	SendInput, %visualMode%^{Right}
 }
 
 sendWordBack(){
 	global visualMode
-	if(OverrideKey())
-		SendInput, %visualMode%^{Left}
+	SendInput, %visualMode%^{Left}
 }
 
 SendBottom(){
 	global visualMode
-	if(OverrideKey())
-		SendInput, %visualMode%^{End}
+	SendInput, %visualMode%^{End}
 }
 
 SendTop(){
 	global visualMode
-	if(OverrideKey())
-		SendInput, %visualMode%^{Home}
+	SendInput, %visualMode%^{Home}
 }
 
 SendBeginLine(){
 	global visualMode
-	if(OverrideKey())
-		SendInput, %visualMode%{Home}
+	SendInput, %visualMode%{Home}
 }
 
 SendEndLine(){
 	global visualMode
-	if(OverrideKey())
-		SendInput, %visualMode%{End}
+	SendInput, %visualMode%{End}
 }
 
-SendCreateNewLine(){
-	if(OverrideKey()){
-		SendEndLine()
-		SendInput, {Enter}
-	}	
+SendCreateNewLine(){	
+	SendEndLine()
+	SendInput, {Enter}		
 }
 
 SendUndo(){
-	if(OverrideKey())
-		SendInput, ^z
+	SendInput, ^z
 }
 
 SendDel(){
-	if(OverrideKey())
-		SendInput, {Delete}
+	SendInput, {Delete}
 }
 
 SendBackspace(){
-	if(OverrideKey())
-		SendInput, {Backspace}
+	SendInput, {Backspace}
 }
 
-DeleteLine(){
-	if(OverrideKey()){
-		SendBeginLine()
-		SendInput, +{End}
-		SendDel()
-	}
+DeleteLine(){	
+	SendBeginLine()
+	SendInput, +{End}
+	SendDel()	
 }
 
 allowInsert(replace="None"){
-	global multiMode
+	global vimEnabled
 	global LabelId
-	if(OverrideKey()){
-		GuiControl, ,%LabelId%, Vim [I]
-		multiMode = 1
-		Input, key, T1 L1
-		multiMode = 0
-		if(key)
-			{
-				if(replace = "B")
-					SendBackspace()
-				if(replace = "D")
-					SendDel()
-				SendInput, %key%
-			}
-		GuiControl, ,%LabelId%, Vim [N]
-	}
+	
+	GuiControl, ,%LabelId%, Vim [I]
+	vimEnabled = "OFF"
+	Input, key, T1 L1
+	vimEnabled = "ON"
+	if(key)
+		{
+			if(replace = "B")
+				SendBackspace()
+			if(replace = "D")
+				SendDel()
+			SendInput, %key%
+		}
+	GuiControl, ,%LabelId%, Vim [N]
+	
 }
 
 replaceChar(){
@@ -246,39 +228,29 @@ replaceCharDel(){
 	allowInsert("D")
 }
 
-OverrideKey(){
-	global multiMode
-	if(multiMode = 1)
-	{
-		SendInput, %A_ThisHotkey%
-		return false
-	}
+DisableKey(){	
 	return true
 }
 
 ManageCopy(cutMode = false){	
-	global multiMode
-	if(OverrideKey()){		
-		multiMode = 1
-		Input, text, L1 T1, , w,l,s	
-		multiMode = 0
-		Switch text
-		{
-			case "w": SelectWord()
-			case "l": SelectLine()		
-		}	
-		if(cutMode)
-			SendInput, ^x
-		else
-			SendInput, ^c
-	}
+	global vimEnabled
+			
+	vimEnabled = "OFF"
+	Input, text, L1 T1, , w,l,s	
+	vimEnabled = "ON"
+	Switch text
+	{
+		case "w": SelectWord()
+		case "l": SelectLine()		
+	}	
+	if(cutMode)
+		SendInput, ^x
+	else
+		SendInput, ^c	
 }
 
 ManageCut(){
-	if(OverrideKey())
-	
-		ManageCopy(true)		
-		
+	ManageCopy(true)		
 }
 
 SelectWord(){
@@ -292,35 +264,31 @@ SelectLine(){
 }
 
 sendPaste(){
-	if(OverrideKey())
-		SendInput, ^v
+	SendInput, ^v
 }
 
 ManageSelected()
 {
-	if(OverrideKey()){
-		global visualMode
-		global LabelId
-		
-		if visualMode != +
-		{
-			visualMode = +
-			GuiControl, ,%LabelId%, Vim [S]
-		}else{
-			visualMode = 	
-			GuiControl, ,%LabelId%, Vim [N]
-		}
-		
+	global visualMode
+	global LabelId
+	
+	if visualMode != +
+	{
+		visualMode = +
+		GuiControl, ,%LabelId%, Vim [S]
+	}else{
+		visualMode = 	
+		GuiControl, ,%LabelId%, Vim [N]
 	}
 }
 
 StoreSlotClipboad()
 {
-	global slotClipboard	
-	global multiMode	
-	multiMode = 1
+	global slotClipboard
+	global vimEnabled
+	vimEnabled = "OFF"
 	Input, key, T2 L1
-	multiMode = 0
+	vimEnabled = "ON"
 	if(key)
 	{
 		sendSmartCopy()
@@ -333,10 +301,10 @@ StoreSlotClipboad()
 RetrieveSlotClipboad()
 {
 	global slotClipboard
-	global multiMode	
-	multiMode = 1
+	global vimEnabled
+	vimEnabled = "OFF"
 	Input, key, T2 L1
-	multiMode = 0
+	vimEnabled = "ON"
 	if(slotClipboard.HasKey(key))
 	{		 
 		Clipboard := slotClipboard[key]
@@ -345,16 +313,16 @@ RetrieveSlotClipboad()
 		Clipboard := 
 	}else
 		showFailMessage("slot " . key . " is empty", 1500)
-		
+	
 }
 
 StoreMousePosition()
 {	
 	global slotMouse
-	global multiMode
-	multiMode = 1
+	global vimEnabled
+	vimEnabled = "OFF"
 	Input, key, T2 L1
-	multiMode = 0
+	vimEnabled = "ON"
 	if(key){
 		MouseGetPos, posX, posY, wId
 		slotMouse[key] := {x:posX, y:posY, id:wId}
@@ -365,10 +333,10 @@ StoreMousePosition()
 ClickMousePosition()
 {
 	global slotMouse
-	global multiMode
-	multiMode = 1
+	global vimEnabled
+	vimEnabled = "OFF"
 	Input, key, T2 L1
-	multiMode = 0
+	vimEnabled = "ON"
 	if(slotMouse.HasKey(key))
 	{
 		mouseInfo := slotMouse[key]
