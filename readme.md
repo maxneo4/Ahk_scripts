@@ -6,6 +6,12 @@
 - http://fincs.ahk4.net/scite4ahk/
 - https://github.com/maestrith/AHK-Studio           
 
+### Debug
+https://www.autohotkey.com/docs/Scripts.htm#debug
+
+### Scripts show case
+https://www.autohotkey.com/docs/scripts/
+
 ### Run as admin
 https://stackoverflow.com/questions/43298908/how-to-add-administrator-privileges-to-autohotkey-script/43299069
 

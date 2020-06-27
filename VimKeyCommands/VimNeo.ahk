@@ -1,6 +1,6 @@
 ﻿InitVimNeo()
 {	
-	global vimEnabled = false
+	global vimEnabled = "OFF"
 	global multiMode = 0
 	global visualMode = 
 	global slotClipboard = {}
@@ -19,10 +19,11 @@
 	Gui +LastFound 
 	WinSet, TransColor, EEAA99 100	
 	
-	Hotkey, IfWinNotExist, VimT
+	Hotkey, IfWinNotExist, VimT		
 	Hotkey, ~Escape, DoubleKeyToActivate, On
-	
-	Hotkey, IfWinExist, VimT
+		
+	global fn := Func("VimIsEnabled")	
+	Hotkey, If, % fn
 	
 	Hotkey, ~Escape, DisableVim, On
 	Hotkey, F1, VimHelp, On
@@ -99,21 +100,32 @@
 	DoubleKeyToActivate:
 	if(DoubleKey("Escape"))
 		EnableVim()
-	return
-	
+	return	
+}
+
+VimIsEnabled(){
+	global vimEnabled
+	if vimEnabled = "ON"
+		return true
+	else
+		return false
 }
 
 EnableVim()
-{
+{	
+	global vimEnabled
 	WinGet, active_id, ID, A
 	yPos := A_ScreenHeight - 100
 	Gui, vim:Show, autosize xCenter y%yPos%, VimT
 	WinActivate, ahk_id %active_id%
+	vimEnabled = "ON"
 }
 
 DisableVim()
 {	
+	global vimEnabled
 	Gui, vim:Hide
+	vimEnabled = "OFF"
 }
 
 sendLeft(){

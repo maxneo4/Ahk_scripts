@@ -1,4 +1,5 @@
-﻿#NoEnv 
+﻿#NoEnv
+;#HotkeyModifierTimeout 100 maximo tiempo permitido sostener una tecla modificadora
 ;#Warn
 #SingleInstance Force
 SendMode Input
