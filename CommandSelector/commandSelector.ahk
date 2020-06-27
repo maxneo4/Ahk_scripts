@@ -1,4 +1,5 @@
-InitCommandSelector(configFile) {   
+InitCommandSelector(configFileParam) {   
+	global configFile := configFileParam
 	global Search
 	global EditId ;global cause is used in other functions
 	
@@ -19,9 +20,7 @@ InitCommandSelector(configFile) {
 	Gui, mw:Add, ListView, w600 h400 -Multi gMyListView AltSubmit -Hdr vListViewCommandSelector HwndLVID, Category|Name|Command|Order|RunAs|Title
 	LV_SetImageList( DllCall( "ImageList_Create", Int,2, Int, 30, Int,0x18, Int,1, Int,1 ), 1 ) ;set row height to 30
 	
-    ; load json config
-	FileRead, jsonContent, %configFile%
-	global valueCSjson := JSON.Load( jsonContent )
+	LoadCommands()
 	; add default commands
 	FillDefaultCommands() 		
 	
@@ -43,7 +42,7 @@ InitCommandSelector(configFile) {
 	Hotkey, If
 	
 	Hotkey, !Space, ShowCommandSelector, On
-	Hotkey, ^!r, ReloadCommands, On
+	Hotkey, ^!r, ReloadLauncherTools, On
 	Hotkey, ^!e, openCommandsConfig, On
 	
 	GroupAdd, FileListers, ahk_class CabinetWClass
@@ -74,16 +73,23 @@ InitCommandSelector(configFile) {
 	Send, ^a
 	return
 	
-	ReloadCommands:
-	showMessage("Reloading launcher tools...", 1000)
-	Sleep, 1000
-	Reload
-	return
-	
 	openCommandsConfig:
 	global commandsPath
 	Run, %commandsPath%
 	return
+}
+
+LoadCommands(){
+	global configFile
+	; load json config
+	FileRead, jsonContent, %configFile%
+	global valueCSjson := JSON.Load( jsonContent )
+}
+
+ReloadLauncherTools(){
+	showMessage("Reloading Launcher tools...", 1000)
+	Sleep, 500
+	Reload
 }
 
 Add_item(item) {
@@ -216,7 +222,7 @@ addClipboardContentAsCommand(){
 				FileDelete, %commandsPath%
 				FileAppend, %fullJson%, %commandsPath%
 				;run, %commandsPath%
-				Reload 
+				LoadCommands()
 			}else{
 				showFailMessage("You enter an incorrect format", 1000)
 			}			
@@ -243,9 +249,7 @@ FillDefaultCommands(){
 	defaultCommands.Push({category: "config", command: "addSelectedTextAsCommand", name: "add selected text as new command"})
 	defaultCommands.Push({category: "copy", command: "copySelectedFileContentToClipboard", name: "copy content selected file"})
 	defaultCommands.Push({category: "get version", command: "getFileVersion", name: "Get dll/file version"})
-	defaultCommands.Push({category: "workspace", command: "changeLogNotesWorkSpaceFolder", name: "Set current folder to log notes and images"})
-	defaultCommands.Push({category: "workspace", command: "restoreLogNotesWorkSpaceFolder", name: "Default folder to log notes and images"})
-	defaultCommands.Push({category: "workspace", command: "changeRememberListWorkSpaceFolder", name: "Set current folder to remember list"})
-	defaultCommands.Push({category: "workspace", command: "restoreRememberListWorkSpaceFolder", name: "Default folder to remember list"})
+	defaultCommands.Push({category: "workspace", command: "changeLogNotesRememberWorkSpaceFolder", name: "Set current folder to log notes, images, remember list"})
+	defaultCommands.Push({category: "workspace", command: "restoreLogNotesRememberWorkSpaceFolder", name: "Default folder to log notes, images, remember list"})
 	defaultCommands.Push({category: "CMD", command: "openCurrentFolderInCMD", name: "Open current folder in CMD"})
 }

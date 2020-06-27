@@ -32,6 +32,7 @@ http://cedeq.com/enterpad/en/autohotkey/useful-ahk-scripts/set-font-size-in-ms-w
 
 ### Base urls
 
+- https://www.autohotkey.com/docs/commands/Hotkey.htm
 - https://www.autohotkey.com/docs/objects/Object.htm
 - https://www.autohotkey.com/docs/Variables.htm
 - https://www.autohotkey.com/docs/Hotkeys.htm

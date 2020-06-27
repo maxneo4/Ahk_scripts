@@ -285,36 +285,24 @@ openRememberList(){
 	return 
 }
 
-changeLogNotesWorkSpaceFolder(){
+changeLogNotesRememberWorkSpaceFolder(){
 	global folder
+	global rememberListFile
 	newFolder := getSmartCurrentFolder()
 	if(newFolder)
 	{
 		folder := StrReplace(newFolder, "file:", "")
-		showText("","Workspace [log and images] was changed to " . folder, 2000, 500, 60)
-	}
-}
-
-restoreLogNotesWorkSpaceFolder(){
-	global folder := A_ScriptDir . "\LogNotesAndRememberList"
-	showText("","Workspace [log and images] was restored to default", 1500)
-}
-
-changeRememberListWorkSpaceFolder(){
-	global rememberListFile
-	newFolder := getSmartCurrentFolder()
-	if(newFolder)
-	{
 		rememberListFile :=  StrReplace(newFolder, "file:", "") . "\rememberList.txt"
-		showText("","Workspace [remember list] was changed to " . newFolder, 2000, 500, 60)
+		showText("","Workspace [log ,images, remember list] was changed to " . folder, 2000, 500, 60)
 	}
 }
 
-restoreRememberListWorkSpaceFolder(){
+restoreLogNotesRememberWorkSpaceFolder(){
+	global folder := A_ScriptDir . "\LogNotesAndRememberList"
 	global rememberListFile
 	global defaultRemeberListFile
 	rememberListFile := defaultRemeberListFile
-	showText("","Workspace [remember list] was restored to default", 1500)
+	showText("","Workspace [log, images, remember list] was restored to default", 1500)
 }
 
 RememberListHide(){
