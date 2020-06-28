@@ -249,7 +249,21 @@ FillDefaultCommands(){
 	defaultCommands.Push({category: "config", command: "addSelectedTextAsCommand", name: "add selected text as new command"})
 	defaultCommands.Push({category: "copy", command: "copySelectedFileContentToClipboard", name: "copy content selected file"})
 	defaultCommands.Push({category: "get version", command: "getFileVersion", name: "Get dll/file version"})
-	defaultCommands.Push({category: "workspace", command: "changeLogNotesRememberWorkSpaceFolder", name: "Set current folder to log notes, images, remember list"})
-	defaultCommands.Push({category: "workspace", command: "restoreLogNotesRememberWorkSpaceFolder", name: "Default folder to log notes, images, remember list"})
+	defaultCommands.Push({category: "config", command: "changeLogNotesRememberWorkSpaceFolder", name: "Set current folder as workspace"})
+	defaultCommands.Push({category: "config", command: "showCurrentWorkspace", name: "Open workspace"})
 	defaultCommands.Push({category: "CMD", command: "openCurrentFolderInCMD", name: "Open current folder in CMD"})
+	
+	defaultCommands.Push({category: "log notes", command: "addSelectedToLog", name: "log add"})
+	defaultCommands.Push({category: "log notes", command: "InputToLog", name: "log input"})
+	defaultCommands.Push({category: "log notes", command: "openTodayLog", name: "log open"})
+	defaultCommands.Push({category: "log notes", command: "openLogByDate", name: "log open by date"})
+	
+	defaultCommands.Push({category: "log images", command: "addCaptureToLog", name: "capture screen region"})
+	defaultCommands.Push({category: "log images", command: "openCaptureEdit", name: "capture screen edit"})
+	defaultCommands.Push({category: "log images", command: "clipboardCaptureToLog", name: "capture from clipboard"})
+	defaultCommands.Push({category: "log images", command: "openScreenCaptureLog", name: "capture open folder"})
+	defaultCommands.Push({category: "log images", command: "openScreenCaptureByDate", name: "capture open folder by date"})
+	
+	defaultCommands.Push({category: "remember list", command: "addSelectedTextToList", name: "remember add"})
+	defaultCommands.Push({category: "remember list", command: "openRememberList", name: "remember open file"})	
 }

@@ -69,7 +69,7 @@ InitVimNeo()
 ^F1::
 helpText = 
 (
-V 0.5.6
+V 0.5.7
 # CommandSelector
 
 ALT+SPACE : abre selector de comandos
@@ -100,7 +100,7 @@ Return
 +F1::
 helpText = 
 (
-V 0.5.6
+V 0.5.7
 Master command = (CTRL+ALT+SPACE = ALT GR+SPACE), SHIFT+SPACE
 ----------------------------------------------------------------
 

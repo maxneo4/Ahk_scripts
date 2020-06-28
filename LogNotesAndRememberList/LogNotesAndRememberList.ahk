@@ -68,7 +68,7 @@ WaitSubCommandKeys(){
 		case "lo": openTodayLog()
 		case "ld": openLogByDate()
 		case "cs": addCaptureToLog()
-		case "ce": openCapture()
+		case "ce": openCaptureEdit()
 		case "cc": clipboardCaptureToLog()
 		case "co": openScreenCaptureLog()
 		case "cd": openScreenCaptureByDate()
@@ -134,7 +134,7 @@ addCaptureToLog(sendToCaptureScreen=1){
 	return
 }
 
-openCapture(){
+openCaptureEdit(){
 	SendInput, ^{PrintScreen}	
 }
 
@@ -285,7 +285,7 @@ openRememberList(){
 	return 
 }
 
-changeLogNotesRememberWorkSpaceFolder(){
+changeLogNotesRememberWorkSpaceFolder(){	
 	global folder
 	global rememberListFile
 	newFolder := getSmartCurrentFolder()
@@ -293,7 +293,7 @@ changeLogNotesRememberWorkSpaceFolder(){
 	{
 		folder := StrReplace(newFolder, "file:", "")
 		rememberListFile :=  StrReplace(newFolder, "file:", "") . "\rememberList.txt"
-		showText("","Workspace [log ,images, remember list] was changed to " . folder, 2000, 500, 60)
+		showText("","Workspace was changed to " . folder, 2000, 500, 60)
 	}
 }
 
@@ -302,7 +302,12 @@ restoreLogNotesRememberWorkSpaceFolder(){
 	global rememberListFile
 	global defaultRemeberListFile
 	rememberListFile := defaultRemeberListFile
-	showText("","Workspace [log, images, remember list] was restored to default", 1500)
+	showText("","Workspace was restored to default", 1500)
+}
+
+showCurrentWorkspace(){
+	global folder
+	Run, %folder%
 }
 
 RememberListHide(){

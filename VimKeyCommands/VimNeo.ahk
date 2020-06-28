@@ -24,7 +24,7 @@
 	global fn := Func("VimIsEnabled")	
 	Hotkey, If, % fn
 	
-	Hotkey, ~Escape, DisableVim, On
+	Hotkey, Escape, DisableVim, On
 	Hotkey, F1, VimHelp, On
 	
 	movModifiers := ["","+"]	
