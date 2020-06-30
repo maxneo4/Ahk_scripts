@@ -1,12 +1,14 @@
-InitRememberList(rememberListFileParam) {
+InitRememberList() {
 	global folder := A_ScriptDir . "\LogNotesAndRememberList"
 	global ownFolder := "LogNotesAndRememberList"
 	global rememberListFile
+	global gRememberListFile
 	global Filter
 	global FilterId
 	
-	global defaultRemeberListFile := rememberListFileParam
-	rememberListFile := rememberListFileParam
+	global defaultRemeberListFile := "LogNotesAndRememberList\rememberList.txt"
+	rememberListFile := defaultRemeberListFile
+	gRememberListFile := "LogNotesAndRememberList\GlobalRememberList.txt"
 	
 	
 	static LVRLID
@@ -43,6 +45,7 @@ InitRememberList(rememberListFileParam) {
 	
 	Hotkey, IfWinNotActive, ahk_exe strwinclt.exe
 	Hotstring(":X*:irm", "invokeRememberList")
+	Hotstring(":X*:igr", "invokeGlobalRememberList")
 	Hotkey, if
 	
 	DownRL:      	
@@ -60,7 +63,7 @@ InitRememberList(rememberListFileParam) {
 }
 
 WaitSubCommandKeys(){
-	Input, text, L3 T3, , la,li,lo,ld,cs,co,cd,ra,ro,ri,ce,cc
+	Input, text, L3 T3, , la,li,lo,ld,cs,co,cd,ra,ro,ce,cc,ga,go
 	Switch text
 	{
 		case "la": addSelectedToLog()
@@ -73,8 +76,9 @@ WaitSubCommandKeys(){
 		case "co": openScreenCaptureLog()
 		case "cd": openScreenCaptureByDate()
 		case "ra": addSelectedTextToList()
-		case "ro": openRememberList()		
-		case "ri": invokeRememberList()
+		case "ro": openRememberList()
+		case "ga": addSelectedTextToGlobalList()
+		case "go": openGlobalRememberList()
 	}		
 	return
 }
@@ -205,8 +209,18 @@ selectedDate(){
 ;REMEMBER LIST
 
 invokeRememberList(){
+	global rememberListFile	
+	invokeRememberListByPath(rememberListFile)
+}
+
+invokeGlobalRememberList(){
+	global gRememberListFile
+	invokeRememberListByPath(gRememberListFile)
+}
+
+invokeRememberListByPath(rememberListFile){	
 	global FilterId
-	
+	global rememberListFileParam := rememberListFile
 	UpdateRememberFilter()
 	CoordMode, Caret, Screen 
 	GuiControl, ,%FilterId% 	
@@ -221,7 +235,7 @@ invokeRememberList(){
 
 invokeText(){
 	global SelectedText
-    Gui, rl:Hide
+	Gui, rl:Hide
 	Clipboard := SelectedText	
 	SendInput ^v
 	return
@@ -239,20 +253,20 @@ ListViewRLEvent(){
 	return
 }
 
-UpdateRememberFilter(){
-    global rememberListFile
-    Gui, rl:Default 
-    GuiControlGet Filter ;get content of control of associate var
-    Filter := Trim(Filter)
-    LV_Delete()
-    Loop, Read, %rememberListFile%
-	{
+UpdateRememberFilter(){ 	
+	global rememberListFileParam
+	Gui, rl:Default 
+	GuiControlGet Filter ;get content of control of associate var
+	Filter := Trim(Filter)
+	LV_Delete()
+	Loop, Read, %rememberListFileParam%
+	{		
 		if  InStr(A_LoopReadLine, Filter) or (Filter = )
 			LV_Add("", A_LoopReadLine)
 	}
-    selectFirstRowRemember()
+	selectFirstRowRemember()
 	LV_ModifyCol()
-    return
+	return
 }
 
 selectFirstRowRemember(){
@@ -261,9 +275,19 @@ selectFirstRowRemember(){
 	return
 }
 
-; add to list remember
 addSelectedTextToList(){
 	global rememberListFile
+	addSelectedTextToListByPath(rememberListFile)
+}
+
+addSelectedTextToGlobalList()
+{
+	global gRememberListFile
+	addSelectedTextToListByPath(gRememberListFile)
+}
+
+; add to list remember
+addSelectedTextToListByPath(rememberListFile){	
 	sendSmartCopy()
 	RemoveBreakLinesAndTrimClipboard()
 	if Clipboard
@@ -275,9 +299,19 @@ addSelectedTextToList(){
 	return
 }
 
-; open remember list file
 openRememberList(){
 	global rememberListFile
+	openRememberListByPath(rememberListFile)
+}
+
+openGlobalRememberList(){
+	global gRememberListFile
+	openRememberListByPath(gRememberListFile)
+}
+
+; open remember list file
+openRememberListByPath(rememberListFile){
+	
 	IfExist, %rememberListFile%
 		Run, %rememberListFile%
 	else

@@ -28,7 +28,7 @@ global commandsPath = "CommandSelector\commands.json"
 #include CommandSelector\CommandSelector.ahk
 InitCommandSelector(commandsPath)
 #include LogNotesAndRememberList\LogNotesAndRememberList.ahk
-InitRememberList("LogNotesAndRememberList\rememberList.txt")
+InitRememberList()
 
 #include Window Gestures\Window Gestures.ahk
 WindowGesturesInit()
@@ -127,11 +127,13 @@ Master command => CD: [Capture date] abrir log de imagenes por fecha del calenda
 # Remember list #
 
 Master command => RA: [Remember add] agrega texto seleccionado a la lista
+	GA: [Global remember add]
 Master command => RO: [Remember open] abre listRemember.txt
+	GO: [Global remember open]
 ESCAPE : oculta la lista
 
 irm : [Invoke Re-Member] muestra la lista para escoger el item a usar
-Master command => RI : [Remember invoke] muestra la lista para escoger el item a usar
+igr : [invoke global remember] muestra la lista global para escoger el item a usar
 )
 MsgBox, ,Help, %helptext%, 
 Return

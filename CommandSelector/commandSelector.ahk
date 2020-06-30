@@ -265,5 +265,7 @@ FillDefaultCommands(){
 	defaultCommands.Push({category: "log images", command: "openScreenCaptureByDate", name: "capture open folder by date"})
 	
 	defaultCommands.Push({category: "remember list", command: "addSelectedTextToList", name: "remember add"})
-	defaultCommands.Push({category: "remember list", command: "openRememberList", name: "remember open file"})	
+	defaultCommands.Push({category: "remember list", command: "openRememberList", name: "remember open file"})		
+	defaultCommands.Push({category: "global remember list", command: "addSelectedTextToGlobalList", name: "global remember add"})
+	defaultCommands.Push({category: "global remember list", command: "openGlobalRememberList", name: "global remember open file"})
 }
