@@ -1,3 +1,19 @@
+ContainsAllWords(value, arrayWords){	
+	maxIndex := arrayWords.MaxIndex()
+	matches = 0
+	
+	Loop, % arrayWords.maxIndex()
+	{
+		word := arrayWords[A_Index]
+		if InStr(value, word)
+			matches += 1
+	}
+	if(matches = maxIndex)
+		return true
+	else
+		return false
+}
+
 openCurrentFolderInCMD(){
 	currdir := getSmartCurrentFolder()
 	Run, cmd, % currdir ? currdir : "C:\"

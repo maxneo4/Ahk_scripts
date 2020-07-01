@@ -87,9 +87,8 @@ LoadCommands(){
 }
 
 ReloadLauncherTools(){
-	showMessage("Reloading Launcher tools...", 1000)
-	Sleep, 500
-	Reload
+	showMessage("Reloading commands ...", 1000)	
+	LoadCommands()
 }
 
 Add_item(item) {
@@ -154,29 +153,32 @@ Update() {
     ;Gui, Submit, NoHide
 	GuiControlGet Search ;get content of control of associate var
 	Search := Trim(Search)
+	arrayWords := StrSplit(Search, A_Space)
 	LV_Delete()
 	Loop, % valueCSjson.Commands.MaxIndex()  
 	{
 		item := valueCSjson.Commands[A_Index]
-		FilterItem(item)
+		FilterItem(item, arrayWords)
 	}
 	Loop, % defaultCommands.MaxIndex()  
 	{
 		item := defaultCommands[A_Index]
-		FilterItem(item)
+		FilterItem(item, arrayWords )
 	} 
 	
 	selectFirstRow()    
 	return
 }
 
-FilterItem(item){
+FilterItem(item, arrayWords){
 	global Search
 	name := item.name       
 	category := item.category
-	if  InStr(name, Search) or InStr(category, Search) or (Search = )
+	;if  InStr(name, Search) or InStr(category, Search) or (Search = )
+	if InStr(category, Search) or ContainsAllWords(name, arrayWords) or (Search = )	
 		Add_item(item)	
 }
+
 
 copySelectedFileContentToClipboard(){	
 	path := getSmartSelectedFile()

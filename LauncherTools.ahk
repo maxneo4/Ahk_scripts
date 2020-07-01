@@ -39,6 +39,8 @@ TimeOSDInit()
 #Include  VimKeyCommands\VimNeo.ahk
 InitVimNeo()
 
+#Include TutorialMaker\TutorialMaker.ahk
+
 ;O ommit the end character separator
 ;* ommit to need end character	
 ;Bizagi developer hotStrings
