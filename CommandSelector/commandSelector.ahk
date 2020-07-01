@@ -270,4 +270,8 @@ FillDefaultCommands(){
 	defaultCommands.Push({category: "remember list", command: "openRememberList", name: "remember open file"})		
 	defaultCommands.Push({category: "global remember list", command: "addSelectedTextToGlobalList", name: "global remember add"})
 	defaultCommands.Push({category: "global remember list", command: "openGlobalRememberList", name: "global remember open file"})
+	
+	defaultCommands.Push({category: "tutorial maker", command: "ChooseEnabledTutorialFolder", name: "enabled/choose tutorial maker folder"})
+	defaultCommands.Push({category: "tutorial maker", command: "DisableTutorialFolder", name: "disable tutorial maker folder"})
+	defaultCommands.Push({category: "tutorial maker", command: "showTutorialFolder", name: "open tutorial maker folder"})
 }

@@ -40,6 +40,7 @@ TimeOSDInit()
 InitVimNeo()
 
 #Include TutorialMaker\TutorialMaker.ahk
+InitTutorialMaker()
 
 ;O ommit the end character separator
 ;* ommit to need end character	
