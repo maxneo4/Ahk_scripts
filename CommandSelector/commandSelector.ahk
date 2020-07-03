@@ -253,6 +253,7 @@ FillDefaultCommands(){
 	defaultCommands.Push({category: "get version", command: "getFileVersion", name: "Get dll/file version"})
 	defaultCommands.Push({category: "config", command: "changeLogNotesRememberWorkSpaceFolder", name: "Set current folder as workspace"})
 	defaultCommands.Push({category: "config", command: "showCurrentWorkspace", name: "Open workspace"})
+	defaultCommands.Push({category: "config", command: "restoreLogNotesRememberWorkSpaceFolder", name: "Set/Restore default workspace"})
 	defaultCommands.Push({category: "CMD", command: "openCurrentFolderInCMD", name: "Open current folder in CMD"})
 	
 	defaultCommands.Push({category: "log notes", command: "addSelectedToLog", name: "log add"})

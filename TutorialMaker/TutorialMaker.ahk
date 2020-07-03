@@ -1,14 +1,17 @@
 ﻿InitTutorialMaker(){
 	global capture = "OFF"
 	global tutorialFolder	
-		
-		
+	
+	Hotkey, ^!c, ChooseEnabledTutorialFolder, On
+	Hotkey, ^!d, DisableTutorialFolder, On
+	
 	global fnCaptureEnabled := Func("CaptureEnabled")	
 	Hotkey, If, % fnCaptureEnabled
 	
 	Hotkey, #s, InvokeTutorialCapture, On
 	Hotkey, #e, openCaptureEdit, On
 	Hotkey, #c, ClipboardTutorialCapture, On
+	Hotkey, #o, showTutorialFolder, On
 	Hotkey, #r, RunTemplate, On
 	
 	Hotkey, if	
@@ -48,7 +51,7 @@ ChooseEnabledTutorialFolder(){
 showTutorialFolder(){
 	global tutorialFolder
 	if(tutorialFolder)		
-		Run, %tutorialFolder%
+		Run, %tutorialFolder%\TImages\
 	else
 		showFailMessage("tutorial Folder has not been configured", 1500)
 }

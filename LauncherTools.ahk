@@ -96,6 +96,18 @@ Double ESC to activate
 ESC : exit Vim mode
 F1 : Vim Help (Only when Vim mode is activated)
 
+--------------------------------------------------------------
+
+# Tutorial Maker
+CTRL + ALT + C : Choose Tutorial Folder and enabled
+CTRL + ALT + D : Disable Tutorial maker capture
+
+When it is enabled
+	WIN + S : capture screen
+	WIN + E : capture and edit
+	WIN + C : capture from clipboard (edited image)
+	WIN + O : open capture folder
+	WIN + R : Run and open template
 )
 MsgBox, ,Help, %helptext%, 
 Return
