@@ -275,4 +275,5 @@ FillDefaultCommands(){
 	defaultCommands.Push({category: "tutorial maker", command: "ChooseEnabledTutorialFolder", name: "enabled/choose tutorial maker folder"})
 	defaultCommands.Push({category: "tutorial maker", command: "DisableTutorialFolder", name: "disable tutorial maker folder"})
 	defaultCommands.Push({category: "tutorial maker", command: "showTutorialFolder", name: "open tutorial maker folder"})
+	defaultCommands.Push({category: "tutorial maker", command: "RunTemplate", name: "generate tutorial"})
 }

@@ -60,7 +60,7 @@ InvokeTutorialCapture(sendToCaptureScreen=1){
 	global tutorialFolder
 	global ownFolder
 	
-	FormatTime, TimeString,, ddMMMyyyy HH-mm-ss
+	FormatTime, TimeString,, yyyy-MM-dd HH-mm-ss
 	IfNotExist, %tutorialFolder%\TImages
 		FileCreateDir, %tutorialFolder%\TImages
 	if sendToCaptureScreen
@@ -76,17 +76,18 @@ ClipboardTutorialCapture(){
 
 RunTemplate(){	
 	global tutorialFolder
-	global capture
-	
-	if(capture = "ON"){
-		FileCopy, %A_ScriptDir%\Word template.docx, %Folder%, 1
+	global capture	
+	if capture = "ON" 
+	{
+		MsgBox,,, actived
+		FileCopy, %A_ScriptDir%\TutorialMaker\Word template.docx, %tutorialFolder%, 1
 		if ErrorLevel
 			MsgBox,,, %ErrorLevel%
 		
 		ShowProgress("initializing word...")
 		
 		oWord := ComObjCreate("Word.Application")
-		wordFile := % Folder . "\Word template.docx"
+		wordFile := % tutorialFolder . "\Word template.docx"
 		
 		ShowProgress(wordFile, 400)
 		
@@ -99,7 +100,7 @@ RunTemplate(){
 		oWord.Selection.TypeParagraph		
 		
 		
-		Loop Files, %Folder%\web\images\*.png
+		Loop Files, %tutorialFolder%\TImages\*.png
 		{
 			ShowProgress("adding " . A_LoopFileFullPath, 550)
 			oWord.Selection.TypeParagraph
