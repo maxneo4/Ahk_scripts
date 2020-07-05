@@ -14,6 +14,8 @@
 	Hotkey, #o, showTutorialFolder, On
 	Hotkey, #r, RunTemplate, On
 	
+	Hotkey, #t, EditTextImage, On
+	
 	Hotkey, if	
 }
 ;enable tutorial maker mode
@@ -78,8 +80,7 @@ RunTemplate(){
 	global tutorialFolder
 	global capture	
 	if capture = "ON" 
-	{
-		MsgBox,,, actived
+	{		
 		FileCopy, %A_ScriptDir%\TutorialMaker\Word template.docx, %tutorialFolder%, 1
 		if ErrorLevel
 			MsgBox,,, %ErrorLevel%
@@ -117,8 +118,33 @@ RunTemplate(){
 		
 		;oWord.ActiveDocument.Save()
 		
-		;Run, %Folder%\Word template.docx 
-		
-		;Run, "%A_ScriptDir%\SaveImageFromClipboard.exe" -runHtmlPage true -folderTarget %Folder%
+		;Run, %Folder%\Word template.docx 	
 	}
+}
+
+EditTextImage(){
+	static title
+	static description
+	static step
+	
+	path := getSmartSelectedItem()
+	if(path){
+		Gui, editTextGui:New, AlwaysOnTop -DPIScale ToolWindow
+		Gui, Add, Text,, Step:
+		Gui, Add, Edit
+		Gui, Add, UpDown, vstep Range0-100, 0
+		Gui, Add, Text,, Title:
+		Gui, Add, Edit, vtitle w300
+		Gui, Add, Text,, Description:
+		Gui, Add, Edit, vdescription r5 w300
+		Gui, Add, Button, Default gSaveIM, Ok
+		
+		Gui, editTextGui:show, AutoSize Center, Edit image metadata
+	}
+	
+	return
+	
+	SaveIm:
+	Gui, Submit
+	return
 }

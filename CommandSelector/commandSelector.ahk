@@ -276,4 +276,5 @@ FillDefaultCommands(){
 	defaultCommands.Push({category: "tutorial maker", command: "DisableTutorialFolder", name: "disable tutorial maker folder"})
 	defaultCommands.Push({category: "tutorial maker", command: "showTutorialFolder", name: "open tutorial maker folder"})
 	defaultCommands.Push({category: "tutorial maker", command: "RunTemplate", name: "generate tutorial"})
+	defaultCommands.Push({category: "tutorial maker", command: "EditTextImage", name: "edite text of selected image"})
 }
