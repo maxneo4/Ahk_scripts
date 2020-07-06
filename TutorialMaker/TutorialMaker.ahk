@@ -126,25 +126,41 @@ EditTextImage(){
 	static title
 	static description
 	static step
+	global tutorialFolder
+	static path
 	
-	path := getSmartSelectedItem()
+	path := getSmartSelectedItem()	
+	
 	if(path){
-		Gui, editTextGui:New, AlwaysOnTop -DPIScale ToolWindow
-		Gui, Add, Text,, Step:
-		Gui, Add, Edit
-		Gui, Add, UpDown, vstep Range0-100, 0
-		Gui, Add, Text,, Title:
-		Gui, Add, Edit, vtitle w300
-		Gui, Add, Text,, Description:
-		Gui, Add, Edit, vdescription r5 w300
-		Gui, Add, Button, Default gSaveIM, Ok
-		
-		Gui, editTextGui:show, AutoSize Center, Edit image metadata
+		SplitPath, path, , dir
+		if dir != %tutorialFolder%\TImages
+			MsgBox,,, image doesn´t belong to tutorial folder
+		else
+		{
+			Gui, editTextGui:New, AlwaysOnTop -DPIScale ToolWindow
+			Gui, Add, Text,, Step:
+			Gui, Add, Edit
+			Gui, Add, UpDown, vstep Range0-100, 0
+			Gui, Add, Text,, Title:
+			Gui, Add, Edit, vtitle w300
+			Gui, Add, Text,, Description:
+			Gui, Add, Edit, vdescription r5 w300
+			Gui, Add, Button, Default gSaveIM, Ok
+			
+			Gui, editTextGui:show, AutoSize Center, Edit image metadata
+		}
 	}
 	
 	return
 	
-	SaveIm:
-	Gui, Submit
+	SaveIm:	
+	Gui, Submit	
+	configImg := { step: step, title: title, description: description }
+	fullJsonPath := path . ".json"
+	MsgBox,,, % fullJsonPath
+	fullJsonContent := JSON.Dump(configImg,,2)
+	FileDelete, %fullJsonPath% 
+	FileAppend, %fullJsonContent% ,%fullJsonPath%
 	return
 }
+
