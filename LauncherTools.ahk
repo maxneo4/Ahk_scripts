@@ -72,7 +72,7 @@ InitTutorialMaker()
 ^F1::
 helpText = 
 (
-V 0.5.7
+V 0.5.8
 # CommandSelector
 
 ALT+SPACE : abre selector de comandos
@@ -107,7 +107,8 @@ When it is enabled
 	WIN + E : capture and edit
 	WIN + C : capture from clipboard (edited image)
 	WIN + O : open capture folder
-	WIN + R : Run and open template
+	WIN + T : select image in windows explorer to edit (step, title, description) 
+	WIN + R : Run and generate tutorial adding captured images with the step, title and description
 )
 MsgBox, ,Help, %helptext%, 
 Return
@@ -115,7 +116,7 @@ Return
 +F1::
 helpText = 
 (
-V 0.5.7
+V 0.5.8
 Master command = (CTRL+ALT+SPACE = ALT GR+SPACE), SHIFT+SPACE
 ----------------------------------------------------------------
 
