@@ -33,7 +33,7 @@ InitRememberList() {
 	LV_ModifyCol()				
 	selectFirstRowRemember()
 	
-	Hotkey, IfWinActive, rememberList
+	Hotkey, IfWinActive, rememberListWindow
 	Hotkey, ~Enter, invokeText, On
 	Hotkey, ~Down, DownRL, On
 	Hotkey, ~Up, UpRL, On
@@ -49,14 +49,14 @@ InitRememberList() {
 	Hotkey, if
 	
 	DownRL:      	
-	ControlGetFocus, OutVar, rememberList    
+	ControlGetFocus, OutVar, rememberListWindow    
 	if OutVar contains edit ;retrive edit or similar        
 		GuiControl, Focus, %LVRLID% 
 	return
 	
 	UpRL:  
 	global selectedIndexRL
-	ControlGetFocus, OutVar, rememberList
+	ControlGetFocus, OutVar, rememberListWindow
 	if (OutVar contains listView) and (selectedIndexRL < 2)
 		GuiControl, Focus, %FilterId%
 	return
@@ -226,9 +226,9 @@ invokeRememberListByPath(rememberListFile){
 	GuiControl, ,%FilterId% 	
 	Sleep, 100
 	if A_CaretX	
-		Gui, rl:show, AutoSize x%A_CaretX% y%A_CaretY% ,rememberList	
+		Gui, rl:show, AutoSize x%A_CaretX% y%A_CaretY% ,rememberListWindow	
 	else
-		Gui, rl:show, AutoSize Center , rememberList
+		Gui, rl:show, AutoSize Center , rememberListWindow
 	GuiControl, Focus, %FilterId%
 	return
 }
