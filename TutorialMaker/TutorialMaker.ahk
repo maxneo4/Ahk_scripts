@@ -104,13 +104,35 @@ RunTemplate(){
 		Loop Files, %tutorialFolder%\TImages\*.png
 		{
 			ShowProgress("adding " . A_LoopFileFullPath, 550)
+			
+			fullJsonPath := A_LoopFileFullPath . ".json"
+			if FileExist(fullJsonPath)
+			{
+				FileRead, jsonContent, %fullJsonPath%
+				valueImageMetadata := JSON.Load( jsonContent )
+			}
+			
 			oWord.Selection.TypeParagraph
 			oWord.Selection.Font.Size := 24
-			step := % "Step " . A_Index
+			step := % valueImageMetadata? "Step" . valueImageMetadata.step : ""
+			oWord.Selection.BoldRun
 			oWord.Selection.TypeText(step)
+			oWord.Selection.BoldRun
+			
+			oWord.Selection.Font.Size := 32
+			title := % valueImageMetadata? valueImageMetadata.title : ""
+			oWord.Selection.TypeParagraph
+			oWord.Selection.TypeText(title)
+			oWord.Selection.TypeParagraph
+			
+			oWord.Selection.Font.Size := 14
+			description := % valueImageMetadata? valueImageMetadata.description : ""
+			oWord.Selection.TypeText(description)
 			oWord.Selection.TypeParagraph
 			oWord.Selection.InlineShapes.AddPicture(A_LoopFileFullPath,0,1)
-			oWord.Selection.TypeParagraph				
+			oWord.Selection.TypeParagraph		
+			
+			valueImageMetadata = 
 		}
 		OSD_OFF()
 		oWord.Visible := True
