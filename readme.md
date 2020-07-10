@@ -30,6 +30,13 @@ https://github.com/rcmdnk/vim_ahk
 ### using ms word
 http://cedeq.com/enterpad/en/autohotkey/useful-ahk-scripts/set-font-size-in-ms-word
 
+### xml
+https://www.autohotkey.com/boards/viewtopic.php?f=62&t=33114&p=153893#p153893
+https://the-automator.com/
+https://the-automator.com/download/XML_Tutorial.ahk
+https://the-automator.com/xml-parsing-is-super-easy-with-this-autohotkey-class/
+
+
 ### Base urls
 
 - https://www.autohotkey.com/docs/commands/Hotkey.htm

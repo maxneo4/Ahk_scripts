@@ -114,7 +114,7 @@ RunTemplate(){
 			
 			oWord.Selection.TypeParagraph
 			oWord.Selection.Font.Size := 24
-			step := % valueImageMetadata? "Step" . valueImageMetadata.step : ""
+			step := % valueImageMetadata? ( valueImageMetadata.step > 0 ? "Step" . valueImageMetadata.step : "" ) : ""
 			oWord.Selection.BoldRun
 			oWord.Selection.TypeText(step)
 			oWord.Selection.BoldRun
