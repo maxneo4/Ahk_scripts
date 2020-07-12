@@ -19,6 +19,14 @@ if not (A_IsAdmin or RegExMatch(full_command_line, " /restart(?!\S)"))
 	ExitApp
 }
 
+;Changes
+;Remove ñ n Vim
+;Edit image capture automatically whithout using second command
+;Save word automatically 
+
+;Capture in tutorial with less keys or easy position WIN+E.. GC + ce cs WIN+S
+;Clipboard change event... to caputure more automatically..
+
 global commandsPath = "CommandSelector\commands.json"
 
 #Include Ahk Resources\AhkLibs\json.ahk

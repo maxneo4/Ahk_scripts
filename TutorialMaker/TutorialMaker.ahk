@@ -9,7 +9,7 @@
 	Hotkey, If, % fnCaptureEnabled
 	
 	Hotkey, #s, InvokeTutorialCapture, On
-	Hotkey, #e, openCaptureEdit, On
+	Hotkey, #e, openTutorialCaptureEdit, On
 	Hotkey, #c, ClipboardTutorialCapture, On
 	Hotkey, #o, showTutorialFolder, On
 	Hotkey, #r, RunTemplate, On
@@ -17,7 +17,23 @@
 	Hotkey, #t, EditTextImage, On
 	
 	Hotkey, if	
+	
+	;OnClipboardChange("ClipChanged")	
 }
+
+openTutorialCaptureEdit(){
+	SendInput, ^{PrintScreen}
+	ClipWait, 5
+	ClipboardTutorialCapture()
+}
+
+ClipChanged(Type) {
+	MsgBox,,, trigered
+	ToolTip Clipboard data type: %Type%
+	Sleep 1000
+	ToolTip  ; Turn off the tip.
+}
+
 ;enable tutorial maker mode
 CaptureEnabled()
 {
@@ -81,18 +97,19 @@ RunTemplate(){
 	global capture	
 	if capture = "ON" 
 	{		
-		FileCopy, %A_ScriptDir%\TutorialMaker\Word template.docx, %tutorialFolder%, 1
+		wordFile := % tutorialFolder . "\Tutorial.docx"
+		
+		FileCopy, %A_ScriptDir%\TutorialMaker\Word template.docx, %wordFile%, 1
 		if ErrorLevel
-			MsgBox,,, %ErrorLevel%
+			MsgBox,,, error coping template %ErrorLevel%
 		
 		ShowProgress("initializing word...")
 		
-		oWord := ComObjCreate("Word.Application")
-		wordFile := % tutorialFolder . "\Word template.docx"
+		oWord := ComObjCreate("Word.Application")		
 		
 		ShowProgress(wordFile, 400)
 		
-		oWord.Documents.Add(wordFile)
+		wDoc := oWord.Documents.Open(wordFile)
 		
 		
 		oWord.Selection.TypeParagraph
@@ -135,12 +152,13 @@ RunTemplate(){
 			valueImageMetadata = 
 		}
 		OSD_OFF()
-		oWord.Visible := True
-		oWord.Activate
 		
-		;oWord.ActiveDocument.Save()
+		wDoc.Save()
+		wDoc.Close()
+		oWord.Quit()
+		Sleep, 500
 		
-		;Run, %Folder%\Word template.docx 	
+		Run, %wordFile%	
 	}
 }
 

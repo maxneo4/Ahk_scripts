@@ -139,7 +139,9 @@ addCaptureToLog(sendToCaptureScreen=1){
 }
 
 openCaptureEdit(){
-	SendInput, ^{PrintScreen}	
+	SendInput, ^{PrintScreen}
+	ClipWait, 5
+	clipboardCaptureToLog()
 }
 
 clipboardCaptureToLog(){
