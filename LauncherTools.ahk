@@ -23,13 +23,14 @@ if not (A_IsAdmin or RegExMatch(full_command_line, " /restart(?!\S)"))
 ;Remove ñ n Vim
 ;Edit image capture automatically whithout using second command
 ;Save word automatically 
-
 ;Capture in tutorial with less keys or easy position WIN+E.. GC + ce cs WIN+S
+
 ;Clipboard change event... to caputure more automatically..
 
 global commandsPath = "CommandSelector\commands.json"
 
 #Include Ahk Resources\AhkLibs\json.ahk
+
 #Include Ahk Resources\AhkLibs\SelectedPath.ahk
 #include CommandSelector\custom_functions.ahk
 
@@ -80,7 +81,7 @@ InitTutorialMaker()
 ^F1::
 helpText = 
 (
-V 0.5.8
+V 0.5.9
 # CommandSelector
 
 ALT+SPACE : abre selector de comandos
@@ -111,12 +112,12 @@ CTRL + ALT + C : Choose Tutorial Folder and enabled
 CTRL + ALT + D : Disable Tutorial maker capture
 
 When it is enabled
-	WIN + S : capture screen
-	WIN + E : capture and edit
-	WIN + C : capture from clipboard (edited image)
-	WIN + O : open capture folder
-	WIN + T : select image in windows explorer to edit (step, title, description) 
-	WIN + R : Run and generate tutorial adding captured images with the step, title and description
+	WIN + S or F1: capture screen
+	WIN + E or F2: capture and edit
+	WIN + C or F12: capture from clipboard (edited image)
+	WIN + O or F3: open capture folder
+	WIN + T or F4: select image in windows explorer to edit (step, title, description) 
+	WIN + R or F5: Run and generate tutorial adding captured images with the step, title and description
 )
 MsgBox, ,Help, %helptext%, 
 Return
@@ -124,7 +125,7 @@ Return
 +F1::
 helpText = 
 (
-V 0.5.8
+V 0.5.9
 Master command = (CTRL+ALT+SPACE = ALT GR+SPACE), SHIFT+SPACE
 ----------------------------------------------------------------
 

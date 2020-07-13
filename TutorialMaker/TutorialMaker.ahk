@@ -9,19 +9,25 @@
 	Hotkey, If, % fnCaptureEnabled
 	
 	Hotkey, #s, InvokeTutorialCapture, On
-	Hotkey, #e, openTutorialCaptureEdit, On
+	Hotkey, #e, InvokeTutorialCaptureEdit, On
 	Hotkey, #c, ClipboardTutorialCapture, On
 	Hotkey, #o, showTutorialFolder, On
-	Hotkey, #r, RunTemplate, On
-	
 	Hotkey, #t, EditTextImage, On
+	Hotkey, #r, RunTemplate, On	
+	
+	Hotkey, F1, InvokeTutorialCapture, On
+	Hotkey, F2, InvokeTutorialCaptureEdit, On
+	Hotkey, F12, ClipboardTutorialCapture, On
+	Hotkey, F3, showTutorialFolder, On
+	Hotkey, F4, EditTextImage, On
+	Hotkey, F5, RunTemplate, On
 	
 	Hotkey, if	
 	
 	;OnClipboardChange("ClipChanged")	
 }
 
-openTutorialCaptureEdit(){
+InvokeTutorialCaptureEdit(){
 	SendInput, ^{PrintScreen}
 	ClipWait, 5
 	ClipboardTutorialCapture()
