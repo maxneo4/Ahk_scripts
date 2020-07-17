@@ -45,7 +45,8 @@ InitRememberList() {
 	
 	Hotkey, IfWinNotActive, ahk_exe strwinclt.exe
 	Hotstring(":X*:irm", "invokeRememberList")
-	Hotstring(":X*:igr", "invokeGlobalRememberList")
+	Hotstring(":X*:irl", "invokeRememberList")
+	Hotstring(":X*:irg", "invokeGlobalRememberList")
 	Hotkey, if
 	
 	DownRL:      	
@@ -260,10 +261,12 @@ UpdateRememberFilter(){
 	Gui, rl:Default 
 	GuiControlGet Filter ;get content of control of associate var
 	Filter := Trim(Filter)
-	LV_Delete()
+	arrayWords := StrSplit(Filter, A_Space)
+	LV_Delete()	
 	Loop, Read, %rememberListFileParam%
-	{		
-		if  InStr(A_LoopReadLine, Filter) or (Filter = )
+	{	
+		line := A_LoopReadLine	
+		if  InStr("", Filter) or ContainsAllWords(line, arrayWords) or (Filter = )
 			LV_Add("", A_LoopReadLine)
 	}
 	selectFirstRowRemember()

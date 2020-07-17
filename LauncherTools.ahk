@@ -157,8 +157,14 @@ Master command => RO: [Remember open] abre listRemember.txt
 	GO: [Global remember open]
 ESCAPE : oculta la lista
 
-irm : [Invoke Re-Member] muestra la lista para escoger el item a usar
-igr : [invoke global remember] muestra la lista global para escoger el item a usar
+irm/irl : [Invoke Re-Member-list] muestra la lista para escoger el item a usar
+irg : [invoke remember global] muestra la lista global para escoger el item a usar
 )
 MsgBox, ,Help, %helptext%, 
+Return
+
+#if !A_IsCompiled
+F5::
+MsgBox, , , Reloading script, 1
+Reload
 Return
