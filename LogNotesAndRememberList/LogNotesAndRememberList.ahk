@@ -56,7 +56,15 @@ InitRememberList() {
 }
 
 WaitSubCommandKeys(){
-	Input, text, L3 T3, , la,li,lo,ld,cs,co,cd,ra,ro,ce,cc,ga,go,gi
+Help =
+(
+la, li, lo, ld   cs, ce, cc, co, cd, 
+ ra, ro,  ga, go, gi  ws, wd, wo
+)
+	SplashTextOn, , 40, Waiting command, %Help%	
+	Input, text, L3 T3, , la,li,lo,ld,cs,co,cd,ra,ro,ce,cc,ga,go,gi,ws,wd,wo
+	SplashTextOff	
+	Sleep, 250
 	Switch text
 	{
 		case "la": addSelectedToLog()
@@ -73,8 +81,10 @@ WaitSubCommandKeys(){
 		case "ga": addSelectedTextToGlobalList()
 		case "go": openGlobalRememberList()
 		case "gi": invokeGlobalRememberList()
-	}		
-	return
+		case "ws": changeLogNotesRememberWorkSpaceFolder()
+		case "wd": restoreLogNotesRememberWorkSpaceFolder()
+		case "wo": showCurrentWorkspace()
+	}
 }
 
 ;LOG NOTES
@@ -259,6 +269,13 @@ UpdateRememberFilter(){
 	Filter := Trim(Filter)
 	arrayWords := StrSplit(Filter, A_Space)	
 	tagFilter := arrayWords[1]
+
+	filterTagAndValue := false
+	if(arrayWords.MaxIndex() > 1) ;to work first word with tags, others with value
+		{
+			arrayWords.Remove(1)
+			filterTagAndValue := true
+		}
 	LV_Delete()	
 	Loop, Read, %rememberListFileParam%
 	{	
@@ -273,9 +290,15 @@ UpdateRememberFilter(){
 			tags = 
 			value := line
 		}
-		ordered := tags . value		
-		if  ( InStr(tags, tagFilter) or ContainsAllWords(value, arrayWords) ) or (Filter = )
-			LV_Add("", tags, value, ordered) ;fisrt tags, second value
+		ordered := tags . value				
+		if (filterTagAndValue = true) {
+			if InStr(tags, tagFilter) and ContainsAllWords(value, arrayWords) 
+					LV_Add("", tags, value, ordered) ;fisrt tags, second value
+			}
+		else{		
+			if  InStr(tags, tagFilter) or ContainsAllWords(value, arrayWords) or (Filter = )
+				LV_Add("", tags, value, ordered) ;fisrt tags, second value				
+		}
 	}
 	selectFirstRowRemember()
 }
