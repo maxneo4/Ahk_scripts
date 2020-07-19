@@ -10,6 +10,7 @@ InitRememberList() {
 	rememberListFile := defaultRemeberListFile
 	gRememberListFile := "LogNotesAndRememberList\GlobalRememberList.txt"
 	
+	global isGlobalWorking := false ;to define if tags column has size or not..
 	
 	static LVRLID
 	static LV2	
@@ -21,18 +22,9 @@ InitRememberList() {
 	Gui, rl:Color, EEAA99, F3282923
 	Gui +LastFound 
 	WinSet, TransColor, EEAA99 220
-	Gui, rl:Add, ListView, w600 h300 x0 y25 -Multi gListViewRLEvent AltSubmit -Hdr vLV2 HwndLVRLID, item ;important diff v and Hwn
+	Gui, rl:Add, ListView, w600 h300 x0 y25 -Multi gListViewRLEvent AltSubmit -Hdr vLV2 HwndLVRLID, tag|item|order ;important diff v and Hwn
 	LV_SetImageList( DllCall( "ImageList_Create", Int,2, Int, 20, Int,0x18, Int,1, Int,1 ), 1 ) ;set row height to 25
-	
-	FileRead, listContent, %rememberListFile%
-	Loop, Parse, listContent, `n
-	{
-		if  A_LoopField
-			LV_Add("", A_LoopField)
-	}
-	LV_ModifyCol()				
-	selectFirstRowRemember()
-	
+
 	Hotkey, IfWinActive, rememberListWindow
 	Hotkey, ~Enter, invokeText, On
 	Hotkey, ~Down, DownRL, On
@@ -213,11 +205,15 @@ selectedDate(){
 
 invokeRememberList(){
 	global rememberListFile	
+	global isGlobalWorking
+	isGlobalWorking = false
 	invokeRememberListByPath(rememberListFile)
 }
 
 invokeGlobalRememberList(){
 	global gRememberListFile
+	global isGlobalWorking
+	isGlobalWorking = true
 	invokeRememberListByPath(gRememberListFile)
 }
 
@@ -251,7 +247,7 @@ ListViewRLEvent(){
 	    {        
 	    	global selectedIndexRL
 	        selectedIndexRL:= LV_GetNext() ; new focused row  
-	        LV_GetText(selectedText, A_EventInfo, 1)
+	        LV_GetText(selectedText, A_EventInfo, 2)
 	    }
 	return
 }
@@ -261,23 +257,39 @@ UpdateRememberFilter(){
 	Gui, rl:Default 
 	GuiControlGet Filter ;get content of control of associate var
 	Filter := Trim(Filter)
-	arrayWords := StrSplit(Filter, A_Space)
+	arrayWords := StrSplit(Filter, A_Space)	
+	tagFilter := arrayWords[1]
 	LV_Delete()	
 	Loop, Read, %rememberListFileParam%
 	{	
 		line := A_LoopReadLine	
-		if  InStr("", Filter) or ContainsAllWords(line, arrayWords) or (Filter = )
-			LV_Add("", A_LoopReadLine)
+		
+		parts := StrSplit(line, ">>")		
+		if(parts.MaxIndex() = 2)
+		{
+			tags := parts[1]
+			value := parts[2]							
+		}else{
+			tags = 
+			value := line
+		}
+		ordered := tags . value		
+		if  ( InStr(tags, tagFilter) or ContainsAllWords(value, arrayWords) ) or (Filter = )
+			LV_Add("", tags, value, ordered) ;fisrt tags, second value
 	}
 	selectFirstRowRemember()
-	LV_ModifyCol()
-	return
 }
 
 selectFirstRowRemember(){
-    LV_ModifyCol(1, "Sort")
+	global isGlobalWorking
+    LV_ModifyCol(3, "Sort")
     LV_Modify(1, "+Select +Focus")
-	return
+    LV_ModifyCol(2)
+    if isGlobalWorking = true
+    	LV_ModifyCol(1, 100)
+    else
+    	LV_ModifyCol(1, 0) ;by default tags are invisible column
+	LV_ModifyCol(3, 0)	
 }
 
 addSelectedTextToList(){
@@ -285,18 +297,16 @@ addSelectedTextToList(){
 	addSelectedTextToListByPath(rememberListFile)
 }
 
-addSelectedTextToGlobalList()
-{
+addSelectedTextToGlobalList(){
 	global gRememberListFile
-	InputBox, textToLog, , Add to global remember., , 500, 140
+	InputBox, textToAdd, Add to global remember., Set tags and value separated by >> , , 500, 140
 	if ErrorLevel 
 		ShowFailMessage("You cancel the dialog", 1000)
 	else
-	{
-		Clipboard := textToLog
-		addSelectedTextToListByPath(gRememberListFile)
+	{		
+		FileAppend, %textToAdd%`r`n, %gRememberListFile%
+		showMessage("Text added to global remember", 1000)	
 	}
-	
 }
 
 ; add to list remember
