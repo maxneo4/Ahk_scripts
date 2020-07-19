@@ -155,6 +155,7 @@ Master command => RA: [Remember add] agrega texto seleccionado a la lista
 	GA: [Global remember add]
 Master command => RO: [Remember open] abre listRemember.txt
 	GO: [Global remember open]
+Master command => GI: Invoke global remember list
 ESCAPE : oculta la lista
 
 irm/irl : [Invoke Re-Member-list] muestra la lista para escoger el item a usar

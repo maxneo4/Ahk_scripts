@@ -16,12 +16,12 @@ InitRememberList() {
 	
 	Gui, rl:New, AlwaysOnTop ToolWindow -DPIScale -Caption
 	Gui, Font, s10 Arial cA9A9A7
-	Gui, rl:Add, Edit, w400 x0 y0 vFilter gUpdateRememberFilter HwndFilterId ;h35
+	Gui, rl:Add, Edit, w600 x0 y0 vFilter gUpdateRememberFilter HwndFilterId ;h35
 	Gui, Font, s10 Arial cA9A9A7
 	Gui, rl:Color, EEAA99, F3282923
 	Gui +LastFound 
 	WinSet, TransColor, EEAA99 220
-	Gui, rl:Add, ListView, w400 h300 x0 y25 -Multi gListViewRLEvent AltSubmit -Hdr vLV2 HwndLVRLID, item ;important diff v and Hwn
+	Gui, rl:Add, ListView, w600 h300 x0 y25 -Multi gListViewRLEvent AltSubmit -Hdr vLV2 HwndLVRLID, item ;important diff v and Hwn
 	LV_SetImageList( DllCall( "ImageList_Create", Int,2, Int, 20, Int,0x18, Int,1, Int,1 ), 1 ) ;set row height to 25
 	
 	FileRead, listContent, %rememberListFile%
@@ -64,7 +64,7 @@ InitRememberList() {
 }
 
 WaitSubCommandKeys(){
-	Input, text, L3 T3, , la,li,lo,ld,cs,co,cd,ra,ro,ce,cc,ga,go
+	Input, text, L3 T3, , la,li,lo,ld,cs,co,cd,ra,ro,ce,cc,ga,go,gi
 	Switch text
 	{
 		case "la": addSelectedToLog()
@@ -80,6 +80,7 @@ WaitSubCommandKeys(){
 		case "ro": openRememberList()
 		case "ga": addSelectedTextToGlobalList()
 		case "go": openGlobalRememberList()
+		case "gi": invokeGlobalRememberList()
 	}		
 	return
 }
@@ -104,7 +105,6 @@ InputToLog(){
 		Clipboard := textToLog
 		addToLog()
 	}
-	return
 }
 
 openTodayLog(){
@@ -288,7 +288,15 @@ addSelectedTextToList(){
 addSelectedTextToGlobalList()
 {
 	global gRememberListFile
-	addSelectedTextToListByPath(gRememberListFile)
+	InputBox, textToLog, , Add to global remember., , 500, 140
+	if ErrorLevel 
+		ShowFailMessage("You cancel the dialog", 1000)
+	else
+	{
+		Clipboard := textToLog
+		addSelectedTextToListByPath(gRememberListFile)
+	}
+	
 }
 
 ; add to list remember

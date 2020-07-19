@@ -13,8 +13,8 @@
 	
 	Gui, vim:New, AlwaysOnTop ToolWindow -DPIScale -Caption
 	Gui, vim:Color, EEAA99, OOOO00
-	Gui, vim:Font, s14 Arial bold
-	Gui, vim:Add, Text, cBlue -Background HwndLabelId , Vim [N]	
+	Gui, vim:Font, s24 Calibri bold
+	Gui, vim:Add, Text, cBlue -Background HwndLabelId W140 h44 center, Vim [N]	
 	Gui +LastFound 
 	WinSet, TransColor, EEAA99 100	
 	
