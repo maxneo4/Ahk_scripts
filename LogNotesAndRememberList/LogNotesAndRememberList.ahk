@@ -1,6 +1,7 @@
 InitRememberList() {
-	global folder := A_ScriptDir . "\LogNotesAndRememberList"
 	global ownFolder := "LogNotesAndRememberList"
+	global defaultFolder := A_ScriptDir . "\" . ownFolder
+	global folder := defaultFolder	
 	global rememberListFile
 	global gRememberListFile
 	global Filter
@@ -171,10 +172,12 @@ openScreenCaptureByDate(){
 
 addToLog(){	
 	global folder
+	global defaultFolder
 	FormatTime, DateString,, ddMMMyyyy
-	FormatTime, TimeString,, HH:mm:ss
+	FormatTime, TimeString,, HH:mm:ss	
 	FileAppend, >>[%TimeString%] `r`n%Clipboard%`r`n`r`n, %folder%\%DateString%.txt 
-	return
+	if (folder != defaultFolder) ;reply to defaultFolder
+		FileAppend, >>[%TimeString%] (%folder%) `r`n%Clipboard%`r`n`r`n, %defaultFolder%\%DateString%.txt		
 }
 
 openCalendar(){
