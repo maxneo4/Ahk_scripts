@@ -81,7 +81,7 @@ InitTutorialMaker()
 ^F1::
 helpText = 
 (
-V 0.5.9
+V 0.6
 # CommandSelector
 
 ALT+SPACE : abre selector de comandos
@@ -125,41 +125,43 @@ Return
 +F1::
 helpText = 
 (
-V 0.5.9
+V 0.6
 Master command = (CTRL+ALT+SPACE = ALT GR+SPACE), SHIFT+SPACE
+Master command = MC
 ----------------------------------------------------------------
 
 # Log notes #
-Master command => LA: [Log add] agregar texto seleccionado al log
-
-Master command => LI: [Log input] abre caja de texto para escribir directamente al log
-
-Master command => LO: [Log open] abrir log del dia actual
-
-Master command => LD: [Log date] abrir log por fecha del calendario
+MC => LA: [Log add] agregar texto seleccionado al log
+MC => LI: [Log input] abre caja de texto para escribir directamente al log
+MC => LO: [Log open] abrir log del dia actual
+MC => LD: [Log date] abrir log por fecha del calendario
 
 # Images notes #
-Master command => CS: [Capture screen] agregar captura de pantalla al log de imagenes
+MC => CS: [Capture screen] agregar captura de pantalla al log de imagenes
+MC => CE: [Capture edit] envia CTRL+PrintScreen captura region con ShareX
+MC => CC: [Capture clipboard] guarda una imagen del portapapeles al log
+MC => CO: [Capture open] abrir log de imagenes del dia actual
+MC => CD: [Capture date] abrir log de imagenes por fecha del calendario
 
-Master command => CE: [Capture edit] envia CTRL+PrintScreen captura region con ShareX
-Master command => CC: [Capture clipboard] guarda una imagen del portapapeles al log
-
-Master command => CO: [Capture open] abrir log de imagenes del dia actual
-
-Master command => CD: [Capture date] abrir log de imagenes por fecha del calendario
+# Workspace #
+MC => WS: [Workspace Set] set current folder as Workspace
+MC => WO: [Worksace Open] open current workspace
+MC => WD: [Workspace Default] set workspace to default value again
 
 ----------------------------------------------------------------
 # Remember list #
 
-Master command => RA: [Remember add] agrega texto seleccionado a la lista
-	GA: [Global remember add]
-Master command => RO: [Remember open] abre listRemember.txt
-	GO: [Global remember open]
-Master command => GI: Invoke global remember list
+MC => RA: [Remember add] agrega texto seleccionado a la lista
+MC => GA: [Global remember add]
+MC => RO: [Remember open] abre listRemember.txt
+MC => GO: [Global remember open]
+MC => GI: Invoke global remember list
 ESCAPE : oculta la lista
 
 irm/irl : [Invoke Re-Member-list] muestra la lista para escoger el item a usar
-irg : [invoke remember global] muestra la lista global para escoger el item a usar
+irg: [invoke remember global] muestra la lista global para escoger el item a usar
+Enter: invoke selected Text
+SHIFT + Enter: run selected Text
 )
 MsgBox, ,Help, %helptext%, 
 Return
@@ -167,5 +169,6 @@ Return
 #if !A_IsCompiled
 F5::
 MsgBox, , , Reloading script, 1
+Send, ^s
 Reload
 Return

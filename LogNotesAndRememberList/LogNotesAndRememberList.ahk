@@ -28,6 +28,7 @@ InitRememberList() {
 
 	Hotkey, IfWinActive, rememberListWindow
 	Hotkey, ~Enter, invokeText, On
+	Hotkey, +Enter, runText, On
 	Hotkey, ~Down, DownRL, On
 	Hotkey, ~Up, UpRL, On
 	Hotkey, ~Escape, RememberListHide, On
@@ -250,7 +251,14 @@ invokeText(){
 	Gui, rl:Hide
 	Clipboard := SelectedText	
 	SendInput ^v
-	return
+}
+
+runText(){
+	global SelectedText
+	Gui, rl:Hide
+	Run, %SelectedText%, , UseErrorLevel
+	if ErrorLevel
+		MsgBox, , Error, %ErrorLevel% happen trying to run '%SelectedText%', 2
 }
 
 ListViewRLEvent(){
