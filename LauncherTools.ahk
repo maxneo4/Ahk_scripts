@@ -24,6 +24,7 @@ if not (A_IsAdmin or RegExMatch(full_command_line, " /restart(?!\S)"))
 ;Edit image capture automatically whithout using second command
 ;Save word automatically 
 ;Capture in tutorial with less keys or easy position WIN+E.. GC + ce cs WIN+S
+;change shift+space to ctrl+space to avoid accidentally activation master command
 
 ;Clipboard change event... to caputure more automatically..
 
@@ -123,7 +124,7 @@ Return
 helpText = 
 (
 V 0.6
-Master command = (CTRL+ALT+SPACE = ALT GR+SPACE), SHIFT+SPACE
+Master command = (CTRL+ALT+SPACE = ALT GR+SPACE), CTRL+SHIFT+SPACE(to avoid to close popups)
 Master command = MC
 ----------------------------------------------------------------
 

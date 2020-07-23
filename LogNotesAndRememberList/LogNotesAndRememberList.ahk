@@ -35,7 +35,7 @@ InitRememberList() {
 	Hotkey, if
 	
 	Hotkey, ^!Space , WaitSubCommandKeys, On
-	Hotkey, +Space , WaitSubCommandKeys, On
+	Hotkey, ^+Space , WaitSubCommandKeys, On
 	
 	Hotkey, IfWinNotActive, ahk_exe strwinclt.exe
 	Hotstring(":X*:irm", "invokeRememberList")
