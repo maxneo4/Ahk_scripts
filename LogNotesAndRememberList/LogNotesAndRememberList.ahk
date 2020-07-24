@@ -140,12 +140,12 @@ addCaptureToLog(sendToCaptureScreen=1){
 	if sendToCaptureScreen
 		SendInput, #+s
 	Run, %A_ScriptDir%\%ownFolder%\ClipboardImageToFile.exe -secondsToWait 20 -imagePath "%folder%\%DateString%\%TimeString%.png"
-	return
 }
 
 openCaptureEdit(){
 	SendInput, ^{PrintScreen}
-	ClipWait, 5
+	Clipboard := 
+	ClipWait, 10
 	clipboardCaptureToLog()
 }
 

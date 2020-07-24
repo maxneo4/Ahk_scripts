@@ -29,7 +29,8 @@
 
 InvokeTutorialCaptureEdit(){
 	SendInput, ^{PrintScreen}
-	ClipWait, 5
+	Clipboard := 
+	ClipWait, 10
 	ClipboardTutorialCapture()
 }
 
