@@ -1,3 +1,40 @@
+DynamicInputBox(title, guiDefinitions){
+	static inputResult
+	GuiID = dynForm
+
+	Gui, %GuiID%:Add, Text, x12 y10 w320 h20 , %text%
+	Gui, %GuiID%:Add, Edit
+	Gui, %GuiID%:Add, Button, x232 y70 w100 h30 gCInputButton, % "Cancel"
+	Gui, %GuiID%:Add, Button, x122 y70 w100 h30 gCInputButton Default, % "OK"
+	Gui, %GuiID%:+Toolwindow +AlwaysOnTop
+	Gui %GuiID%:Show,,%title%
+
+
+	Gui, %GuiID%:Default
+
+	Loop
+		If( inputResult )
+			Break
+
+	Result := inputResult
+	inputResult := 
+	Gui, %GuiID%:Submit, Hide
+	Gui %GuiID%:Destroy
+  	Return Result
+
+  	CInputButton:  	 
+  	 inputResult = "Out"
+  	return
+
+  	dynFormGuiEscape:
+	dynFormGuiClose:
+	MsgBox, , enter, %A_Gui%
+	  inputResult = "Canceled"
+	Return
+}
+
+
+
 ContainsAllWords(value, arrayWords){	
 	maxIndex := arrayWords.MaxIndex()
 	matches = 0
@@ -28,16 +65,15 @@ DoubleKey(key){
 	return true
 }
 
-ObjIndexOf(obj, item, case_sensitive:=false)
-{
+ObjIndexOf(obj, item, case_sensitive:=false){
 	for i, val in obj {
 		if (case_sensitive ? (val == item) : (val = item))
 			return i
 	}
+	return 0
 }
 
-showText(title, text, milis_time, width=300, height=60)
-{	
+showText(title, text, milis_time, width=300, height=60){	
 	SplashTextOn,  width , height, %title%, %text%
 	Sleep, milis_time
 	SplashTextOff

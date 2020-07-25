@@ -2,6 +2,7 @@
 
 #IfWinNotActive ahk_exe strwinclt.exe
 
+:*::espanso::de una hi there
 ::gg::gg wp
 ::sf::select * from
 ::tcat::BABIZAGICATALOG

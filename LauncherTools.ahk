@@ -79,7 +79,7 @@ return
 ^F1::
 helpText = 
 (
-V 0.6
+V 0.61
 # CommandSelector
 
 ALT+SPACE : abre selector de comandos
@@ -103,6 +103,7 @@ Double ESC to activate
 ESC : exit Vim mode
 F1 : Vim Help (Only when Vim mode is activated)
 
+
 --------------------------------------------------------------
 
 # Tutorial Maker
@@ -123,7 +124,7 @@ Return
 +F1::
 helpText = 
 (
-V 0.6
+V 0.61
 Master command = (CTRL+ALT+SPACE = ALT GR+SPACE), CTRL+SHIFT+SPACE(to avoid to close popups)
 Master command = MC
 ----------------------------------------------------------------
@@ -170,3 +171,8 @@ MsgBox, , , Reloading script, 1
 Send, ^s
 Reload
 Return
+
+F4::
+value := DynamicInputBox("box dinamica",{val:a})
+MsgBox, , Result, %value%
+return

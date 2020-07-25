@@ -7,7 +7,6 @@
 	Hotkey, ^Right, MoveNextWindow, On
 	Hotkey, ^Left, MovePreviousWindow, On
 	Hotkey, ^+Down, RemoveAll, On
-	Hotkey, *Tab, SendTab, On
 }
 
 RemoveAll()
@@ -24,16 +23,22 @@ AddWindowById()
 	
 	WinGet, active_id, ID, A
 	WinGetTitle, wTitle, A
-	windows.Push(active_id)
-	pos := windows.MaxIndex()
-	currentAddedWindow := % "Added window '" . SubStr(wTitle, 1, 35) . "' in pos " . Windows.MaxIndex()
-	showText("gestor window", currentAddedWindow, 1000)	
+
+	if (ObjIndexOf(windows, active_id) = 0)
+	{
+		windows.Push(active_id)
+		pos := windows.MaxIndex()
+		currentAddedWindow := % "Added window '" . SubStr(wTitle, 1, 35) . "' in pos " . Windows.MaxIndex()
+		showText("gestor window", currentAddedWindow, 1000)	
+	}else
+	{
+		showText("gestor window", "Windows added already", 500)	
+	}
 }
 
 
 MoveNextWindow()
-{
-	
+{	
 	global pos
 	global windows
 	
@@ -43,7 +48,13 @@ MoveNextWindow()
 	if ( pos > windows.MaxIndex() && windows.MaxIndex() > 0)	
 		pos = 1
 	w := windows[pos]
-	WinActivate, ahk_id %w%
+	if WinExist("ahk_id" . w)
+		WinActivate, ahk_id %w%
+	Else
+		{
+			windows.RemoveAt(pos)
+			MoveNextWindow()
+		}
 	;showText("gestor window", pos, 400, 100, 20)
 }
 
@@ -58,7 +69,13 @@ MovePreviousWindow()
 	if ( pos < 1 && windows.MaxIndex() > 0)	
 		pos := windows.MaxIndex()	
 	w := windows[pos]
-	WinActivate, ahk_id %w%
+	if WinExist("ahk_id" . w)
+		WinActivate, ahk_id %w%
+	Else
+		{
+			windows.RemoveAt(pos)
+			MovePreviousWindow()
+		}
 	;showText("gestor window", pos, 400, 100, 20)
 }
 
@@ -87,8 +104,4 @@ updtePosToActiveWindow()
 	posFound := ObjIndexOf(windows, active_id)
 	if posFound		
 		pos := posFound		
-}
-
-SendTab(){
-	SendInput {Blind}{Tab}
 }

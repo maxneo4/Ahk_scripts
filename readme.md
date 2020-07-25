@@ -30,6 +30,10 @@ https://github.com/rcmdnk/vim_ahk
 ### using ms word
 http://cedeq.com/enterpad/en/autohotkey/useful-ahk-scripts/set-font-size-in-ms-word
 
+### compendio de scripts / funciones
+https://autohotkey.com/board/topic/74406-function-custom-input-box-password-box/
+https://github.com/Ixiko/AHK-Rare
+
 ### xml
 https://www.autohotkey.com/boards/viewtopic.php?f=62&t=33114&p=153893#p153893
 https://the-automator.com/
