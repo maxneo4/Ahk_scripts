@@ -165,6 +165,31 @@ SHIFT + Enter: run selected Text
 MsgBox, ,Help, %helptext%, 
 Return
 
+#IfWinNotActive ahk_exe strwinclt.exe
+
+~CapsLock::
+Sleep, 250
+If (GetKeyState("CapsLock", "T"))
+    SplashTextOn, 150, 25, CapsLock state, On
+Else
+	SplashTextOn, 150, 25, CapsLock state, Off
+Sleep, 1500
+SplashTextOff
+return
+
+~NumLock::
+Sleep, 250
+If (GetKeyState("NumLock", "T"))
+    SplashTextOn, 150, 25, NumLock state, On
+Else
+	SplashTextOn, 150, 25, NumLock state, Off
+Sleep, 1500
+SplashTextOff
+return
+return
+
+#if
+
 #if !A_IsCompiled
 F5::
 MsgBox, , , Reloading script, 1
