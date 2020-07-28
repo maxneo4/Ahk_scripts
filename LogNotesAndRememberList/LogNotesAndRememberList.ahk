@@ -65,7 +65,9 @@ la, li, lo, ld   cs, ce, cc, co, cd,
 )
 	SplashTextOn, , 40, Waiting command, %Help%	
 	Input, text, L3 T3, , la,li,lo,ld,cs,co,cd,ra,ro,ce,cc,ga,go,gi,ws,wd,wo
-	SplashTextOff	
+	SplashTextOff
+	if(ErrorLevel != "Match")
+		MsgBox, , Not match, % ErrorLevel . " value:" . text	
 	Sleep, 250
 	Switch text
 	{

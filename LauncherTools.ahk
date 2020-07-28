@@ -25,6 +25,7 @@ if not (A_IsAdmin or RegExMatch(full_command_line, " /restart(?!\S)"))
 ;Save word automatically 
 ;Capture in tutorial with less keys or easy position WIN+E.. GC + ce cs WIN+S
 ;change shift+space to ctrl+space to avoid accidentally activation master command
+;splash when CapsLock or NumLock change
 
 ;Clipboard change event... to caputure more automatically..
 
@@ -79,7 +80,7 @@ return
 ^F1::
 helpText = 
 (
-V 0.61
+V 0.62
 # CommandSelector
 
 ALT+SPACE : abre selector de comandos
@@ -124,7 +125,7 @@ Return
 +F1::
 helpText = 
 (
-V 0.61
+V 0.62
 Master command = (CTRL+ALT+SPACE = ALT GR+SPACE), CTRL+SHIFT+SPACE(to avoid to close popups)
 Master command = MC
 ----------------------------------------------------------------
