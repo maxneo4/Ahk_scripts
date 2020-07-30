@@ -193,12 +193,12 @@ return
 
 #if !A_IsCompiled
 F5::
-MsgBox, , , Reloading script, 1
+MsgBox, , , Reloading script, 0.5
 Send, ^s
 Reload
 Return
 
 F4::
-value := DynamicInputBox("box dinamica",{val:a})
+value := DynamicInputBox("box dinamica", {width: 200, vspace: 35, Margin: 10, controls: ["a", "b", "c", "input field"]})
 MsgBox, , Result, %value%
 return

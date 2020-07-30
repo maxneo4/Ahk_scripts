@@ -2,11 +2,31 @@ DynamicInputBox(title, guiDefinitions){
 	static inputResult
 	GuiID = dynForm
 
-	Gui, %GuiID%:Add, Text, x12 y10 w320 h20 , %text%
-	Gui, %GuiID%:Add, Edit
-	Gui, %GuiID%:Add, Button, x232 y70 w100 h30 gCInputButton, % "Cancel"
-	Gui, %GuiID%:Add, Button, x122 y70 w100 h30 gCInputButton Default, % "OK"
-	Gui, %GuiID%:+Toolwindow +AlwaysOnTop
+	width := guiDefinitions.width	
+	margin := guiDefinitions.Margin
+	vspace := guiDefinitions.vspace
+	controls := guiDefinitions.controls
+	
+	Gui, %GuiID%:+Toolwindow +AlwaysOnTop HwnddynFormId
+
+	Gui, %GuiID%:Margin, %margin%, %margin%
+
+	controlsCount := controls.MaxIndex()
+	ypos := 0
+	Loop, %controlsCount%
+	{
+		text := controls[A_Index]
+		Gui, %GuiID%:Add, Text, y%ypos% x%margin% w%width%, %text%
+		ypos += 15
+		Gui, %GuiID%:Add, Edit, y%ypos% x%margin% w%width%
+		ypos += vspace
+	}
+	
+	yButton := controlsCount * 1.5 * vspace
+	Gui, %GuiID%:Add, Button, y%yButton%  gCInputButton Default, % "OK"
+	Gui, %GuiID%:Add, Button, y%ybutton%  gCInputButton, % "Cancel"
+	
+
 	Gui %GuiID%:Show,,%title%
 
 
@@ -27,8 +47,7 @@ DynamicInputBox(title, guiDefinitions){
   	return
 
   	dynFormGuiEscape:
-	dynFormGuiClose:
-	MsgBox, , enter, %A_Gui%
+	dynFormGuiClose:	
 	  inputResult = "Canceled"
 	Return
 }
