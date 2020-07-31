@@ -16,25 +16,46 @@ DynamicInputBox(title, guiDefinitions){
 	controlsCount := controls.MaxIndex()
 	ypos := 0
 	Loop, %controlsCount%
-	{
-		text := controls[A_Index]
+	{		
+		control := controls[A_Index]
+		text := control.name
+		type = Edit
+		values := 
+		if(control.type)
+			{
+				type := control.type
+				values := control.values
+			}
 		varName := "var" . A_Index		
+		value := control.value
 
 		Gui, %GuiID%:Add, Text, y%ypos% x%margin% w%width%, %text%
 		ypos += vminspace
-		Gui, %GuiID%:Add, Edit, y%ypos% x%margin% v%varName%  w%width%
-		ypos += vspace
+		Gui, %GuiID%:Add, %type%, y%ypos% x%margin% v%varName% w%width%, %value%
+		ypos += vspace	
 	}
 	
 	yButton := controlsCount * 1.5 * vspace
 	Gui, %GuiID%:Add, Button, y%yButton%  gCInputButton Default, % "OK"
-	Gui, %GuiID%:Add, Button, y%ybutton%  gCInputButton, % "Cancel"
+	Gui, %GuiID%:Add, Button, y%ybutton%  gCCancelButton, % "Cancel"
 	
 
 	Gui %GuiID%:Show,,%title%
-
-
 	Gui, %GuiID%:Default
+
+	Loop, %controlsCount%
+	{		
+		control := controls[A_Index]
+		varName := "var" . A_Index
+		if(control.state)
+		{	
+			state := control.state	
+			if(control.type = "Edit" or control.type = "CheckBox")		
+				GuiControl,, %varName% , %state%
+			if(control.type = "ComboBox")
+				GuiControl, ChooseString, %varName%, %state%
+		}
+	}
 
 	Loop
 		If( inputResult )
@@ -49,7 +70,7 @@ DynamicInputBox(title, guiDefinitions){
 		Result := {}
 		Loop, %controlsCount%
 		{
-			text := controls[A_Index]
+			text := controls[A_Index].name
 			varName := "var" . A_Index
 			value := %varName%
 			Result[text] := value 
@@ -61,6 +82,7 @@ DynamicInputBox(title, guiDefinitions){
   	 inputResult = "Out"
   	return
 
+  	CCancelButton:
   	dynFormGuiEscape:
 	dynFormGuiClose:	
 	  inputResult = "Canceled"

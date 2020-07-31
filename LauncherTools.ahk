@@ -199,7 +199,7 @@ Reload
 Return
 
 F4::
-value := DynamicInputBox("box dinamica", {width: 200, vspace: 32, Margin: 10, controls: ["a", "b", "c", "input field"]})
+value := DynamicInputBox("box dinamica", {width: 200, vspace: 32, Margin: 10, controls: [{name: "flag", type: "CheckBox", value: "flag", state: "1"}, {name: "input field", value: "22"}, {name: "options", type: "ComboBox", state:"c", value: "a|b|c|d"}]})
 if value = "Canceled"
 	MsgBox, , value, %value%
 Else
