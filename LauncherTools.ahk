@@ -199,6 +199,12 @@ Reload
 Return
 
 F4::
-value := DynamicInputBox("box dinamica", {width: 200, vspace: 35, Margin: 10, controls: ["a", "b", "c", "input field"]})
-MsgBox, , Result, %value%
+value := DynamicInputBox("box dinamica", {width: 200, vspace: 32, Margin: 10, controls: ["a", "b", "c", "input field"]})
+if value = "Canceled"
+	MsgBox, , value, %value%
+Else
+	{
+		jsonValue := JSON.Dump(value,,2)
+		MsgBox, , Result Value, %jsonValue%
+	}
 return

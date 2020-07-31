@@ -1,10 +1,12 @@
 DynamicInputBox(title, guiDefinitions){
+	static
 	static inputResult
 	GuiID = dynForm
 
 	width := guiDefinitions.width	
 	margin := guiDefinitions.Margin
 	vspace := guiDefinitions.vspace
+	vminspace := vspace / 2
 	controls := guiDefinitions.controls
 	
 	Gui, %GuiID%:+Toolwindow +AlwaysOnTop HwnddynFormId
@@ -16,9 +18,11 @@ DynamicInputBox(title, guiDefinitions){
 	Loop, %controlsCount%
 	{
 		text := controls[A_Index]
+		varName := "var" . A_Index		
+
 		Gui, %GuiID%:Add, Text, y%ypos% x%margin% w%width%, %text%
-		ypos += 15
-		Gui, %GuiID%:Add, Edit, y%ypos% x%margin% w%width%
+		ypos += vminspace
+		Gui, %GuiID%:Add, Edit, y%ypos% x%margin% v%varName%  w%width%
 		ypos += vspace
 	}
 	
@@ -40,6 +44,17 @@ DynamicInputBox(title, guiDefinitions){
 	inputResult := 
 	Gui, %GuiID%:Submit, Hide
 	Gui %GuiID%:Destroy
+	if Result = "Out"
+	{
+		Result := {}
+		Loop, %controlsCount%
+		{
+			text := controls[A_Index]
+			varName := "var" . A_Index
+			value := %varName%
+			Result[text] := value 
+		}
+	}
   	Return Result
 
   	CInputButton:  	 
