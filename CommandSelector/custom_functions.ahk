@@ -28,10 +28,13 @@ DynamicInputBox(title, guiDefinitions){
 			}
 		varName := "var" . A_Index		
 		value := control.value
+		options := control.options
 
 		Gui, %GuiID%:Add, Text, y%ypos% x%margin% w%width%, %text%
 		ypos += vminspace
-		Gui, %GuiID%:Add, %type%, y%ypos% x%margin% v%varName% w%width%, %value%
+		if(type = "UpDown")
+			Gui, %GuiID%:Add, Edit
+		Gui, %GuiID%:Add, %type%, y%ypos% x%margin% v%varName% w%width% %options%, %value%
 		ypos += vspace	
 	}
 	
@@ -49,11 +52,12 @@ DynamicInputBox(title, guiDefinitions){
 		varName := "var" . A_Index
 		if(control.state)
 		{	
-			state := control.state	
-			if(control.type = "Edit" or control.type = "CheckBox")		
-				GuiControl,, %varName% , %state%
-			if(control.type = "ComboBox")
-				GuiControl, ChooseString, %varName%, %state%
+			state := control.state
+			switch % control.type
+			{
+				case "Edit", "CheckBox", "UpDown", "Slider": GuiControl,, %varName% , %state%
+				case "ComboBox", "ListBox", "DropDownList": GuiControl, ChooseString, %varName%, %state%
+			}			
 		}
 	}
 
