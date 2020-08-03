@@ -199,7 +199,7 @@ Reload
 Return
 
 F4::
-value := DynamicInputBox("box dinamica", {width: 200, vspace: 32, Margin: 10, controls: [{name: "flag", type: "CheckBox", value: "flag", state: "1"}, {name: "input field", value: "22", options: "r5"}, {name: "options", type: "DropDownList", state:"c", value: "a|b|c|d"},{name: "list", type: "ComboBox", state: "d", value: "o|c|f|d"},{name: "numero", type: "Slider", options: "Range1-10 ToolTip", state: "2"}]})
+value := DynamicInputBox("box dinamica", {width: 200, vspace: 32, Margin: 10, controls: [{name: "flag", type: "CheckBox", value: "flag", state: "1"}, {name: "input field", value: "22", options: "r5"}, {name: "options", type: "DropDownList", state:"c", value: "a|b|c|d"},{name: "list", type: "ComboBox", state: "d", value: "o|c|f|d"},{name: "numero", type: "Slider", options: "Range1-10 ToolTip", state: "2"},{name:"server", help:"C:\temporal\servers.txt"}]})
 if value = "Canceled"
 	MsgBox, , value, %value%
 Else

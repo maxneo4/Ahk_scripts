@@ -1,6 +1,6 @@
 DynamicInputBox(title, guiDefinitions){
 	static
-	static inputResult
+	inputResult = 
 	GuiID = dynForm
 
 	width := guiDefinitions.width	
@@ -8,10 +8,20 @@ DynamicInputBox(title, guiDefinitions){
 	vspace := guiDefinitions.vspace
 	vminspace := vspace / 2
 	controls := guiDefinitions.controls
+
+	global helps := {}
 	
 	Gui, %GuiID%:+Toolwindow +AlwaysOnTop HwnddynFormId
-
 	Gui, %GuiID%:Margin, %margin%, %margin%
+
+	Gui, help:New, AlwaysOnTop ToolWindow -DPIScale -Caption	
+	Gui, Font, s10 Arial cA9A9A7
+	Gui, help:Color, EEAA99, 282923
+	Gui +LastFound 
+	WinSet, TransColor, EEAA99
+	Gui, help:Add, ListView, w400 h200 x0 y15 -Multi gListEvent AltSubmit -Hdr vListViewResult HwndLVID, text 
+	LV_SetImageList( DllCall( "ImageList_Create", Int,2, Int, 20, Int,0x18, Int,1, Int,1 ), 1 ) ;set row height to 25
+	
 
 	controlsCount := controls.MaxIndex()
 	ypos := 0
@@ -22,19 +32,20 @@ DynamicInputBox(title, guiDefinitions){
 		type = Edit
 		values := 
 		if(control.type)
-			{
-				type := control.type
-				values := control.values
-			}
-		varName := "var" . A_Index		
+		{
+			type := control.type
+			values := control.values
+		}
+		varName := "var" . A_Index
 		value := control.value
 		options := control.options
+		helps[varName] := control.help
 
 		Gui, %GuiID%:Add, Text, y%ypos% x%margin% w%width%, %text%
 		ypos += vminspace
 		if(type = "UpDown")
 			Gui, %GuiID%:Add, Edit
-		Gui, %GuiID%:Add, %type%, y%ypos% x%margin% v%varName% w%width% %options%, %value%
+		Gui, %GuiID%:Add, %type%, y%ypos% x%margin% v%varName% w%width% %options% gEditChangeEvent, %value%
 		ypos += vspace	
 	}
 	
@@ -55,8 +66,10 @@ DynamicInputBox(title, guiDefinitions){
 			state := control.state
 			switch % control.type
 			{
-				case "Edit", "CheckBox", "UpDown", "Slider": GuiControl,, %varName% , %state%
-				case "ComboBox", "ListBox", "DropDownList": GuiControl, ChooseString, %varName%, %state%
+				case "Edit", "CheckBox", "UpDown", "Slider": 
+					GuiControl,, %varName% , %state%
+				case "ComboBox", "ListBox", "DropDownList": 
+					GuiControl, ChooseString, %varName%, %state%
 			}			
 		}
 	}
@@ -91,6 +104,49 @@ DynamicInputBox(title, guiDefinitions){
 	dynFormGuiClose:	
 	  inputResult = "Canceled"
 	Return
+}
+
+EditChangeEvent(CtrlHwnd, GuiEvent, EventInfo, ErrLevel:=""){
+	global helps 
+	controlDef := A_GuiControl
+	help := helps[controlDef]
+
+	if(help)
+	{
+		GuiControlGet, Search,, %CtrlHwnd% 
+		Search := Trim(Search)
+		arrayWords := StrSplit(Search, A_Space)
+		
+		Gui, help:Default
+		LV_Delete()
+
+		Loop, Read, %help%
+		{	
+			line := A_LoopReadLine				
+			LV_Add("", line) ;fisrt tags, second value
+		}
+
+		CoordMode, Caret, Screen
+		Gui, +Owner ;+OwnDialogs
+		Gui, show, AutoSize x%A_CaretX% y%A_CaretY% , dynamicHelp	
+	}	
+
+	Loop, % valueCSjson.Commands.MaxIndex()  
+	{
+		item := valueCSjson.Commands[A_Index]
+		FilterItem(item, arrayWords)
+	}
+	Loop, % defaultCommands.MaxIndex()  
+	{
+		item := defaultCommands[A_Index]
+		FilterItem(item, arrayWords )
+	} 
+	
+	selectFirstRow()  
+}
+
+ListEvent(){
+
 }
 
 
