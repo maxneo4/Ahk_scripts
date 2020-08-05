@@ -1,7 +1,10 @@
 DynamicInputBox(title, guiDefinitions){
+
 	static
 	inputResult = 
 	GuiID = dynForm
+
+	global dynTitle := title
 
 	width := guiDefinitions.width	
 	margin := guiDefinitions.Margin
@@ -11,7 +14,7 @@ DynamicInputBox(title, guiDefinitions){
 
 	global helps := {}
 	
-	Gui, %GuiID%:+Toolwindow +AlwaysOnTop HwnddynFormId
+	Gui, %GuiID%: +AlwaysOnTop HwnddynFormId -Caption
 	Gui, %GuiID%:Margin, %margin%, %margin%
 
 	Gui, help:New, AlwaysOnTop ToolWindow -DPIScale -Caption	
@@ -108,6 +111,8 @@ DynamicInputBox(title, guiDefinitions){
 
 EditChangeEvent(CtrlHwnd, GuiEvent, EventInfo, ErrLevel:=""){
 	global helps 
+	global dynTitle
+
 	controlDef := A_GuiControl
 	help := helps[controlDef]
 
@@ -122,13 +127,19 @@ EditChangeEvent(CtrlHwnd, GuiEvent, EventInfo, ErrLevel:=""){
 
 		Loop, Read, %help%
 		{	
-			line := A_LoopReadLine				
-			LV_Add("", line) ;fisrt tags, second value
+			line := A_LoopReadLine
+			if(ContainsAllWords(line, arrayWords))			
+				LV_Add("", line) ;fisrt tags, second value
 		}
 
 		CoordMode, Caret, Screen
-		Gui, +Owner ;+OwnDialogs
-		Gui, show, AutoSize x%A_CaretX% y%A_CaretY% , dynamicHelp	
+		Gui, +OwnerdynForm ;+Owner{OtherGui}
+
+		IfWinNotExist, dynamicHelp
+			{
+				Gui, show, AutoSize x%A_CaretX% y%A_CaretY% , dynamicHelp
+				WinActivate, %dynTitle%
+			}
 	}	
 
 	Loop, % valueCSjson.Commands.MaxIndex()  
