@@ -1,5 +1,4 @@
 DynamicInputBox(title, guiDefinitions){
-
 	static
 	inputResult = 
 	GuiID = dynForm
@@ -84,7 +83,7 @@ DynamicInputBox(title, guiDefinitions){
 	Result := inputResult
 	inputResult := 
 	Gui, %GuiID%:Submit, Hide
-	Gui %GuiID%:Destroy
+	Gui %GuiID%:Destroy 
 	if Result = "Out"
 	{
 		Result := {}
@@ -128,7 +127,7 @@ EditChangeEvent(CtrlHwnd, GuiEvent, EventInfo, ErrLevel:=""){
 		Loop, Read, %help%
 		{	
 			line := A_LoopReadLine
-			if(ContainsAllWords(line, arrayWords))			
+			if(ContainsAllWords(line, arrayWords) or Search = "")			
 				LV_Add("", line) ;fisrt tags, second value
 		}
 
@@ -136,31 +135,16 @@ EditChangeEvent(CtrlHwnd, GuiEvent, EventInfo, ErrLevel:=""){
 		Gui, +OwnerdynForm ;+Owner{OtherGui}
 
 		IfWinNotExist, dynamicHelp
-			{
-				Gui, show, AutoSize x%A_CaretX% y%A_CaretY% , dynamicHelp
-				WinActivate, %dynTitle%
-			}
-	}	
-
-	Loop, % valueCSjson.Commands.MaxIndex()  
-	{
-		item := valueCSjson.Commands[A_Index]
-		FilterItem(item, arrayWords)
+		{
+			Gui, show, AutoSize x%A_CaretX% y%A_CaretY% , dynamicHelp
+			WinActivate, %dynTitle%
+		}		
 	}
-	Loop, % defaultCommands.MaxIndex()  
-	{
-		item := defaultCommands[A_Index]
-		FilterItem(item, arrayWords )
-	} 
-	
-	selectFirstRow()  
 }
 
 ListEvent(){
 
 }
-
-
 
 ContainsAllWords(value, arrayWords){	
 	maxIndex := arrayWords.MaxIndex()
