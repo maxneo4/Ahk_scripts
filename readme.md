@@ -43,6 +43,7 @@ https://the-automator.com/xml-parsing-is-super-easy-with-this-autohotkey-class/
 
 ### Base urls
 
+- https://www.autohotkey.com/docs/Scripts.htm#continuation
 - https://www.autohotkey.com/docs/commands/Hotkey.htm
 - https://www.autohotkey.com/docs/objects/Object.htm
 - https://www.autohotkey.com/docs/Variables.htm
