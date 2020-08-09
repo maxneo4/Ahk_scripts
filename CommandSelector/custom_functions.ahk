@@ -125,18 +125,18 @@ EditChangeEvent(CtrlHwnd, GuiEvent, EventInfo, ErrLevel:=""){
 	controlDef := A_GuiControl
 	help := helps[controlDef]
 	list := lists[controlDef]
-
-	Control ShowDropDown,,, ahk_id %CtrlHwnd%
-	;Control HideDropDown,,, ahk_id %hCbx1%
-	;https://www.autohotkey.com/boards/viewtopic.php?t=24393
-
+	
 	if(help)
-	{
+	{		
+		;Control HideDropDown,,, ahk_id %hCbx1%
+		;https://www.autohotkey.com/boards/viewtopic.php?t=24393
 		GuiControlGet, Search,, %CtrlHwnd% 
+		if(StrLen(Search) > 1)
+			Control ShowDropDown,,, ahk_id %CtrlHwnd%
 
 		listByComma := StrReplace(list, "|", ",")
 		if Search not in %listByComma%
-		{
+		{			
 			Search := Trim(Search)
 			arrayWords := StrSplit(Search, A_Space)
 							
@@ -146,7 +146,10 @@ EditChangeEvent(CtrlHwnd, GuiEvent, EventInfo, ErrLevel:=""){
 
 			newValue := parseHelp(help, arrayWords, Search)
 			GuiControl, , %CtrlHwnd%, %newValue%
+			if !InStr(newValue, "|")
+				SendInput, {Down}
 		}
+
 	}
 }
 
