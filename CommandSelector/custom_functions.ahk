@@ -1,32 +1,21 @@
 DynamicInputBox(title, guiDefinitions){
 	static
 	inputResult = 
-	GuiID = dynForm
+	global helps := {}
+	global lists := {}
 
-	global dynTitle := title
+	Gui, dynForm:Default	
+	Gui, +AlwaysOnTop ToolWindow HwnddynFormId 
+	Gui, Margin, %margin%, %margin%
 
 	width := guiDefinitions.width	
 	margin := guiDefinitions.Margin
 	vspace := guiDefinitions.vspace
 	vminspace := vspace / 2
 	controls := guiDefinitions.controls
-
-	global helps := {}
-	
-	Gui, %GuiID%: +AlwaysOnTop HwnddynFormId -Caption
-	Gui, %GuiID%:Margin, %margin%, %margin%
-
-	Gui, help:New, AlwaysOnTop ToolWindow -DPIScale -Caption	
-	Gui, Font, s10 Arial cA9A9A7
-	Gui, help:Color, EEAA99, 282923
-	Gui +LastFound 
-	WinSet, TransColor, EEAA99
-	Gui, help:Add, ListView, w400 h200 x0 y15 -Multi gListEvent AltSubmit -Hdr vListViewResult HwndLVID, text 
-	LV_SetImageList( DllCall( "ImageList_Create", Int,2, Int, 20, Int,0x18, Int,1, Int,1 ), 1 ) ;set row height to 25
-	
-
 	controlsCount := controls.MaxIndex()
 	ypos := 0
+
 	Loop, %controlsCount%
 	{		
 		control := controls[A_Index]
@@ -43,21 +32,31 @@ DynamicInputBox(title, guiDefinitions){
 		options := control.options
 		helps[varName] := control.help
 
-		Gui, %GuiID%:Add, Text, y%ypos% x%margin% w%width%, %text%
+		if(type != "CheckBox")
+			Gui, Add, Text, y%ypos% x%margin% w%width%, %text%
+		Else
+			value := text
+
+		if(type = "ComboBox")
+		{
+			helpPath := control.help
+			value := parseHelp(helpPath)
+			lists[varName] := value		
+		}
+
 		ypos += vminspace
+
 		if(type = "UpDown")
-			Gui, %GuiID%:Add, Edit
-		Gui, %GuiID%:Add, %type%, y%ypos% x%margin% v%varName% w%width% %options% gEditChangeEvent, %value%
+			Gui, Add, Edit
+		Gui, Add, %type%, y%ypos% x%margin% v%varName% w%width% %options% gEditChangeEvent, %value%
 		ypos += vspace	
 	}
 	
 	yButton := controlsCount * 1.5 * vspace
-	Gui, %GuiID%:Add, Button, y%yButton%  gCInputButton Default, % "OK"
-	Gui, %GuiID%:Add, Button, y%ybutton%  gCCancelButton, % "Cancel"
+	Gui, Add, Button, y%yButton%  gCInputButton Default, % "OK"
+	Gui, Add, Button, y%ybutton%  gCCancelButton, % "Cancel"
 	
-
-	Gui %GuiID%:Show,,%title%
-	Gui, %GuiID%:Default
+	Gui Show,,%title%
 
 	Loop, %controlsCount%
 	{		
@@ -82,8 +81,8 @@ DynamicInputBox(title, guiDefinitions){
 
 	Result := inputResult
 	inputResult := 
-	Gui, %GuiID%:Submit, Hide
-	Gui %GuiID%:Destroy 
+	Gui, Submit, Hide
+	Gui Destroy 
 	if Result = "Out"
 	{
 		Result := {}
@@ -108,42 +107,47 @@ DynamicInputBox(title, guiDefinitions){
 	Return
 }
 
+parseHelp(path, arrayWords = "", Search = ""){
+	result := ""
+	Loop, Read, %path%
+	{	
+		line := A_LoopReadLine
+		if(ContainsAllWords(line, arrayWords) or Search = "")			
+			result := result . "|" . line 
+	}
+	return SubStr(result, 2)
+}
+
 EditChangeEvent(CtrlHwnd, GuiEvent, EventInfo, ErrLevel:=""){
 	global helps 
-	global dynTitle
-
+	global lists
+	
 	controlDef := A_GuiControl
 	help := helps[controlDef]
+	list := lists[controlDef]
+
+	Control ShowDropDown,,, ahk_id %CtrlHwnd%
+	;Control HideDropDown,,, ahk_id %hCbx1%
+	;https://www.autohotkey.com/boards/viewtopic.php?t=24393
 
 	if(help)
 	{
 		GuiControlGet, Search,, %CtrlHwnd% 
-		Search := Trim(Search)
-		arrayWords := StrSplit(Search, A_Space)
-		
-		Gui, help:Default
-		LV_Delete()
 
-		Loop, Read, %help%
-		{	
-			line := A_LoopReadLine
-			if(ContainsAllWords(line, arrayWords) or Search = "")			
-				LV_Add("", line) ;fisrt tags, second value
-		}
-
-		CoordMode, Caret, Screen
-		Gui, +OwnerdynForm ;+Owner{OtherGui}
-
-		IfWinNotExist, dynamicHelp
+		listByComma := StrReplace(list, "|", ",")
+		if Search not in %listByComma%
 		{
-			Gui, show, AutoSize x%A_CaretX% y%A_CaretY% , dynamicHelp
-			WinActivate, %dynTitle%
-		}		
+			Search := Trim(Search)
+			arrayWords := StrSplit(Search, A_Space)
+							
+			listItems := StrSplit(list, "|")		
+			Loop, % listItems.MaxIndex()
+				Control, Delete, 1,, % "ahk_id " . CtrlHwnd 
+
+			newValue := parseHelp(help, arrayWords, Search)
+			GuiControl, , %CtrlHwnd%, %newValue%
+		}
 	}
-}
-
-ListEvent(){
-
 }
 
 ContainsAllWords(value, arrayWords){	
