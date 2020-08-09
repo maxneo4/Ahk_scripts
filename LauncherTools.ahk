@@ -4,6 +4,7 @@
 #SingleInstance Force
 SendMode Input
 SetWorkingDir %A_ScriptDir%
+FileEncoding, UTF-8
 FileCreateShortcut, %A_ScriptFullPath%, %A_Startup%\LauncherToolsShortCut.lnk, %A_ScriptDir%
 
 full_command_line := DllCall("GetCommandLine", "str")
@@ -199,7 +200,7 @@ Reload
 Return
 
 F4::
-controls := [{name: "flag", type: "CheckBox", state: "1"}, {name: "input field", value: "22", options: ""}, {name: "options", type: "DropDownList", state:"c", value: "a|b|c|d"},{name: "list", type: "ComboBox", state: "d", value: "o|c|f|d"},{name: "numero", type: "Slider", options: "Range1-10 ToolTip", state: "2"},{name:"server",type: "ComboBox", help:"C:\temporal\servers.txt"}, {name:"serverB",type: "ComboBox", help:"C:\temporal\servers.txt"}]
+controls := [{name: "flag", type: "CheckBox", state: "1"}, {name: "input field", value: "22", options: ""}, {name: "options", type: "DropDownList", state:"c", value: "a|b|c|d"},{name: "list", type: "ComboBox", state: "qu", help: "C:\temporal\compras.txt"},{name: "numero", type: "Slider", options: "Range1-10 ToolTip", state: "2"},{name:"server",type: "ComboBox", help:"C:\temporal\servers.txt"}, {name:"serverB",type: "ComboBox", help:"C:\temporal\servers.txt"}]
 value := DynamicInputBox("box dinamica", {width: 200, vspace: 32, Margin: 10, controls: controls })
 if value = "Canceled"
 	MsgBox, , value, %value%

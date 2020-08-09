@@ -4,10 +4,6 @@ DynamicInputBox(title, guiDefinitions){
 	global helps := {}
 	global lists := {}
 
-	Gui, dynForm:Default	
-	Gui, +AlwaysOnTop ToolWindow HwnddynFormId 
-	Gui, Margin, %margin%, %margin%
-
 	width := guiDefinitions.width	
 	margin := guiDefinitions.Margin
 	vspace := guiDefinitions.vspace
@@ -16,21 +12,27 @@ DynamicInputBox(title, guiDefinitions){
 	controlsCount := controls.MaxIndex()
 	ypos := 0
 
+	Gui, dynForm:Default	
+	Gui, +AlwaysOnTop ToolWindow 
+	Gui, Margin, %margin%, %margin%
+
 	Loop, %controlsCount%
 	{		
 		control := controls[A_Index]
 		text := control.name
 		type = Edit
-		values := 
+		values := 		
+		varName := "var" . A_Index
+		value := control.value
+		options := control.options
+		helpPath := control.help
+		helps[varName] := helpPath
+
 		if(control.type)
 		{
 			type := control.type
 			values := control.values
 		}
-		varName := "var" . A_Index
-		value := control.value
-		options := control.options
-		helps[varName] := control.help
 
 		if(type != "CheckBox")
 			Gui, Add, Text, y%ypos% x%margin% w%width%, %text%
@@ -38,8 +40,7 @@ DynamicInputBox(title, guiDefinitions){
 			value := text
 
 		if(type = "ComboBox")
-		{
-			helpPath := control.help
+		{			
 			value := parseHelp(helpPath)
 			lists[varName] := value		
 		}
@@ -88,10 +89,10 @@ DynamicInputBox(title, guiDefinitions){
 		Result := {}
 		Loop, %controlsCount%
 		{
-			text := controls[A_Index].name
+			controlName := controls[A_Index].name
 			varName := "var" . A_Index
 			value := %varName%
-			Result[text] := value 
+			Result[controlName] := value 
 		}
 	}
   	Return Result
@@ -131,12 +132,10 @@ EditChangeEvent(CtrlHwnd, GuiEvent, EventInfo, ErrLevel:=""){
 		;Control HideDropDown,,, ahk_id %hCbx1%
 		;https://www.autohotkey.com/boards/viewtopic.php?t=24393
 		GuiControlGet, Search,, %CtrlHwnd% 
-		if(StrLen(Search) > 1)
-			Control ShowDropDown,,, ahk_id %CtrlHwnd%
-
+				
 		listByComma := StrReplace(list, "|", ",")
 		if Search not in %listByComma%
-		{			
+		{		
 			Search := Trim(Search)
 			arrayWords := StrSplit(Search, A_Space)
 							
@@ -146,9 +145,16 @@ EditChangeEvent(CtrlHwnd, GuiEvent, EventInfo, ErrLevel:=""){
 
 			newValue := parseHelp(help, arrayWords, Search)
 			GuiControl, , %CtrlHwnd%, %newValue%
+			lists[controlDef] := newValue
 			if !InStr(newValue, "|")
 				SendInput, {Down}
+
+			if(StrLen(Search) > 1 && newValue)			
+				Control ShowDropDown,,, ahk_id %CtrlHwnd%
 		}
+		;Else
+			;Control HideDropDown,,, ahk_id %CtrlHwnd%	
+
 
 	}
 }
