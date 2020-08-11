@@ -2,7 +2,7 @@ DynamicInputBox(title, guiDefinitions){
 	static
 	inputResult = 
 	global helps := {}
-	global lists := {}
+	global lists := {}	
 
 	width := guiDefinitions.width	
 	margin := guiDefinitions.Margin
@@ -26,7 +26,9 @@ DynamicInputBox(title, guiDefinitions){
 		value := control.value
 		options := control.options
 		helpPath := control.help
-		helps[varName] := helpPath
+		FileRead, helpContent, %helpPath%		
+		helpContent := StrSplit(helpContent, "`r`n")
+		helps[varName] := helpContent
 
 		if(control.type)
 		{
@@ -41,7 +43,7 @@ DynamicInputBox(title, guiDefinitions){
 
 		if(type = "ComboBox")
 		{			
-			value := parseHelp(helpPath)
+			value := parseHelp(helpContent)
 			lists[varName] := value		
 		}
 
@@ -76,6 +78,10 @@ DynamicInputBox(title, guiDefinitions){
 		}
 	}
 
+	Hotkey, IfWinExist, %title%
+	Hotkey, ^Space, openDropDown, On
+	Hotkey, if
+
 	Loop
 		If( inputResult )
 			Break
@@ -108,34 +114,44 @@ DynamicInputBox(title, guiDefinitions){
 	Return
 }
 
-parseHelp(path, arrayWords = "", Search = ""){
+parseHelp(arrayHelpContent, arrayWords = "", Search = ""){
 	result := ""
-	Loop, Read, %path%
+	Loop, % arrayHelpContent.MaxIndex()
 	{	
-		line := A_LoopReadLine
+		line := arrayHelpContent[A_Index]
 		if(ContainsAllWords(line, arrayWords) or Search = "")			
 			result := result . "|" . line 
 	}
 	return SubStr(result, 2)
 }
 
+openDropDown(){
+	global currentHwnd
+	Control ShowDropDown,,, ahk_id %currentHwnd%
+}
+
 EditChangeEvent(CtrlHwnd, GuiEvent, EventInfo, ErrLevel:=""){
 	global helps 
 	global lists
-	
+	global currentHwnd := CtrlHwnd
+		
 	controlDef := A_GuiControl
-	help := helps[controlDef]
+	helpContent := helps[controlDef]
 	list := lists[controlDef]
 	
-	if(help)
+	if(helpContent)
 	{		
 		;Control HideDropDown,,, ahk_id %hCbx1%
 		;https://www.autohotkey.com/boards/viewtopic.php?t=24393
 		GuiControlGet, Search,, %CtrlHwnd% 
+		
+		if(selectedText)
+			MsgBox, , Title, % SelectedText
 				
 		listByComma := StrReplace(list, "|", ",")
 		if Search not in %listByComma%
 		{		
+			;Control ShowDropDown,,, ahk_id %CtrlHwnd%
 			Search := Trim(Search)
 			arrayWords := StrSplit(Search, A_Space)
 							
@@ -143,19 +159,15 @@ EditChangeEvent(CtrlHwnd, GuiEvent, EventInfo, ErrLevel:=""){
 			Loop, % listItems.MaxIndex()
 				Control, Delete, 1,, % "ahk_id " . CtrlHwnd 
 
-			newValue := parseHelp(help, arrayWords, Search)
+			newValue := parseHelp(helpContent, arrayWords, Search)
 			GuiControl, , %CtrlHwnd%, %newValue%
 			lists[controlDef] := newValue
-			if !InStr(newValue, "|")
-				SendInput, {Down}
+			;if !InStr(newValue, "|")
+			;	SendInput, {Down}
 
-			if(StrLen(Search) > 1 && newValue)			
+			if(StrLen(Search) > 4 && newValue)			
 				Control ShowDropDown,,, ahk_id %CtrlHwnd%
 		}
-		;Else
-			;Control HideDropDown,,, ahk_id %CtrlHwnd%	
-
-
 	}
 }
 

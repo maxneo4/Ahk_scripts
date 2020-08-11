@@ -22,6 +22,8 @@ InitRememberList() {
 	Gui, Font, s10 Arial cA9A9A7
 	Gui, rl:Color, EEAA99, F3282923
 	Gui +LastFound 
+
+	
 	WinSet, TransColor, EEAA99 220
 	Gui, rl:Add, ListView, w600 h300 x0 y25 -Multi gListViewRLEvent AltSubmit -Hdr vLV2 HwndLVRLID, tag|item|order ;important diff v and Hwn
 	LV_SetImageList( DllCall( "ImageList_Create", Int,2, Int, 20, Int,0x18, Int,1, Int,1 ), 1 ) ;set row height to 25
