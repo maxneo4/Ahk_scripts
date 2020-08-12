@@ -162,10 +162,10 @@ EditChangeEvent(CtrlHwnd, GuiEvent, EventInfo, ErrLevel:=""){
 			newValue := parseHelp(helpContent, arrayWords, Search)
 			GuiControl, , %CtrlHwnd%, %newValue%
 			lists[controlDef] := newValue
-			;if !InStr(newValue, "|")
-			;	SendInput, {Down}
+			if !InStr(newValue, "|")
+				SendInput, {Down}
 
-			if(StrLen(Search) > 4 && newValue)			
+			if(StrLen(Search) > 3 && newValue)			
 				Control ShowDropDown,,, ahk_id %CtrlHwnd%
 		}
 	}
