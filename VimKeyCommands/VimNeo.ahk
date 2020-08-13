@@ -19,7 +19,7 @@
 	WinSet, TransColor, EEAA99 100	
 	
 	Hotkey, IfWinNotExist, VimT		
-	Hotkey, ~Escape, DoubleKeyToActivate, On
+	Hotkey, ~+Escape, DoubleKeyToActivate, On
 		
 	global fn := Func("VimIsEnabled")	
 	Hotkey, If, % fn
@@ -97,7 +97,7 @@
 	Hotkey, if	
 	
 	DoubleKeyToActivate:
-	if(DoubleKey("Escape"))
+	if(DoubleKey("+Escape"))
 		EnableVim()
 	return	
 }

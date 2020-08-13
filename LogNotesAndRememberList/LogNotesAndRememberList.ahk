@@ -62,11 +62,11 @@ InitRememberList() {
 WaitSubCommandKeys(){
 Help =
 (
-la, li, lo, ld   cs, ce, cc, co, cd, 
- ra, ro,  ga, go, gi  ws, wd, wo
+la, li, lo   cs, ce, cc, co  ra, ro 
+ga, go, gi   ws, wd, wo, wc
 )
 	SplashTextOn, , 40, Waiting command, %Help%	
-	Input, text, L3 T3, , la,li,lo,ld,cs,co,cd,ra,ro,ce,cc,ga,go,gi,ws,wd,wo
+	Input, text, L3 T3, , la,li,lo,cs,co,ra,ro,ce,cc,ga,go,gi,ws,wd,wo,wc
 	SplashTextOff
 	if(ErrorLevel != "Match")
 		MsgBox, , Not match, % ErrorLevel . " value:" . text	
@@ -75,21 +75,20 @@ la, li, lo, ld   cs, ce, cc, co, cd,
 	{
 		case "la": addSelectedToLog()
 		case "li": InputToLog()
-		case "lo": openTodayLog()
-		case "ld": openLogByDate()
+		case "lo": openTodayLog()		
 		case "cs": addCaptureToLog()
 		case "ce": openCaptureEdit()
 		case "cc": clipboardCaptureToLog()
-		case "co": openScreenCaptureLog()
-		case "cd": openScreenCaptureByDate()
+		case "co": openScreenCaptureLog()		
 		case "ra": addSelectedTextToList()
 		case "ro": openRememberList()
 		case "ga": addSelectedTextToGlobalList()
 		case "go": openGlobalRememberList()
-		case "gi": invokeGlobalRememberList()
+		case "gi": invokeGlobalRememberList(false)
 		case "ws": changeLogNotesRememberWorkSpaceFolder()
 		case "wd": restoreLogNotesRememberWorkSpaceFolder()
 		case "wo": showCurrentWorkspace()
+		case "wc": copyPathCurrentWorkspace()
 	}
 }
 
@@ -122,15 +121,6 @@ openTodayLog(){
 		Run, %folder%\%DateString%.txt
 	else
 		showFailMessage(DateString ".txt is not created!", 1500)
-	return 
-}
-
-
-;open by selected date
-openLogByDate(){
-	global mode
-	mode := "file"
-	openCalendar()
 	return 
 }
 
@@ -168,13 +158,6 @@ openScreenCaptureLog(){
 	return
 }
 
-openScreenCaptureByDate(){
-	global mode
-	mode := "folder"
-	openCalendar()
-	return
-}
-
 addToLog(){	
 	global folder
 	global defaultFolder
@@ -185,64 +168,30 @@ addToLog(){
 		FileAppend, >>[%TimeString%] (%folder%) `r`n%Clipboard%`r`n`r`n, %defaultFolder%\%DateString%.txt		
 }
 
-openCalendar(){
-	global MyCalendar
-	Gui, dt:New, AlwaysOnTop ToolWindow -DPIScale -Caption
-	Gui, dt:Add, MonthCal, vMyCalendar
-	Gui, Font, s10
-	Gui, dt:Add, Button, gSelectedDate x100, Ok
-	Gui, Show
-	return
-}
-
-selectedDate(){
-	global folder
-	global mode
-	global MyCalendar
-	Gui, dt:Submit ; important when selected date is today
-	FormatTime, DateString, %MyCalendar%000000 , ddMMMyyyy
-	Gui, dt:Hide
-	if(mode = "file")
-	{
-		IfExist, %folder%\%DateString%.txt
-			Run, %folder%\%DateString%.txt
-		else
-			showFailMessage(DateString ".txt is not created!", 2000)
-	}
-	if(mode = "folder")
-	{
-		IfExist, %folder%\%DateString%
-			Run, %folder%\%DateString%
-		else
-			showFailMessage(DateString " images log not created!", 2000)
-	}
-	return
-}
-
 ;REMEMBER LIST
 
 invokeRememberList(){
 	global rememberListFile	
 	global isGlobalWorking
 	isGlobalWorking = false
-	invokeRememberListByPath(rememberListFile)
+	invokeRememberListByPath(rememberListFile, true)
 }
 
-invokeGlobalRememberList(){
+invokeGlobalRememberList(showInCaret = true){
 	global gRememberListFile
 	global isGlobalWorking
 	isGlobalWorking = true
-	invokeRememberListByPath(gRememberListFile)
+	invokeRememberListByPath(gRememberListFile, showInCaret)
 }
 
-invokeRememberListByPath(rememberListFile){	
+invokeRememberListByPath(rememberListFile, showInCaret){	
 	global FilterId
 	global rememberListFileParam := rememberListFile
 	UpdateRememberFilter()
 	CoordMode, Caret, Screen 
 	GuiControl, ,%FilterId% 	
 	Sleep, 100
-	if A_CaretX	
+	if A_CaretX	and showInCaret
 		Gui, rl:show, AutoSize x%A_CaretX% y%A_CaretY% ,rememberListWindow	
 	else
 		Gui, rl:show, AutoSize Center , rememberListWindow
@@ -403,6 +352,11 @@ restoreLogNotesRememberWorkSpaceFolder(){
 showCurrentWorkspace(){
 	global folder
 	Run, %folder%
+}
+
+copyPathCurrentWorkspace(){
+	global folder
+	Clipboard := folder
 }
 
 RememberListHide(){

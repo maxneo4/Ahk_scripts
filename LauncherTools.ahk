@@ -81,7 +81,7 @@ return
 ^F1::
 helpText = 
 (
-V 0.62
+V 0.63
 # CommandSelector
 
 ALT+SPACE : abre selector de comandos
@@ -101,7 +101,7 @@ CTRL+ SHIFT + DOWN : remueve todas las ventanas del gestor
 --------------------------------------------------------------
 
 # Vim mode
-Double ESC to activate
+Double SHIFT + ESC to activate
 ESC : exit Vim mode
 F1 : Vim Help (Only when Vim mode is activated)
 
@@ -126,7 +126,7 @@ Return
 +F1::
 helpText = 
 (
-V 0.62
+V 0.63
 Master command = (CTRL+ALT+SPACE = ALT GR+SPACE), CTRL+SHIFT+SPACE(to avoid to close popups)
 Master command = MC
 ----------------------------------------------------------------
@@ -135,19 +135,18 @@ Master command = MC
 MC => LA: [Log add] agregar texto seleccionado al log
 MC => LI: [Log input] abre caja de texto para escribir directamente al log
 MC => LO: [Log open] abrir log del dia actual
-MC => LD: [Log date] abrir log por fecha del calendario
 
 # Images notes #
 MC => CS: [Capture screen] agregar captura de pantalla al log de imagenes
 MC => CE: [Capture edit] envia CTRL+PrintScreen captura region con ShareX
 MC => CC: [Capture clipboard] guarda una imagen del portapapeles al log
 MC => CO: [Capture open] abrir log de imagenes del dia actual
-MC => CD: [Capture date] abrir log de imagenes por fecha del calendario
 
 # Workspace #
 MC => WS: [Workspace Set] set current folder as Workspace
 MC => WO: [Worksace Open] open current workspace
 MC => WD: [Workspace Default] set workspace to default value again
+MC => WC: [Workspace Copy] copy workspace path to clipboard
 
 ----------------------------------------------------------------
 # Remember list #
