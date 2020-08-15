@@ -26,9 +26,12 @@ DynamicInputBox(title, guiDefinitions){
 		value := control.value
 		options := control.options
 		helpPath := control.help
-		FileRead, helpContent, %helpPath%		
-		helpContent := StrSplit(helpContent, "`r`n")
-		helps[varName] := helpContent
+		if(helpPath)
+		{
+			FileRead, helpContent, %helpPath%		
+			helpContent := StrSplit(helpContent, "`r`n")
+			helps[varName] := helpContent
+		}		
 
 		if(control.type)
 		{
