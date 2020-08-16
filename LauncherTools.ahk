@@ -36,6 +36,8 @@ global commandsPath = "CommandSelector\commands.json"
 
 #Include Ahk Resources\AhkLibs\SelectedPath.ahk
 #include CustomFunctions\custom_functions.ahk
+#include CustomFunctions\explorer_functions.ahk
+#include CustomFunctions\form_functions.ahk
 
 #include CommandSelector\CommandSelector.ahk
 InitCommandSelector(commandsPath)
