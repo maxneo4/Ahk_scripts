@@ -42,7 +42,8 @@ DynamicInputBox(title, guiDefinitions, storeFileIni=""){
 		{
 			type := control.type
 			values := control.values
-		}
+		}Else
+			control["type"] := "Edit"
 
 		if(type != "CheckBox")
 			Gui, Add, Text, y%ypos% x%margin% w%width%, %text%
@@ -79,30 +80,34 @@ DynamicInputBox(title, guiDefinitions, storeFileIni=""){
 			storedData[key] := pair[2]
 		}		
 	}
+	
 
-	WinGet, ListControl, ControlList, %title%
-	ExploreVar(ListControl)
-
+	editNumber := 0
 	Loop, %controlsCount%
 	{		
 		control := controls[A_Index]
 		varName := "var" . A_Index
 		controlName := control.name	
+		controlType := control.type
 		storedValue := storedData[controlName]	 
 		state := (storedValue)? storedValue: control.state
-		
+				
+		if controlType in Edit,ComboBox,UpDown
+			editNumber := editNumber + 1
+
 		if(state)
 		{						
-			switch % control.type
+			switch % controlType
 			{
-				case "Edit", "CheckBox", "UpDown", "Slider": 
-					;GuiControl,, %varName% , %state%}
-					ControlSetText, Edit1, %state%, %title%
-				case "ComboBox", "ListBox", "DropDownList": 
+				case "CheckBox", "UpDown", "Slider": 
+					GuiControl, , %varName% , %state%
+				case "Edit", "ComboBox":
+						ControlSetText, Edit%EditNumber%, %state%, %title%
+				case "DropDownList", "ListBox": 
 					GuiControl, ChooseString, %varName%, %state%
 			}			
 		}
-	}
+	}	
 
 	Hotkey, IfWinExist, %title%
 	Hotkey, ^Space, openDropDown, On
