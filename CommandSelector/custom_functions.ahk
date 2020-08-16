@@ -79,8 +79,7 @@ DynamicInputBox(title, guiDefinitions, storeFileIni=""){
 			key := pair[1]
 			storedData[key] := pair[2]
 		}		
-	}
-	
+	}	
 
 	editNumber := 0
 	Loop, %controlsCount%
@@ -129,7 +128,14 @@ DynamicInputBox(title, guiDefinitions, storeFileIni=""){
 			controlName := controls[A_Index].name
 			varName := "var" . A_Index
 			value := %varName%
-			Result[controlName] := value 
+			Result[controlName] := value
+			storedData[controlName] := value
+		}
+		if(storeFileIni)
+		{
+			FileDelete, %storeFileIni%
+			For key, value in storedData
+    			FileAppend, %key%=%value%`r`n, %storeFileIni%
 		}
 	}
   	Return Result
@@ -171,9 +177,7 @@ EditChangeEvent(CtrlHwnd, GuiEvent, EventInfo, ErrLevel:=""){
 	list := lists[controlDef]
 	
 	if(helpContent)
-	{		
-		;Control HideDropDown,,, ahk_id %hCbx1%
-		;https://www.autohotkey.com/boards/viewtopic.php?t=24393
+	{				
 		GuiControlGet, Search,, %CtrlHwnd% 
 		
 		if(selectedText)
