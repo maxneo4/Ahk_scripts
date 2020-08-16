@@ -1,4 +1,9 @@
-DynamicInputBox(title, guiDefinitions){
+ExploreVar(varValue){
+	jsonValue := JSON.Dump(varValue)
+	MsgBox, , Var value, % jsonValue
+}
+
+DynamicInputBox(title, guiDefinitions, storeFileIni=""){
 	static
 	inputResult = 
 	global helps := {}
@@ -64,17 +69,35 @@ DynamicInputBox(title, guiDefinitions){
 	
 	Gui Show,,%title%
 
+	if(storeFileIni)
+	{
+		storedData := {}
+		loop, Read, %storeFileIni%
+		{
+			pair := StrSplit(A_LoopReadLine, "=")
+			key := pair[1]
+			storedData[key] := pair[2]
+		}		
+	}
+
+	WinGet, ListControl, ControlList, %title%
+	ExploreVar(ListControl)
+
 	Loop, %controlsCount%
 	{		
 		control := controls[A_Index]
 		varName := "var" . A_Index
-		if(control.state)
-		{	
-			state := control.state
+		controlName := control.name	
+		storedValue := storedData[controlName]	 
+		state := (storedValue)? storedValue: control.state
+		
+		if(state)
+		{						
 			switch % control.type
 			{
 				case "Edit", "CheckBox", "UpDown", "Slider": 
-					GuiControl,, %varName% , %state%
+					;GuiControl,, %varName% , %state%}
+					ControlSetText, Edit1, %state%, %title%
 				case "ComboBox", "ListBox", "DropDownList": 
 					GuiControl, ChooseString, %varName%, %state%
 			}			
@@ -138,7 +161,7 @@ EditChangeEvent(CtrlHwnd, GuiEvent, EventInfo, ErrLevel:=""){
 	global lists
 	global currentHwnd := CtrlHwnd
 		
-	controlDef := A_GuiControl
+	controlDef := A_GuiControl	
 	helpContent := helps[controlDef]
 	list := lists[controlDef]
 	

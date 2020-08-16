@@ -84,9 +84,9 @@ InitVimNeo()
 	Hotkey, ^k, moveFastMouseUp, On
 	Hotkey, ^l, moveFastMouseRight, On
 	
-	;"ñ" removed cause error in some computers	
+	;"ñ","?","¿" removed cause error in some computers	
 	;"m","n"
-	nullKeys := ["Space","a","e","f","g","t","1","2","3","4","5","6","7","8","9",";","-","_","{","}","[","]","+","*","/","!","#","%","&","(",")","=","'","?","¿","<",">",""""]
+	nullKeys := ["Space","a","e","f","g","t","1","2","3","4","5","6","7","8","9",";","-","_","{","}","[","]","+","*","/","!","#","%","&","(",")","=","'","<",">",""""]
 	
 	Loop, % nullKeys.MaxIndex()
 	{
