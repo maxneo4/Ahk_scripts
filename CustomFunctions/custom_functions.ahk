@@ -1,6 +1,7 @@
 ExploreVar(varValue){
-	jsonValue := JSON.Dump(varValue)
+	jsonValue := JSON.Dump(varValue,,2)
 	MsgBox, , Var value, % jsonValue
+	Clipboard := jsonValue
 }
 
 ContainsAllWords(value, arrayWords){	

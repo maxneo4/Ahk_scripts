@@ -1,11 +1,14 @@
-DynamicInputBox(title, guiDefinitions, storeFileIni=""){
+DynamicInputBox(guiDefinitions){
 	static
 	inputResult = 
 	global helps := {}
-	global lists := {}	
-
+	global helpPaths := {}
+	global lists := {}
+ExploreVar(guiDefinitions)
+	title := guiDefinitions.title
+	storeFileIni := guiDefinitions.storeFileIni
 	width := guiDefinitions.width	
-	margin := guiDefinitions.Margin
+	margin := guiDefinitions.margin
 	vspace := guiDefinitions.vspace
 	vminspace := vspace / 2
 	controls := guiDefinitions.controls
@@ -30,6 +33,7 @@ DynamicInputBox(title, guiDefinitions, storeFileIni=""){
 		{
 			FileRead, helpContent, %helpPath%		
 			helpContent := StrSplit(helpContent, "`r`n")
+			helpPaths[varName] := helpPath
 			helps[varName] := helpContent
 		}		
 
@@ -105,6 +109,7 @@ DynamicInputBox(title, guiDefinitions, storeFileIni=""){
 
 	Hotkey, IfWinExist, %title%
 	Hotkey, ^Space, openDropDown, On
+	HotKey, ^E, editHelp, On
 	Hotkey, if
 
 	Loop
@@ -162,12 +167,20 @@ openDropDown(){
 	Control ShowDropDown,,, ahk_id %currentHwnd%
 }
 
+editHelp(){
+	global helpPaths
+	global controlDef
+	helpPath := helpPaths[controlDef]
+	if FileExist(helpPath)
+		Run Edit %helpPath%
+}
+
 EditChangeEvent(CtrlHwnd, GuiEvent, EventInfo, ErrLevel:=""){
 	global helps 
 	global lists
 	global currentHwnd := CtrlHwnd
 		
-	controlDef := A_GuiControl	
+	global controlDef := A_GuiControl	
 	helpContent := helps[controlDef]
 	list := lists[controlDef]
 	

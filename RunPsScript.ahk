@@ -20,7 +20,7 @@ if not (A_IsAdmin or RegExMatch(full_command_line, " /restart(?!\S)"))
 #include CustomFunctions\form_functions.ahk
 
 controls := [{name: "Delete Dbs", type: "CheckBox", state: "0"}, {name: "limit MB", type: "DropDownList", state: "5000", value: "500|1000|2000|3000|4000|5000|10000|20000"}, {name: "limit days", type: "DropDownList", state:"365", value: "8|15|30|90|180|365"}]
-value := DynamicInputBox("Free disk space", {width: 200, vspace: 32, Margin: 10, controls: controls }, "storedValues.ini")
+value := DynamicInputBox({title: "Free disk space", width: 200, vspace: 32, Margin: 10, controls: controls, storeFileIni: "storedValues.ini" } )
 
 if value != "Canceled"
 {
