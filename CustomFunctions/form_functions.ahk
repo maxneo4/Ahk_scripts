@@ -4,7 +4,6 @@ DynamicInputBox(guiDefinitions){
 	global helps := {}
 	global helpPaths := {}
 	global lists := {}
-ExploreVar(guiDefinitions)
 	title := guiDefinitions.title
 	storeFileIni := guiDefinitions.storeFileIni
 	width := guiDefinitions.width	
