@@ -119,7 +119,7 @@ DynamicInputBox(guiDefinitions){
 	inputResult := 
 	Gui, Submit, Hide
 	Gui Destroy 
-	if Result = "Out"
+	if Result = Out
 	{
 		Result := {}
 		Loop, %controlsCount%
@@ -140,13 +140,13 @@ DynamicInputBox(guiDefinitions){
   	Return Result
 
   	CInputButton:  	 
-  	 inputResult = "Out"
+  	 inputResult = Out
   	return
 
   	CCancelButton:
   	dynFormGuiEscape:
 	dynFormGuiClose:	
-	  inputResult = "Canceled"
+	  inputResult = Canceled
 	Return
 }
 
@@ -170,8 +170,9 @@ editHelp(){
 	global helpPaths
 	global controlDef
 	helpPath := helpPaths[controlDef]
-	if FileExist(helpPath)
-		Run Edit %helpPath%
+	if !FileExist(helpPath)
+		FileAppend, , %helpPath%
+	Run Edit %helpPath%
 }
 
 EditChangeEvent(CtrlHwnd, GuiEvent, EventInfo, ErrLevel:=""){

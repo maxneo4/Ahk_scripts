@@ -83,7 +83,7 @@ return
 ^F1::
 helpText = 
 (
-V 0.63
+V 0.65
 # CommandSelector
 
 ALT+SPACE : abre selector de comandos
@@ -101,13 +101,21 @@ CTRL + LEFT : navega a la anterior ventana del gestor de forma ciclica
 CTRL+ SHIFT + DOWN : remueve todas las ventanas del gestor
 
 --------------------------------------------------------------
+# Clipboard util
+CTRL+WIN+O : open clipboard util window
+WIN+A : copy and add content
+WIN+V : add content
+CTRL+WIN+C : copy selected item content
+SUPR: delete selected item content
 
 # Vim mode
 Double SHIFT + ESC to activate
 ESC : exit Vim mode
 F1 : Vim Help (Only when Vim mode is activated)
 
-
+# Hot Strings
+CTRL+WIN+E : edit hotstrings file
+CTRL+WIN+R : reload hotstrings
 --------------------------------------------------------------
 
 # Tutorial Maker
@@ -128,7 +136,7 @@ Return
 +F1::
 helpText = 
 (
-V 0.63
+V 0.65
 Master command = (CTRL+ALT+SPACE = ALT GR+SPACE), CTRL+SHIFT+SPACE(to avoid to close popups)
 Master command = MC
 ----------------------------------------------------------------
