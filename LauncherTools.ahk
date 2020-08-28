@@ -56,6 +56,9 @@ InitVimNeo()
 #Include TutorialMaker\TutorialMaker.ahk
 InitTutorialMaker()
 
+#Include ClipboardUtil\ClipboardWindows.ahk
+initClipboardWindow()
+
 ;O ommit the end character separator
 ;* ommit to need end character	
 ;Bizagi developer hotStrings
@@ -105,7 +108,7 @@ CTRL+ SHIFT + DOWN : remueve todas las ventanas del gestor
 CTRL+WIN+O : open clipboard util window
 WIN+A : copy and add content
 WIN+V : add content
-CTRL+WIN+C : copy selected item content
+WIN+C : copy selected item content
 SUPR: delete selected item content
 
 # Vim mode
