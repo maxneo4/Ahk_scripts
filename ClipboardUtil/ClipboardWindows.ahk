@@ -1,29 +1,31 @@
-﻿initClipboardWindow()
+﻿;initClipboardWindow()
 
 initClipboardWindow(){
 	global
 	clipItems := []
 	Content = 	
 	CHListBoxHwnd =
-	Hotkey, ^#o, openClipboardWindow, on
+	Hotkey, #o, openClipboardWindow, on
+	Hotkey, ~LButton, validateIfChangeFocus, on
 	Hotkey, IfWinExist, Clipboard history
 	Hotkey, #v, addClipItem, on
-	Hotkey, #a, copyAndAddClipItem, on
+	Hotkey, #a, copyAndAddClipItem, on ;when used in window actived fails with error
 	Hotkey, #c, copySelectedItem, on
-	;#r run item
+	;#r run item, detect parent folder to use to working directory
 	Hotkey, Escape, HideClipboardWindow, on	
 	Hotkey, Delete, deleteSelectedItem, On
 	Hotkey, if	
 
 	Gui, clipboardForm:Default
 	;set transparency
-	Gui, Color, EEAA99, F3282923
+	;Gui, Color, CCCCCC
 	Gui +LastFound 
-	WinSet, TransColor, EEAA99 250
+	validateIfChangeFocus()
 	Gui, +AlwaysOnTop ToolWindow 
 	Gui, Margin, 5, 5
 	Gui, Add, ListBox, HwndCHListBoxHwnd vListClips w500 0x100 h100 gUpdateItem AltSubmit
 	Gui, Add, Edit, r12 vContent w500 ReadOnly
+	;Gui, Color, 000000, 000000	
 }
 
 openClipboardWindow(){
@@ -42,6 +44,8 @@ addClipItem(){
 	global
 	Gui, clipboardForm:Default
 	newContent := Clipboard
+	if(StrLen(newContent)<1)
+		return ;only if we have some newContent
 	clipItems.Push(newContent)
 	maxIndex := clipItems.MaxIndex()
 	text := newContent 
@@ -94,4 +98,26 @@ deleteSelectedItem(){
 	clipItems.remove(ListClips)
 	Control, Delete, %ListClips%,, % "ahk_id " . CHListBoxHwnd
 	GuiControl, , Content ,
+}
+
+validateIfChangeFocus(){
+	global
+	SetTimer, changeTransparency, -250
+	Return
+
+	changeTransparency:
+	Gui, clipboardForm:Default
+	IfWinActive, Clipboard history
+	{
+		GuiControl, Show, Content
+		Gui, Color, FFFFFF
+		Gui +LastFound 
+		WinSet, TransColor, CCCCCC 230		
+		return
+	}		
+	GuiControl, Hide, Content
+	Gui, Color, CCCCCC
+	Gui +LastFound 
+	WinSet, TransColor, CCCCCC 150
+	return
 }
