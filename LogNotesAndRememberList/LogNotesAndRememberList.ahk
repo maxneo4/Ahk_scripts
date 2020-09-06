@@ -16,7 +16,7 @@ InitRememberList() {
 	static LVRLID
 	static LV2	
 	
-	Gui, rl:New, AlwaysOnTop ToolWindow -DPIScale -Caption
+	Gui, rl:New, AlwaysOnTop ToolWindow -DPIScale ;-Caption
 	Gui, Font, s10 Arial cA9A9A7
 	Gui, rl:Add, Edit, w600 x0 y0 vFilter gUpdateRememberFilter HwndFilterId ;h35
 	Gui, Font, s10 Arial cA9A9A7

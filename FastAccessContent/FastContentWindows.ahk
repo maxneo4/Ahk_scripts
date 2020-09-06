@@ -1,4 +1,4 @@
-﻿;initClipboardWindow()
+;initClipboardWindow()
 
 initClipboardWindow(){
 	global
@@ -7,7 +7,8 @@ initClipboardWindow(){
 	CHListBoxHwnd =
 	Hotkey, #o, openClipboardWindow, on
 	Hotkey, ~LButton, validateIfChangeFocus, on
-	Hotkey, IfWinExist, Clipboard history
+	Hotkey, IfWinExist, 
+	
 	Hotkey, #v, addClipItem, on
 	Hotkey, #a, copyAndAddClipItem, on ;when used in window actived fails with error
 	Hotkey, #c, copySelectedItem, on
@@ -31,7 +32,7 @@ initClipboardWindow(){
 openClipboardWindow(){
 	global 	
 	Gui, clipboardForm:Default
-	Gui, Show,, Clipboard history
+	Gui, Show,, Fast contents
 }
 
 HideClipboardWindow(){
@@ -107,7 +108,7 @@ validateIfChangeFocus(){
 
 	changeTransparency:
 	Gui, clipboardForm:Default
-	IfWinActive, Clipboard history
+	IfWinActive, Fast contents
 	{
 		GuiControl, Show, Content
 		Gui, Color, FFFFFF
