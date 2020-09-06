@@ -32,6 +32,19 @@ initFastContentWindow(){
 	Gui, Add, ListBox, HwndCHListBoxHwnd vListClips w450 0x100 h100 gUpdateItem AltSubmit
 	Gui, Add, Edit, r12 vContent w450 ReadOnly
 	;Gui, Color, 000000, 000000	
+	loadContentsFromDisk()
+}
+
+loadContentsFromDisk(){
+	global
+	Gui, ClipboardForm:Default
+	patternFiles := FolderName . "/*.*"
+	Loop, Files, %patternFiles%
+	{
+		GuiControl, , ListClips, %A_LoopFileName%
+		FileRead, newContent, %A_LoopFileFullPath%
+		clipItems.Push(newContent)
+	}
 }
 
 openFastContentWindow(){
