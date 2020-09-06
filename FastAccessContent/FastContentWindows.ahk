@@ -7,6 +7,7 @@ F5::Reload
 initFastContentWindow(){
 	global
 	clipItems := []
+	clipNames := []
 	Content = 	
 	CHListBoxHwnd =
 	FolderName = FastAccessContent 
@@ -44,6 +45,7 @@ loadContentsFromDisk(){
 		GuiControl, , ListClips, %A_LoopFileName%
 		FileRead, newContent, %A_LoopFileFullPath%
 		clipItems.Push(newContent)
+		clipNames.Push(A_LoopFileName)
 	}
 }
 
@@ -65,8 +67,7 @@ addClipItem(customTitle=""){
 	newContent := Clipboard
 	if(StrLen(newContent)<1)
 		return ;only if we have some newContent
-	clipItems.Push(newContent)
-	maxIndex := clipItems.MaxIndex()
+	
 	text := newContent 
 	text := varize(text)
 	if(StrLen(text) > 100)
@@ -75,6 +76,9 @@ addClipItem(customTitle=""){
 		startSuffix := len - 40
 		text := SubStr(text, 1, 40) . " [...] " . SubStr(text, startSuffix, 41)
 	} 
+	clipItems.Push(newContent)
+	clipNames.Push(text)
+	maxIndex := clipItems.MaxIndex()
 	file := FolderName . "/" . text
 	FileAppend, %newContent%, %file%
 	GuiControl, , ListClips, %text%
@@ -116,9 +120,14 @@ deleteSelectedItem(){
 	global
 	Gui, clipboardForm:Default
 	Gui, Submit, NoHide
-	clipItems.remove(ListClips)
+	
 	Control, Delete, %ListClips%,, % "ahk_id " . CHListBoxHwnd
 	GuiControl, , Content ,
+	file := FolderName . "/" . clipNames[ListClips]
+
+	clipItems.remove(ListClips)
+	clipNames.remove(ListClips)
+	FileDelete, %file%
 }
 
 validateIfChangeFocus(){
