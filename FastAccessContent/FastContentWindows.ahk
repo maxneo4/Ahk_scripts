@@ -1,11 +1,16 @@
-;initClipboardWindow()
+SetWorkingDir, C:\git\Ahk_scripts
 
-initClipboardWindow(){
+initFastContentWindow()
+
+F5::Reload
+
+initFastContentWindow(){
 	global
 	clipItems := []
 	Content = 	
 	CHListBoxHwnd =
-	Hotkey, #o, openClipboardWindow, on
+	FolderName = FastAccessContent 
+	Hotkey, #o, openFastContentWindow, on
 	Hotkey, ~LButton, validateIfChangeFocus, on
 	Hotkey, IfWinExist, 
 	
@@ -13,7 +18,7 @@ initClipboardWindow(){
 	Hotkey, #a, copyAndAddClipItem, on ;when used in window actived fails with error
 	Hotkey, #c, copySelectedItem, on
 	;#r run item, detect parent folder to use to working directory
-	Hotkey, Escape, HideClipboardWindow, on	
+	Hotkey, Escape, HideFastContentWindow, on	
 	Hotkey, Delete, deleteSelectedItem, On
 	Hotkey, if	
 
@@ -24,24 +29,24 @@ initClipboardWindow(){
 	validateIfChangeFocus()
 	Gui, +AlwaysOnTop ToolWindow 
 	Gui, Margin, 5, 5
-	Gui, Add, ListBox, HwndCHListBoxHwnd vListClips w500 0x100 h100 gUpdateItem AltSubmit
-	Gui, Add, Edit, r12 vContent w500 ReadOnly
+	Gui, Add, ListBox, HwndCHListBoxHwnd vListClips w450 0x100 h100 gUpdateItem AltSubmit
+	Gui, Add, Edit, r12 vContent w450 ReadOnly
 	;Gui, Color, 000000, 000000	
 }
 
-openClipboardWindow(){
+openFastContentWindow(){
 	global 	
 	Gui, clipboardForm:Default
 	Gui, Show,, Fast contents
 }
 
-HideClipboardWindow(){
+HideFastContentWindow(){
 	global 	
 	Gui, clipboardForm:Default
 	Gui, Hide
 }
 
-addClipItem(){
+addClipItem(customTitle=""){
 	global
 	Gui, clipboardForm:Default
 	newContent := Clipboard
@@ -50,13 +55,15 @@ addClipItem(){
 	clipItems.Push(newContent)
 	maxIndex := clipItems.MaxIndex()
 	text := newContent 
-	text := StrReplace(text, "|", "")
+	text := varize(text)
 	if(StrLen(text) > 100)
 	{
 		len := StrLen(text)
 		startSuffix := len - 40
-		text := SubStr(newContent, 1, 40) . " [...] " . SubStr(newContent, startSuffix, 41)
+		text := SubStr(text, 1, 40) . " [...] " . SubStr(text, startSuffix, 41)
 	} 
+	file := FolderName . "/" . text
+	FileAppend, %newContent%, %file%
 	GuiControl, , ListClips, %text%
 	GuiControl, Choose, ListClips, %maxIndex%
 	GuiControl, , Content , %newContent%
@@ -121,4 +128,13 @@ validateIfChangeFocus(){
 	Gui +LastFound 
 	WinSet, TransColor, CCCCCC 150
 	return
+}
+
+varize(var){
+   var := StrReplace(var, "`r`n", " ")
+   var := StrReplace(var, "`t")
+   chars = .,<>:;'"/|\*?
+   loop, parse, chars,
+   	var := StrReplace(var, A_Loopfield, " ")
+   return var
 }
