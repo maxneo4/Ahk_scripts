@@ -56,7 +56,7 @@ InitVimNeo()
 #Include TutorialMaker\TutorialMaker.ahk
 InitTutorialMaker()
 
-#Include ClipboardUtil\FastContentdWindows.ahk
+#Include FastAccessContent\FastContentWindows.ahk
 initFastContentWindow()
 
 ;O ommit the end character separator

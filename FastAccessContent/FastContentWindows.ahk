@@ -10,6 +10,9 @@ initFastContentWindow(){
 	CHListBoxHwnd =
 	FolderName = FastAccessContent
 	hideFinished = 1
+
+	FileCreateDir, %FolderName%
+
 	Hotkey, #o, openFastContentWindow, on
 	Hotkey, ~LButton, validateIfChangeFocus, on
 	Hotkey, IfWinExist, 
