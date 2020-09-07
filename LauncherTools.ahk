@@ -56,8 +56,8 @@ InitVimNeo()
 #Include TutorialMaker\TutorialMaker.ahk
 InitTutorialMaker()
 
-#Include ClipboardUtil\ClipboardWindows.ahk
-initClipboardWindow()
+#Include ClipboardUtil\FastContentdWindows.ahk
+initFastContentWindow()
 
 ;O ommit the end character separator
 ;* ommit to need end character	
@@ -86,7 +86,7 @@ return
 ^F1::
 helpText = 
 (
-V 0.65
+V 0.66
 # CommandSelector
 
 ALT+SPACE : abre selector de comandos
@@ -104,11 +104,13 @@ CTRL + LEFT : navega a la anterior ventana del gestor de forma ciclica
 CTRL+ SHIFT + DOWN : remueve todas las ventanas del gestor
 
 --------------------------------------------------------------
-# Clipboard util
-CTRL+WIN+O : open clipboard util window
+# Fast contents
+WIN+O : open fast contents window
 WIN+A : copy and add content
 WIN+V : add content
 WIN+C : copy selected item content
+WIN+R : run selected item
+CTRL+WIN+R : run selected item as Admin
 SUPR: delete selected item content
 
 # Vim mode
@@ -139,7 +141,7 @@ Return
 +F1::
 helpText = 
 (
-V 0.65
+V 0.66
 Master command = (CTRL+ALT+SPACE = ALT GR+SPACE), CTRL+SHIFT+SPACE(to avoid to close popups)
 Master command = MC
 ----------------------------------------------------------------
