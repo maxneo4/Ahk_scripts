@@ -10,7 +10,8 @@ initFastContentWindow(){
 	clipNames := []
 	Content = 	
 	CHListBoxHwnd =
-	FolderName = FastAccessContent 
+	FolderName = FastAccessContent
+	hideFinished = 1
 	Hotkey, #o, openFastContentWindow, on
 	Hotkey, ~LButton, validateIfChangeFocus, on
 	Hotkey, IfWinExist, 
@@ -53,6 +54,7 @@ openFastContentWindow(){
 	global 	
 	Gui, clipboardForm:Default
 	Gui, Show,, Fast contents
+	SetTransparencyShow()
 }
 
 HideFastContentWindow(){
@@ -132,24 +134,44 @@ deleteSelectedItem(){
 
 validateIfChangeFocus(){
 	global
-	SetTimer, changeTransparency, -250
-	Return
+	SetTimer, changeTransparency, -250	
+}
 
-	changeTransparency:
-	Gui, clipboardForm:Default
+changeTransparency(){
+	global
 	IfWinActive, Fast contents
 	{
-		GuiControl, Show, Content
-		Gui, Color, FFFFFF
-		Gui +LastFound 
-		WinSet, TransColor, CCCCCC 230		
-		return
-	}		
+		;MsgBox will be actived
+		SetTimer, SetTransparencyHide, off
+		hideFinished = 1
+		SetTransparencyShow()
+	}
+	Else
+	{
+		if hideFinished = 1
+		{
+			hideFinished = 0
+			SetTimer, SetTransparencyHide, -10000
+		}
+	}
+}
+
+SetTransparencyShow(){
+	Gui, clipboardForm:Default
+	GuiControl, Show, Content
+	Gui, Color, FFFFFF
+	Gui +LastFound 
+	WinSet, TransColor, CCCCCC 230
+}
+
+SetTransparencyHide(){
+	global
+	hideFinished = 1
+	Gui, clipboardForm:Default
 	GuiControl, Hide, Content
 	Gui, Color, CCCCCC
 	Gui +LastFound 
 	WinSet, TransColor, CCCCCC 150
-	return
 }
 
 varize(var){
