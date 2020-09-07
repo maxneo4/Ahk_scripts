@@ -1,8 +1,6 @@
-SetWorkingDir, C:\git\Ahk_scripts
-
-initFastContentWindow()
-
-F5::Reload
+;SetWorkingDir, C:\git\Ahk_scripts
+;initFastContentWindow()
+;F5::Reload
 
 initFastContentWindow(){
 	global
@@ -19,6 +17,8 @@ initFastContentWindow(){
 	Hotkey, #v, addClipItem, on
 	Hotkey, #a, copyAndAddClipItem, on ;when used in window actived fails with error
 	Hotkey, #c, copySelectedItem, on
+	Hotkey, #r, runSelectedItem, on
+	HotKey, ^#r, runSelectedItemAsAdmin, on
 	;#r run item, detect parent folder to use to working directory
 	Hotkey, Escape, HideFastContentWindow, on	
 	Hotkey, Delete, deleteSelectedItem, On
@@ -116,6 +116,26 @@ copySelectedItem(){
 	RemoveToolTip:
 	ToolTip
 	return
+}
+
+runSelectedItemAsAdmin(){
+	runSelectedItem(1)
+}
+
+runSelectedItem(runAsAdmin=0){
+	global
+	Gui, clipboardForm:Default
+	Gui, Submit, NoHide
+	selectedContent := clipItems[ListClips]
+	loop, %selectedContent%
+		ContainerDir := A_LoopFileDir
+	
+	if(runAsAdmin = 1)
+		Run, *RunAs %selectedContent%, %ContainerDir%, UseErrorLevel, varPID
+	Else
+		Run, %selectedContent%, %ContainerDir%, , varPID
+	; store in array to can kill with #k
+	ContainerDir :=
 }
 
 deleteSelectedItem(){
