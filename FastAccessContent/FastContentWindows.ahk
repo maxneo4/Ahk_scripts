@@ -15,7 +15,7 @@ initFastContentWindow(){
 
 	Hotkey, #o, openFastContentWindow, on
 	Hotkey, ~LButton, validateIfChangeFocus, on
-	Hotkey, IfWinExist, 
+	Hotkey, IfWinExist, Fast contents
 	
 	Hotkey, #v, addClipItem, on
 	Hotkey, #a, copyAndAddClipItem, on ;when used in window actived fails with error
@@ -24,7 +24,7 @@ initFastContentWindow(){
 	HotKey, ^#r, runSelectedItemAsAdmin, on
 	;#r run item, detect parent folder to use to working directory
 	Hotkey, Escape, HideFastContentWindow, on	
-	Hotkey, Delete, deleteSelectedItem, On
+	Hotkey, ~Delete, deleteSelectedItem, On
 	Hotkey, if	
 
 	Gui, clipboardForm:Default

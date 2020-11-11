@@ -50,7 +50,7 @@ MoveNextWindow()
 	w := windows[pos]
 	if WinExist("ahk_id" . w)
 		WinActivate, ahk_id %w%
-	Else
+	Else if w
 		{
 			windows.RemoveAt(pos)
 			MoveNextWindow()
@@ -71,7 +71,7 @@ MovePreviousWindow()
 	w := windows[pos]
 	if WinExist("ahk_id" . w)
 		WinActivate, ahk_id %w%
-	Else
+	Else if w
 		{
 			windows.RemoveAt(pos)
 			MovePreviousWindow()
@@ -101,7 +101,9 @@ updtePosToActiveWindow()
 	global windows
 	
 	WinGet, active_id, ID, A
-	posFound := ObjIndexOf(windows, active_id)
+
+	if(active_id)
+		posFound := ObjIndexOf(windows, active_id)
 	if posFound		
 		pos := posFound		
 }
