@@ -7,17 +7,21 @@ SetWorkingDir %A_ScriptDir%
 FileEncoding, UTF-8
 FileCreateShortcut, %A_ScriptFullPath%, %A_Startup%\LauncherToolsShortCut.lnk, %A_ScriptDir%
 
-full_command_line := DllCall("GetCommandLine", "str")
-if not (A_IsAdmin or RegExMatch(full_command_line, " /restart(?!\S)"))
+FileRead, settings, settings.ini
+if InStr(settings, "runAsAdmin=") > 0
 {
-	try
+	full_command_line := DllCall("GetCommandLine", "str")
+	if not (A_IsAdmin or RegExMatch(full_command_line, " /restart(?!\S)"))
 	{
-		if A_IsCompiled
-			Run *RunAs "%A_ScriptFullPath%" /restart
-		else
-			Run *RunAs "%A_AhkPath%" /restart "%A_ScriptFullPath%"
+		try
+		{
+			if A_IsCompiled
+				Run *RunAs "%A_ScriptFullPath%" /restart
+			else
+				Run *RunAs "%A_AhkPath%" /restart "%A_ScriptFullPath%"
+		}
+		ExitApp
 	}
-	ExitApp
 }
 
 ;Changes
@@ -86,7 +90,7 @@ return
 ^F1::
 helpText = 
 (
-V 0.66
+V 0.67
 # CommandSelector
 
 ALT+SPACE : abre selector de comandos
@@ -97,6 +101,8 @@ ESCAPE : oculta el selector de comandos
 --------------------------------------------------------------
 
 # Window gestures
+SHIFT + UP : pone la ventana actual AlwaysOnTop
+SHIFT + DOWN : desactiva en la ventana actual AlwaysOnTop
 CTRL + UP : agrega ventana al gestor
 CTRL + DOWN : remueve ventana del gestor
 CTRL + RIGHT : Navega a la siguiente ventana del gestor de forma ciclica
@@ -114,7 +120,7 @@ CTRL+WIN+R : run selected item as Admin
 SUPR: delete selected item content
 
 # Vim mode
-Double SHIFT + ESC to activate
+SHIFT + ESC to activate
 ESC : exit Vim mode
 F1 : Vim Help (Only when Vim mode is activated)
 
@@ -141,7 +147,7 @@ Return
 +F1::
 helpText = 
 (
-V 0.66
+V 0.67
 Master command = (CTRL+ALT+SPACE = ALT GR+SPACE), CTRL+SHIFT+SPACE(to avoid to close popups)
 Master command = MC
 ----------------------------------------------------------------
@@ -189,7 +195,7 @@ If (GetKeyState("CapsLock", "T"))
     SplashTextOn, 150, 25, CapsLock state, On
 Else
 	SplashTextOn, 150, 25, CapsLock state, Off
-Sleep, 1500
+Sleep, 500
 SplashTextOff
 return
 
@@ -199,7 +205,7 @@ If (GetKeyState("NumLock", "T"))
     SplashTextOn, 150, 25, NumLock state, On
 Else
 	SplashTextOn, 150, 25, NumLock state, Off
-Sleep, 1500
+Sleep, 500
 SplashTextOff
 return
 return

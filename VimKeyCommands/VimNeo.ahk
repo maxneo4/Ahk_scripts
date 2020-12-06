@@ -1,4 +1,4 @@
-InitVimNeo()
+﻿InitVimNeo()
 {	
 	global vimEnabled = "OFF"	
 	global visualMode = 
@@ -19,8 +19,8 @@ InitVimNeo()
 	WinSet, TransColor, EEAA99 100	
 	
 	Hotkey, IfWinNotExist, VimT		
-	Hotkey, +Escape, DoubleKeyToActivate, On
-		
+	Hotkey, +Escape, EnableVim, On
+	
 	global fn := Func("VimIsEnabled")	
 	Hotkey, If, % fn
 	

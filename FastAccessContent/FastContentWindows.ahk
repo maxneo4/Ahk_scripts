@@ -10,9 +10,9 @@ initFastContentWindow(){
 	CHListBoxHwnd =
 	FolderName = FastAccessContent
 	hideFinished = 1
-
+	
 	FileCreateDir, %FolderName%
-
+	
 	Hotkey, #o, openFastContentWindow, on
 	Hotkey, ~LButton, validateIfChangeFocus, on
 	Hotkey, IfWinExist, Fast contents
@@ -26,16 +26,18 @@ initFastContentWindow(){
 	Hotkey, Escape, HideFastContentWindow, on	
 	Hotkey, ~Delete, deleteSelectedItem, On
 	Hotkey, if	
-
+	
 	Gui, clipboardForm:Default
 	;set transparency
-	;Gui, Color, CCCCCC
+	;Gui, Color, CCCCCC	
 	Gui +LastFound 
 	validateIfChangeFocus()
 	Gui, +AlwaysOnTop ToolWindow 
 	Gui, Margin, 5, 5
-	Gui, Add, ListBox, HwndCHListBoxHwnd vListClips w450 0x100 h100 gUpdateItem AltSubmit
-	Gui, Add, Edit, r12 vContent w450 ReadOnly
+	Gui, Font, s12
+	Gui, Add, ListBox, HwndCHListBoxHwnd vListClips w550 0x100 h100 gUpdateItem AltSubmit
+	Gui, Font, s14
+	Gui, Add, Edit, r12 vContent w550 ReadOnly
 	;Gui, Color, 000000, 000000	
 	loadContentsFromDisk()
 }
@@ -174,7 +176,7 @@ changeTransparency(){
 		if hideFinished = 1
 		{
 			hideFinished = 0
-			SetTimer, SetTransparencyHide, -10000
+			SetTimer, SetTransparencyHide, -30000
 		}
 	}
 }

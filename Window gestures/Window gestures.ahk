@@ -7,6 +7,9 @@
 	Hotkey, ^Right, MoveNextWindow, On
 	Hotkey, ^Left, MovePreviousWindow, On
 	Hotkey, ^+Down, RemoveAll, On
+
+	Hotkey, +Up, setAlwaysOnTop, On
+	Hotkey, +Down, quitAlwaysOnTop, On
 }
 
 RemoveAll()
@@ -106,4 +109,12 @@ updtePosToActiveWindow()
 		posFound := ObjIndexOf(windows, active_id)
 	if posFound		
 		pos := posFound		
+}
+
+setAlwaysOnTop(){
+	Winset, Alwaysontop, On, A
+}
+
+quitAlwaysOnTop(){
+	Winset, Alwaysontop, Off, A
 }

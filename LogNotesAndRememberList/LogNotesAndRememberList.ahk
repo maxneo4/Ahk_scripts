@@ -6,6 +6,7 @@ InitRememberList() {
 	global gRememberListFile
 	global Filter
 	global FilterId
+	global rememberItemsDictionary := {}
 	
 	global defaultRemeberListFile := "LogNotesAndRememberList\rememberList.txt"
 	rememberListFile := defaultRemeberListFile
@@ -18,14 +19,14 @@ InitRememberList() {
 	
 	Gui, rl:New, AlwaysOnTop ToolWindow -DPIScale ;-Caption
 	Gui, Font, s10 Arial cA9A9A7
-	Gui, rl:Add, Edit, w600 x0 y0 vFilter gUpdateRememberFilter HwndFilterId ;h35
+	Gui, rl:Add, Edit, w840 x0 y0 vFilter gUpdateRememberFilter HwndFilterId ;h35
 	Gui, Font, s10 Arial cA9A9A7
 	Gui, rl:Color, EEAA99, F3282923
 	Gui +LastFound 
 
 	
-	WinSet, TransColor, EEAA99 220
-	Gui, rl:Add, ListView, w600 h300 x0 y25 -Multi gListViewRLEvent AltSubmit -Hdr vLV2 HwndLVRLID, tag|item|order ;important diff v and Hwn
+	WinSet, TransColor, EEAA99 250
+	Gui, rl:Add, ListView, w840 h300 x0 y25 -Multi gListViewRLEvent AltSubmit -Hdr vLV2 HwndLVRLID, tag|item|order ;important diff v and Hwn
 	LV_SetImageList( DllCall( "ImageList_Create", Int,2, Int, 20, Int,0x18, Int,1, Int,1 ), 1 ) ;set row height to 25
 
 	Hotkey, IfWinActive, rememberListWindow
@@ -201,17 +202,26 @@ invokeRememberListByPath(rememberListFile, showInCaret){
 
 invokeText(){
 	global SelectedText
+	global rememberItemsDictionary
 	Gui, rl:Hide
-	Clipboard := SelectedText	
+	
+	if(rememberItemsDictionary.HasKey(SelectedText))
+		Clipboard := rememberItemsDictionary[SelectedText]
+	Else
+		Clipboard := SelectedText	
 	SendInput ^v
 }
 
 runText(){
 	global SelectedText
+	global rememberItemsDictionary
 	Gui, rl:Hide
-	Run, %SelectedText%, , UseErrorLevel
+	textToRun := SelectedText
+	if(rememberItemsDictionary.HasKey(SelectedText))
+		textToRun := rememberItemsDictionary[SelectedText]	
+	Run, %textToRun%, , UseErrorLevel
 	if ErrorLevel
-		MsgBox, , Error, %ErrorLevel% happen trying to run '%SelectedText%', 2
+		MsgBox, , Error, %ErrorLevel% happen trying to run '%textToRun%', 2
 }
 
 ListViewRLEvent(){
@@ -228,18 +238,19 @@ ListViewRLEvent(){
 
 UpdateRememberFilter(){ 	
 	global rememberListFileParam
+	global rememberItemsDictionary
 	Gui, rl:Default 
 	GuiControlGet Filter ;get content of control of associate var
 	Filter := Trim(Filter)
 	arrayWords := StrSplit(Filter, A_Space)	
 	tagFilter := arrayWords[1]
-
+	
 	filterTagAndValue := false
 	if(arrayWords.MaxIndex() > 1) ;to work first word with tags, others with value
-		{
-			arrayWords.Remove(1)
-			filterTagAndValue := true
-		}
+	{
+		arrayWords.Remove(1)
+		filterTagAndValue := true
+	}
 	LV_Delete()	
 	Loop, Read, %rememberListFileParam%
 	{	
@@ -254,11 +265,22 @@ UpdateRememberFilter(){
 			tags = 
 			value := line
 		}
-		ordered := tags . value				
+		ordered := tags . value
+		
+		if(StrLen(value) > 100)
+		{
+			originalValue := value
+			len := StrLen(value)
+			startSuffix := len - 30
+			middleIndex := len / 2 - 30 / 2
+			value := SubStr(value, 1, 30) . "[..]" . SubStr(value, middleIndex, 30) . "[..]" . SubStr(value, startSuffix, 31)
+			rememberItemsDictionary[value] := originalValue 
+		} 
+		
 		if (filterTagAndValue = true) {
 			if InStr(tags, tagFilter) and ContainsAllWords(value, arrayWords) 
-					LV_Add("", tags, value, ordered) ;fisrt tags, second value
-			}
+				LV_Add("", tags, value, ordered) ;fisrt tags, second value
+		}
 		else{		
 			if  InStr(tags, tagFilter) or ContainsAllWords(value, arrayWords) or (Filter = )
 				LV_Add("", tags, value, ordered) ;fisrt tags, second value				
