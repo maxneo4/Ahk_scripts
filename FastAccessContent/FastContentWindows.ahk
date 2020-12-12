@@ -15,10 +15,10 @@ initFastContentWindow(){
 	
 	Hotkey, #o, openFastContentWindow, on
 	Hotkey, ~LButton, validateIfChangeFocus, on
+	Hotkey, #a, copyAndAddClipItem, on ;when used in window actived fails with error
 	Hotkey, IfWinExist, Fast contents
 	
-	Hotkey, #v, addClipItem, on
-	Hotkey, #a, copyAndAddClipItem, on ;when used in window actived fails with error
+	Hotkey, #v, addClipItem, on	
 	Hotkey, #c, copySelectedItem, on
 	Hotkey, #r, runSelectedItem, on
 	HotKey, ^#r, runSelectedItemAsAdmin, on
@@ -35,9 +35,9 @@ initFastContentWindow(){
 	Gui, +AlwaysOnTop ToolWindow 
 	Gui, Margin, 5, 5
 	Gui, Font, s12
-	Gui, Add, ListBox, HwndCHListBoxHwnd vListClips w550 0x100 h100 gUpdateItem AltSubmit
+	Gui, Add, ListBox, HwndCHListBoxHwnd vListClips w600 0x100 h100 gUpdateItem AltSubmit
 	Gui, Font, s14
-	Gui, Add, Edit, r12 vContent w550 ReadOnly
+	Gui, Add, Edit, r12 vContent w600 ReadOnly
 	;Gui, Color, 000000, 000000	
 	loadContentsFromDisk()
 }
@@ -46,13 +46,25 @@ loadContentsFromDisk(){
 	global
 	Gui, ClipboardForm:Default
 	patternFiles := FolderName . "/*.*"
+
 	Loop, Files, %patternFiles%
+ 		FileList = %FileList%%A_LoopFileTimeModified%`t%A_LoopFileName%`t%A_LoopFileFullPath%`n
+	Sort, FileList	
+	Loop, parse, FileList, `n
 	{
-		GuiControl, , ListClips, %A_LoopFileName%
-		FileRead, newContent, %A_LoopFileFullPath%
-		clipItems.Push(newContent)
-		clipNames.Push(A_LoopFileName)
-	}
+		if A_LoopField = 
+        	continue     	
+    	StringSplit, FileItem, A_LoopField, %A_Tab% 
+    	If not ErrorLevel
+		{			
+			fileName := FileItem2
+			fileFullPath := FileItem3
+			GuiControl, , ListClips, %fileName%
+			FileRead, newContent, %fileFullPath%
+			clipItems.Push(newContent)
+			clipNames.Push(fileName)
+		}
+	}	
 }
 
 openFastContentWindow(){
@@ -77,11 +89,12 @@ addClipItem(customTitle=""){
 	
 	text := newContent 
 	text := varize(text)
+	cutLen := 34
 	if(StrLen(text) > 100)
 	{
 		len := StrLen(text)
-		startSuffix := len - 40
-		text := SubStr(text, 1, 40) . " [...] " . SubStr(text, startSuffix, 41)
+		startSuffix := len - cutLen
+		text := SubStr(text, 1, cutLen) . " [...] " . SubStr(text, startSuffix, (cutLen+1))
 	} 
 	clipItems.Push(newContent)
 	clipNames.Push(text)
@@ -98,6 +111,7 @@ copyAndAddClipItem(){
 	send, ^c
 	Sleep, 250
 	addClipItem()
+	openFastContentWindow()
 }
 
 UpdateItem(){
@@ -114,13 +128,8 @@ copySelectedItem(){
 	Gui, Submit, NoHide
 	selectedContent := clipItems[ListClips]
 	Clipboard := selectedContent
-	ToolTip, Item copied!, , ,
-	SetTimer, RemoveToolTip, -1000
+	ShowToolTip("Item copied!")
 	return 
-
-	RemoveToolTip:
-	ToolTip
-	return
 }
 
 runSelectedItemAsAdmin(){

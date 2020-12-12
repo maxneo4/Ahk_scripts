@@ -4,4 +4,5 @@ for idx, target in ["C:\MegaSync\_intercambio archivos\LauncherTools-max","C:\Me
 {
 	MsgBox, , , %target%
 	FileCopy, LauncherTools.exe, %target%, 1
+	FileCopy, settings.ini, %target%, 1
 }

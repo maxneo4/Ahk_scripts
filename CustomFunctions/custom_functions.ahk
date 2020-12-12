@@ -37,6 +37,15 @@ ObjIndexOf(obj, item, case_sensitive:=false){
 	return 0
 }
 
+showToolTip(text, milis_time=1000){
+	ToolTip, %text%
+	SetTimer, removeToolTip, -%milis_time%
+}
+
+removeToolTip(){
+	ToolTip
+}
+
 showText(title, text, milis_time, width=300, height=60){	
 	SplashTextOn,  width , height, %title%, %text%
 	Sleep, milis_time
