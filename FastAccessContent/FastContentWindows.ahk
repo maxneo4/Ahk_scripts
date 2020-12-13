@@ -10,6 +10,7 @@ initFastContentWindow(){
 	CHListBoxHwnd =
 	FolderName = FastAccessContent
 	hideFinished = 1
+	CWidth = 600
 	
 	FileCreateDir, %FolderName%
 	
@@ -34,16 +35,18 @@ initFastContentWindow(){
 	validateIfChangeFocus()
 	Gui, +AlwaysOnTop ToolWindow 
 	Gui, Margin, 5, 5
-	Gui, Font, s12
-	Gui, Add, ListBox, HwndCHListBoxHwnd vListClips w600 0x100 h100 gUpdateItem AltSubmit
+	Gui, Font, s12	
+	Gui, Add, ListView, HwndCHListBoxHwnd w%CWidth% h125 gUpdateItem AltSubmit -Hdr +Grid -Multi, defTitle
+	LV_SetImageList( DllCall( "ImageList_Create", Int,2, Int, 25, Int,0x18, Int,1, Int,1 ), 1 ) ;set row height to 25
 	Gui, Font, s14
-	Gui, Add, Edit, r12 vContent w600 ReadOnly
+	Gui, Add, Edit, r10 vContent w%Cwidth% ReadOnly
 	;Gui, Color, 000000, 000000	
 	loadContentsFromDisk()
 }
 
 loadContentsFromDisk(){
 	global
+	SysGet, VSBW, 2   ; width of a vertical scroll bar
 	Gui, ClipboardForm:Default
 	patternFiles := FolderName . "/*.*"
 
@@ -59,19 +62,22 @@ loadContentsFromDisk(){
 		{			
 			fileName := FileItem2
 			fileFullPath := FileItem3
-			GuiControl, , ListClips, %fileName%
+			LV_Add("", fileName)
 			FileRead, newContent, %fileFullPath%
 			clipItems.Push(newContent)
 			clipNames.Push(fileName)
 		}
 	}	
+	LV_ModifyCol(1, CWidth - VSBW - 4)
 }
 
-openFastContentWindow(){
+openFastContentWindow(moveScroll=0){
 	global 	
 	Gui, clipboardForm:Default
 	Gui, Show,, Fast contents
 	SetTransparencyShow()
+	if moveScroll = 1
+		Send {End} 
 }
 
 HideFastContentWindow(){
@@ -101,8 +107,8 @@ addClipItem(customTitle=""){
 	maxIndex := clipItems.MaxIndex()
 	file := FolderName . "/" . text
 	FileAppend, %newContent%, %file%
-	GuiControl, , ListClips, %text%
-	GuiControl, Choose, ListClips, %maxIndex%
+	LV_Add("", text)
+	LV_Modify(maxIndex, "+Select +Focus")
 	GuiControl, , Content , %newContent%
 }
 
@@ -111,22 +117,25 @@ copyAndAddClipItem(){
 	send, ^c
 	Sleep, 250
 	addClipItem()
-	openFastContentWindow()
+	openFastContentWindow(1)
 }
 
 UpdateItem(){
 	global
 	Gui, clipboardForm:Default
 	Gui, Submit, NoHide
-	selectedContent := clipItems[ListClips]	
-	GuiControl, , Content , %selectedContent%
+	If (A_GuiEvent == "I") && InStr(ErrorLevel, "S", True) {
+		selectedContent := clipItems[A_EventInfo]	
+		GuiControl, , Content , %selectedContent% 
+		FCSelectedIndex := A_EventInfo  		
+	}	
 }
 
 copySelectedItem(){
 	global
 	Gui, clipboardForm:Default
 	Gui, Submit, NoHide
-	selectedContent := clipItems[ListClips]
+	selectedContent := clipItems[FCSelectedIndex]
 	Clipboard := selectedContent
 	ShowToolTip("Item copied!")
 	return 
@@ -140,7 +149,7 @@ runSelectedItem(runAsAdmin=0){
 	global
 	Gui, clipboardForm:Default
 	Gui, Submit, NoHide
-	selectedContent := clipItems[ListClips]
+	selectedContent := clipItems[FCSelectedIndex]
 	loop, %selectedContent%
 		ContainerDir := A_LoopFileDir
 	
@@ -156,13 +165,13 @@ deleteSelectedItem(){
 	global
 	Gui, clipboardForm:Default
 	Gui, Submit, NoHide
-	
-	Control, Delete, %ListClips%,, % "ahk_id " . CHListBoxHwnd
+		
+	LV_Delete(FCSelectedIndex)
 	GuiControl, , Content ,
-	file := FolderName . "/" . clipNames[ListClips]
+	file := FolderName . "/" . clipNames[FCSelectedIndex]
 
-	clipItems.remove(ListClips)
-	clipNames.remove(ListClips)
+	clipItems.remove(FCSelectedIndex)
+	clipNames.remove(FCSelectedIndex)
 	FileDelete, %file%
 }
 
