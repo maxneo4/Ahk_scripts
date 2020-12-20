@@ -8,7 +8,7 @@ FileEncoding, UTF-8
 FileCreateShortcut, %A_ScriptFullPath%, %A_Startup%\LauncherToolsShortCut.lnk, %A_ScriptDir%
 
 FileRead, settings, settings.ini
-if InStr(settings, "runAsAdmin=") > 0
+if InStr(settings, "runAsAdmin=1") > 0
 {
 	full_command_line := DllCall("GetCommandLine", "str")
 	if not (A_IsAdmin or RegExMatch(full_command_line, " /restart(?!\S)"))

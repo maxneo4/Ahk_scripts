@@ -64,10 +64,10 @@ WaitSubCommandKeys(){
 Help =
 (
 la, li, lo   cs, ce, cc, co  ra, ro 
-ga, go, gi   ws, wd, wo, wc
+ga, go, gi   ws, wd, wo, wc, wp
 )
 	SplashTextOn, , 40, Waiting command, %Help%	
-	Input, text, L3 T3, , la,li,lo,cs,co,ra,ro,ce,cc,ga,go,gi,ws,wd,wo,wc
+	Input, text, L3 T3, , la,li,lo,cs,co,ra,ro,ce,cc,ga,go,gi,ws,wd,wo,wc,wp
 	SplashTextOff
 	if(ErrorLevel != "Match")
 		MsgBox, , Not match, % ErrorLevel . " value:" . text	
@@ -90,6 +90,7 @@ ga, go, gi   ws, wd, wo, wc
 		case "wd": restoreLogNotesRememberWorkSpaceFolder()
 		case "wo": showCurrentWorkspace()
 		case "wc": copyPathCurrentWorkspace()
+		case "wp": copyPastePathCurrentWorkspace()
 	}
 }
 
@@ -379,6 +380,11 @@ showCurrentWorkspace(){
 copyPathCurrentWorkspace(){
 	global folder
 	Clipboard := folder
+}
+
+copyPastePathCurrentWorkspace(){
+	copyPathCurrentWorkspace()
+	Send, ^v
 }
 
 RememberListHide(){
