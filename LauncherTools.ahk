@@ -33,6 +33,9 @@ if InStr(settings, "runAsAdmin=1") > 0
 ;splash when CapsLock or NumLock change
 
 ;Clipboard change event... to caputure more automatically..
+;Remove make tutorial
+;Change command to set always on top or not a window
+;Window gestures only keep commands relative to always on top
 
 global commandsPath = "CommandSelector\commands.json"
 
@@ -56,9 +59,6 @@ TimeOSDInit()
 
 #Include  VimKeyCommands\VimNeo.ahk
 InitVimNeo()
-
-#Include TutorialMaker\TutorialMaker.ahk
-InitTutorialMaker()
 
 #Include FastAccessContent\FastContentWindows.ahk
 initFastContentWindow()
@@ -90,7 +90,7 @@ return
 ^F1::
 helpText = 
 (
-V 0.67
+V 0.70
 # CommandSelector
 
 ALT+SPACE : abre selector de comandos
@@ -101,13 +101,8 @@ ESCAPE : oculta el selector de comandos
 --------------------------------------------------------------
 
 # Window gestures
-SHIFT + UP : pone la ventana actual AlwaysOnTop
-SHIFT + DOWN : desactiva en la ventana actual AlwaysOnTop
-CTRL + UP : agrega ventana al gestor
-CTRL + DOWN : remueve ventana del gestor
-CTRL + RIGHT : Navega a la siguiente ventana del gestor de forma ciclica
-CTRL + LEFT : navega a la anterior ventana del gestor de forma ciclica
-CTRL+ SHIFT + DOWN : remueve todas las ventanas del gestor
+CTRL + ALT + UP : pone la ventana actual AlwaysOnTop
+CTRL + ALT + DOWN : desactiva en la ventana actual AlwaysOnTop
 
 --------------------------------------------------------------
 # Fast contents
@@ -128,18 +123,6 @@ F1 : Vim Help (Only when Vim mode is activated)
 CTRL+WIN+E : edit hotstrings file
 CTRL+WIN+R : reload hotstrings
 --------------------------------------------------------------
-
-# Tutorial Maker
-CTRL + ALT + C : Choose Tutorial Folder and enabled
-CTRL + ALT + D : Disable Tutorial maker capture
-
-When it is enabled
-	WIN + S or F1: capture screen
-	WIN + E or F2: capture and edit
-	WIN + C or F12: capture from clipboard (edited image)
-	WIN + O or F3: open capture folder
-	WIN + T or F4: select image in windows explorer to edit (step, title, description) 
-	WIN + R or F5: Run and generate tutorial adding captured images with the step, title and description
 )
 MsgBox, ,Help, %helptext%, 
 Return
@@ -147,7 +130,7 @@ Return
 +F1::
 helpText = 
 (
-V 0.67
+V 0.70
 Master command = (CTRL+ALT+SPACE = ALT GR+SPACE), CTRL+SHIFT+SPACE(to avoid to close popups)
 Master command = MC
 ----------------------------------------------------------------
