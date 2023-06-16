@@ -17,6 +17,10 @@ graphicT(){
 	MouseClick "left", 108, 700
 }
 
+candleT(){
+	MouseClick "left", 100, 650
+}
+
 line(){
 	MouseClick "left", 108, 700
 	Sleep twait
@@ -59,6 +63,23 @@ changeColorW(){
 	Send "{Esc}"
 }
 
+changeColorG(){
+	MouseClick "left", 145, 730
+	Sleep twait
+	MouseClick "left", 249, 493
+	Sleep twait
+	Send "{Esc}"
+}
+
+changeColorR(){
+	MouseClick "left", 145, 730
+	Sleep twait
+	MouseClick "left", 157, 491
+	Sleep twait
+	Send "{Esc}"
+}
+
+
 clone(){
 	MouseClick "left", 242, 731
 }
@@ -76,7 +97,9 @@ scriptOptions(){
 ;#HotIf WinActive("IQ Option")
 ;^s::lower()
 #HotIf WinActive("IQ Option")
-g:: graphicT()
+c:: candleT()
+#HotIf WinActive("IQ Option")
+f:: graphicT()
 #HotIf WinActive("IQ Option")
 l:: line()
 #HotIf WinActive("IQ Option")
@@ -84,11 +107,15 @@ t:: tline()
 #HotIf WinActive("IQ Option")
 h:: hLine()
 #HotIf WinActive("IQ Option")
-^h:: changeColorY()
+y:: changeColorY()
 #HotIf WinActive("IQ Option")
-^t:: changeColorM()
+m:: changeColorM()
 #HotIf WinActive("IQ Option")
-^l:: changeColorW()
+w:: changeColorW()
+#HotIf WinActive("IQ Option")
+g:: changeColorG()
+#HotIf WinActive("IQ Option")
+r:: changeColorR()
 #HotIf WinActive("IQ Option")
 ^d:: clone()
 #HotIf WinActive("IQ Option")
