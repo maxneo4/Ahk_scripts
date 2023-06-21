@@ -39,6 +39,16 @@ hLine(){
 	MouseClick "left", 201, 680
 }
 
+changeGraphicLine(){
+	MouseClick "left", 100, 600
+	Sleep twait
+	MouseClick "left", 150, 590
+	Sleep twait
+	MouseClick "left", 480, 650
+	;Sleep twait
+	Send "{Esc}"
+}
+
 changeColorY(){
 	MouseClick "left", 145, 730
 	Sleep twait
@@ -106,6 +116,9 @@ l:: line()
 t:: tline()
 #HotIf WinActive("IQ Option")
 h:: hLine()
+#HotIf WinActive("IQ Option")
+p:: changeGraphicLine()
+
 #HotIf WinActive("IQ Option")
 y:: changeColorY()
 #HotIf WinActive("IQ Option")

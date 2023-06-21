@@ -3,15 +3,15 @@ SetWorkingDir A_ScriptDir  ; Ensures a consistent starting directory.
 #SingleInstance
 
 
-~r & LButton::
+~s & LButton::
 {
 	Click "Middle Down"
 }
 
 
-~r::
+~s::
 {
-	KeyWait "r"
+	KeyWait "s"
 	Click "Middle Up"
 }
 
