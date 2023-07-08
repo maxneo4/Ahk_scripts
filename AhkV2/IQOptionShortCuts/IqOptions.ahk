@@ -21,10 +21,9 @@ candleT(){
 	MouseClick "left", 100, 650
 }
 
-line(){
-	MouseClick "left", 108, 700
-	Sleep twait
-	MouseClick "left", 212, 608
+time(){
+	MouseClick "left", 1523, 105
+	MouseMove 1294, 270
 }
 
 tline(){
@@ -102,6 +101,19 @@ scriptOptions(){
 	MouseClick "left", 550, 470
 }
 
+up(){
+	MouseMove 1535, 412
+}
+
+down(){
+	MouseMove 1535, 533
+}
+
+amount(){
+	MouseClick "left", 1510, 175
+	MouseMove 1400, 192
+}
+
 ;#HotIf WinActive("IQ Option")
 ;^w::higher()
 ;#HotIf WinActive("IQ Option")
@@ -109,11 +121,11 @@ scriptOptions(){
 #HotIf WinActive("IQ Option")
 c:: candleT()
 #HotIf WinActive("IQ Option")
-f:: graphicT()
+g:: graphicT()
 #HotIf WinActive("IQ Option")
-l:: line()
+t:: time()
 #HotIf WinActive("IQ Option")
-t:: tline()
+l:: tline()
 #HotIf WinActive("IQ Option")
 h:: hLine()
 #HotIf WinActive("IQ Option")
@@ -126,12 +138,22 @@ m:: changeColorM()
 #HotIf WinActive("IQ Option")
 w:: changeColorW()
 #HotIf WinActive("IQ Option")
-g:: changeColorG()
+^g:: changeColorG()
 #HotIf WinActive("IQ Option")
 r:: changeColorR()
 #HotIf WinActive("IQ Option")
 ^d:: clone()
 #HotIf WinActive("IQ Option")
 s::scriptOptions()
+
+#HotIf WinActive("IQ Option")
+u::up()
+
+#HotIf WinActive("IQ Option")
+d::down()
+
+#HotIf WinActive("IQ Option")
+a::amount()
+
 
 ;add change velas time
