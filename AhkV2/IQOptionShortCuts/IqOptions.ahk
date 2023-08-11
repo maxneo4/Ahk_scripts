@@ -156,4 +156,28 @@ d::down()
 a::amount()
 
 
-;add change velas time
+SetTimer OpenIQOption, 30000
+
+OpenIQOption(){
+	TimeString := FormatTime(, "mm:ss")
+	Arr := StrSplit(TimeString, ":")
+	minutes := Integer(Arr[1])
+	seconds := Integer(Arr[2])
+	minPlus := 1
+	if(seconds > 30){
+		minPlus := 2
+	}
+	if( mod(minutes+minPlus, 5) == 0){
+		for i in [1,2,3,4]
+		{
+			if WinWait("ahk_class IQ_OPTION", , 1)
+			{}else
+			{
+				Send "^#{Right}"
+			}
+		}
+		WinActivate "ahk_class IQ_OPTION"
+		;MsgBox "The current time and date (time first) is " Arr[1] ":" Arr[2]
+	}
+	Sleep 30000
+}
